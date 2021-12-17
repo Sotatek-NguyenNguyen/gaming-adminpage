@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Header from "../components/Layouts/Header.js";
 import Button from "../components/UI/Button.js";
+import { wallets } from "../wallets.js";
 
 function HomePage() {
   const [showWalletList, setShowWalletList] = useState(false);
@@ -27,25 +28,21 @@ function HomePage() {
       <div className="wallet-item">
         <div className="wallet-item__title">{props.name}</div>
 
-        <div className="wallet-item__logo">LOGO</div>
+        <div className="wallet-item__logo">
+          <img src={props.imgSrc} alt={props.name} />
+        </div>
       </div>
     );
   };
 
-  const WalletList = () => {
-    const walltets = [
-      { id: 0, name: "Phantom" },
-      { id: 1, name: "Sollet" },
-      { id: 2, name: "Sollet Extension" },
-    ];
-
+  const WalletList = () => {    
     return (
       <div className="wallet-list">
         <div className="wallet-list--heading">Connect a wallet</div>
 
         <div className="wallet-list--main">
-          {walltets.map(w => (
-            <WalletItem key={w.id} name={w.name} />
+          {wallets.map((w) => (
+            <WalletItem key={w.id} name={w.name} imgSrc={w.data} />
           ))}
         </div>
       </div>
