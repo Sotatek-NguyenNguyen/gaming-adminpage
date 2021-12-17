@@ -1,0 +1,37 @@
+.container {
+  height: calc(100vh - 5rem);
+  position: relative;
+}
+
+.heading-primary {
+  color: $color-black;
+  text-align: center;
+  @include absCenter;
+
+  &--main {
+    font-weight: 400;
+    line-height: 33px;
+    margin-bottom: 12px;
+  }
+
+  &--sub {
+    margin-bottom: 10px;
+    font-size: 15px;
+  }
+
+  &--btn {
+    color: $color--white;
+    background: $color-primary;
+    text-transform: uppercase;
+    box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    width: 30.625rem;
+    height: 3.125rem;
+    font-size: 14px;
+    font-weight: normal;
+    letter-spacing: 0.39998px;
+    line-height: 24px;
+    border: none;
+    cursor: pointer;
+  }
+}
