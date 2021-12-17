@@ -35,3 +35,58 @@
     cursor: pointer;
   }
 }
+
+.wallet-list {
+  width: 25.313rem;
+  height: 26.313rem;
+  border: 1px solid $color-primary;
+  border-radius: 4px;
+  @include absCenter;
+
+  &--heading {
+    height: 5.813rem;
+    border-bottom: 1px solid $color-primary;
+    font-size: 24px;
+    line-height: 32px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  &--main {
+    height: calc(100% - 5.813rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.wallet-item {
+  background: $color--white;
+  width: 22.438rem;
+  height: 4.438rem;
+  border: 1px solid rgba(19, 0, 50, 0.5);
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+  cursor: pointer;
+
+  &:not(:last-child) {
+    margin-bottom: 11px;
+  }
+
+  &__title {
+    text-transform: uppercase;
+    font-size: 24px;
+    font-weight: normal;
+  }
+
+  &__logo {
+  }
+}
