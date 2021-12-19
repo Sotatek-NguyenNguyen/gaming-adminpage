@@ -1,7 +1,9 @@
-import '../sass/main.scss';
+import "../sass/main.scss";
 
 function AdminApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  const getLayout = Component.getLayout || ((page) => page);
+
+  return getLayout(<Component {...pageProps} />);
 }
 
-export default AdminApp
+export default AdminApp;
