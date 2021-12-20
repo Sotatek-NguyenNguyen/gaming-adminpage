@@ -9,7 +9,9 @@ function Topbar() {
 
   return (
     <div className="topbar">
-      <div className="topbar__title">{pageTitle}</div>
+      <div className="topbar__title">
+        {pathName !== "notadmin" ? pageTitle : ""}
+      </div>
       <CurrentAccountBadge />
     </div>
   );
