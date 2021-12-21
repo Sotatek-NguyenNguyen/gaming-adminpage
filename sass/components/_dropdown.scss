@@ -1,0 +1,44 @@
+.dropdown {
+  width: 162px;
+  font-size: 14px;
+  position: relative;
+  cursor: pointer;
+
+  &__btn {
+    height: 37px;
+    border: 1px solid #101112;
+    color: #525252;
+    box-sizing: border-box;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding: 0 7px;
+    justify-content: space-between;
+  }
+
+  &__content {
+    position: absolute;
+    top: 103%;
+    background: $color--white;
+    border: 1px solid #dfdfdf;
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0.15008px;
+    width: 100%;
+
+    &-item {
+      width: 162px;
+      height: 40px;
+      border: 1px solid #DFDFDF;
+      display: flex;
+      align-items: center;
+      padding-left: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+          background: #f4f4f4;
+      }
+    }
+  }
+}
