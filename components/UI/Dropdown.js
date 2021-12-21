@@ -7,7 +7,13 @@ const useClickOutSide = (handler) => {
 
   useEffect(() => {
     const mayberHanler = (event) => {
-      if (domNode.current && !domNode.current.contains(event.target)) handler();
+      if (
+        domNode.current &&
+        event.target.className !== "dropdown__btn" &&
+        event.target.tagName !== "svg" &&
+        !domNode.current.contains(event.target)
+      )
+        handler();
     };
 
     document.addEventListener("mousedown", mayberHanler);
@@ -32,7 +38,7 @@ function Dropdown({ options }) {
 
   return (
     <div className="dropdown">
-      <div className="dropdown__btn" onClick={() => setIsActive(!isActive)}>
+      <div className="dropdown__btn" onClick={() => setIsActive(true)}>
         {selected}
         {isActive ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
       </div>
