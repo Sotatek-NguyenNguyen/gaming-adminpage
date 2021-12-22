@@ -1,16 +1,24 @@
 .topbar {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    padding-top: 0px;
 
     &__title { 
         font-size: 1.5rem;
         line-height: 30px;
-        margin: 57px 0 20px 50px;
+        margin-top: 57px;
     }
+}
 
-    &::after {
-        content: "";
-        display: block;
-        margin: 0 auto;
-        width: 94%;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+.players{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+
+    &__total{
+        font-size: 1rem;
+        line-height: 30px;
+        color: #525252;
     }
 }

@@ -1,0 +1,20 @@
+.container--custom{
+    display: block;
+    margin: 0 auto;
+    width: 94%;
+}
+
+.btn-main{
+    background-color: $color-primary;
+    padding: 4px 12px;
+  
+    font-size: 12px;
+    line-height: 30px;
+    letter-spacing: 0.7px;
+    font-weight: 700;
+    text-transform: none;
+  
+    &:hover{
+      background-color: $color-black;
+    }
+}
