@@ -15,8 +15,7 @@ function Topbar() {
       </div>
       {
         pageTitle === 'Player' 
-        ? 
-          <div className='players'>
+        ? <div className='players'>
             <p className='players__total'>Total players: 0</p> 
             <Button variant="contained" className='btn-main'>Export Player</Button>
           </div>
