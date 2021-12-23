@@ -20,11 +20,5 @@
 
 .card-list {
   display: flex;
-  justify-content: center;
-
-  .card {
-    &:not(:last-child) {
-      margin-right: 35px;
-    }
-  }
+  justify-content: space-around;
 }

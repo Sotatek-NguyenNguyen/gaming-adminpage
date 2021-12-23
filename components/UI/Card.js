@@ -1,11 +1,19 @@
 import React from 'react'
 
-function Card() {
+function Card(props) {
   return (
     <div className='card'>
-        <div className='cart__header'></div>
-        <div className='cart__content'></div>
-        <div className='cart__actions'></div>
+        {/* <div className='card__header'>
+          <div className='card__header--title'>Deposits</div>
+          <div>Amount</div>
+          <div>Change</div>
+        </div> */}
+
+        <div className='card__content'>
+          {props.children}
+        </div>
+
+        <div className='card__actions'></div>
     </div>
   )
 }
