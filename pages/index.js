@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import Header from "../components/Layouts/Header.js";
 import Button from "../components/UI/Button.js";
 import { wallets } from "../wallets.js";
+import { useRouter } from "next/router";
 
 function HomePage() {
   const [showWalletList, setShowWalletList] = useState(false);
+  const router = useRouter();
 
   const HeadingPrimary = () => {
     return (
@@ -25,7 +27,7 @@ function HomePage() {
 
   const WalletItem = (props) => {
     return (
-      <div className="wallet-item">
+      <div onClick={props.onClick} className="wallet-item">
         <div className="wallet-item__title">{props.name}</div>
 
         <div className="wallet-item__logo">
@@ -42,7 +44,7 @@ function HomePage() {
 
         <div className="wallet-list--main">
           {wallets.map((w) => (
-            <WalletItem key={w.id} name={w.name} imgSrc={w.data} />
+            <WalletItem onClick={() => router.push('/overview')} key={w.id} name={w.name} imgSrc={w.data} />
           ))}
         </div>
       </div>
