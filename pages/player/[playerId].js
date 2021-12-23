@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
 import Layout from "../../components/Layouts/Layout";
 
-import Inventory from './playerTransaction/inventory';
-import TransactionsHistory from './playerTransaction/transactionsHistory';
+import Inventory from '../../components/playerTransaction/inventory';
+import TransactionsHistory from '../../components/playerTransaction/transactionsHistory';
 
 function PlayerDetail() {
   const [tab, setTab] = useState('inventory');

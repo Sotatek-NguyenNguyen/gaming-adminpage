@@ -6,19 +6,28 @@ import { Button } from '@mui/material';
 function Topbar() {
   const router = useRouter();
   const pathName = router.pathname.replace("/", "");
-  let pageTitle = pathName[0].toUpperCase() + pathName.slice(1);
-  if(pathName === 'player/[playerId]'){
-    pageTitle = 'Player'
-  }
+  const pageTitle = pathName[0].toUpperCase() + pathName.slice(1);
 
-  if(pathName === 'notadmin'){
-    pageTitle = ''
+  const renderPageTitle = (pathName) => {
+    switch(pathName) {
+      case 'player/[playerId]':
+        return 'Player';
+
+      case 'settings':
+        return 'Game Details';
+
+      case 'notadmin':
+        return '';
+        
+      default:
+        return pageTitle;
+    }
   }
 
   return (
     <div className="topbar container--custom">
       <div className="topbar__title">
-        { pageTitle === 'Settings' ? 'Game Details' : pageTitle }
+        { renderPageTitle(pathName) }
       </div>
       {
         pathName === 'player' 
