@@ -1,0 +1,27 @@
+.players-contain{
+    margin-top: 23px;
+}
+
+.card__query{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .query__dropdown{
+        width: 30%;
+    }
+
+    input{
+        width: 55%;
+        height: 37px;
+        border-radius: 4px;
+        outline: none;
+        text-indent: 10px;
+    }
+
+    .card__interactive > button{
+        width: 80px;
+        height: 37px;
+        margin-left: 8px;
+    }
+}
