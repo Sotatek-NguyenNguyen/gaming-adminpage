@@ -44,7 +44,9 @@
       border-radius: 16px;
       display: flex;
       justify-content: center;
-      margin-bottom: 10px;
+      margin-bottom: 16px;
+      height: 72px;
+      align-items: center;
     }
 
     input {
@@ -53,6 +55,7 @@
       border: 1px solid #9f99b3;
       box-sizing: border-box;
       border-radius: 32px;
+      height: 56px;
 
       &:focus {
         border: 1px solid #6823BF;

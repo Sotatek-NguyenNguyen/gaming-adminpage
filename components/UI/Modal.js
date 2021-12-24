@@ -17,7 +17,7 @@ const ModalOverlay = (props) => {
           Destination Address <br />
           4zj7KF13agrr3VYEt3RxxhDtzHGQmL7KdhzGZ9...
         </div>
-        <Input placeholder="Token Amount*" id="token-amount" />
+        <Input placeholder="Token Amount*" min="0" type="number" id="token-amount" />
       </div>
 
       <div className="modal__actions">
