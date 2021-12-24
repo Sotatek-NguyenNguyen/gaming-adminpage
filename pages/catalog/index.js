@@ -2,7 +2,7 @@ import React from "react";
 import Layout from "../../components/Layouts/Layout";
 import Input from "../../components/UI/Input.js";
 import Button from "../../components/UI/Button.js";
-import CustomizedAccordions from "../../components/UI/Accordion";
+import SimpleAccordion from "../../components/UI/Accordion";
 
 function CatalogPage() {
   return (
@@ -17,12 +17,12 @@ function CatalogPage() {
             <label htmlFor="actual-game">
               <h5>Actual game balance</h5>
             </label>
-            <Input id="actual-game" />
+            <Input type="number" id="actual-game" />
 
             <label htmlFor="in-game">
               <h5>In-game balance</h5>
             </label>
-            <Input id="in-game" />
+            <Input type="number" id="in-game" />
 
             <div className="form-actions">
               <Button className='btn-main--outline'>Withdraw</Button>
@@ -31,7 +31,7 @@ function CatalogPage() {
           </form>
         </div>  
       </div>
-      <CustomizedAccordions />
+      <SimpleAccordion />
     </div>
   );
 }
