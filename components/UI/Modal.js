@@ -1,12 +1,28 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
-function Modal() {
-    return (
-        <div>
-            
+const BackDrops = (props) => {
+  return <div className="backdrop" onClick={props.onClick}></div>;
+};
+
+const ModalOverlay = () => {
+    return <div className="modal">
+        <div className="modal__header">
+
         </div>
-    )
+
+        <div className="modal__content">
+
+        </div>
+        
+        <div className="modal__actions">
+
+        </div>
+    </div>
 }
 
-export default Modal
+function Modal() {
+  return <div></div>;
+}
+
+export default Modal;
