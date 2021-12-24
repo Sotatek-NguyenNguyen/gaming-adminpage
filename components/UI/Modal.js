@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import Button from "../UI/Button.js";
+import Input from "../../components/UI/Input.js";
 
 const BackDrops = (props) => {
   return <div className="backdrop" onClick={props.onClick}></div>;
@@ -28,9 +29,14 @@ const ModalOverlay = (props) => {
 };
 
 function Modal(props) {
+  const [mounted, setMounted] = useState(false);
   const portalEl = document.getElementById("modal-root");
 
-  return (
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  return mounted ? (
     <React.Fragment>
       {ReactDOM.createPortal(<BackDrops />, portalEl)}
       {ReactDOM.createPortal(
@@ -38,7 +44,7 @@ function Modal(props) {
         portalEl
       )}
     </React.Fragment>
-  );
+  ) : null;
 }
 
 export default Modal;
