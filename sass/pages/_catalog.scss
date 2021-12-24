@@ -13,7 +13,7 @@
     &__header {
       border-radius: 4px;
       height: 34px;
-      background: $background-primary-dark;
+      background: $background-white-dark;
       display: flex;
       font-size: 14px;
       padding-left: 25px;
@@ -45,7 +45,7 @@
     input {
       height: 37px;
       border-radius: 4px;
-      border: 1px solid $background-primary-dark;
+      border: 1px solid $background-white-dark;
 
       &:focus {
         outline: none !important;

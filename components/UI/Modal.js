@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import Button from "../UI/Button.js";
 import Input from "../../components/UI/Input.js";
@@ -10,7 +10,7 @@ const BackDrops = (props) => {
 const ModalOverlay = (props) => {
   return (
     <div className="modal">
-      <div className="modal__title">CONFIRM DEPOSIT TOKEN?</div>
+      <div className="modal__title">Confirm Deposit Token?</div>
 
       <div className="modal__content">
         <div className="address">
@@ -30,7 +30,6 @@ const ModalOverlay = (props) => {
 
 function Modal(props) {
   const [mounted, setMounted] = useState(false);
-  const portalEl = document.getElementById("modal-root");
 
   useEffect(() => {
     setMounted(true);
@@ -38,10 +37,10 @@ function Modal(props) {
 
   return mounted ? (
     <React.Fragment>
-      {ReactDOM.createPortal(<BackDrops />, portalEl)}
+      {ReactDOM.createPortal(<BackDrops />, document.getElementById("modal-root"))}
       {ReactDOM.createPortal(
         <ModalOverlay>{props.children}</ModalOverlay>,
-        portalEl
+        document.getElementById("modal-root")
       )}
     </React.Fragment>
   ) : null;
