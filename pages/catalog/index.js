@@ -2,6 +2,7 @@ import React from "react";
 import Layout from "../../components/Layouts/Layout";
 import Input from "../../components/UI/Input.js";
 import Button from "../../components/UI/Button.js";
+import CustomizedAccordions from "../../components/UI/Accordion";
 
 function CatalogPage() {
   return (
@@ -30,6 +31,7 @@ function CatalogPage() {
           </form>
         </div>  
       </div>
+      <CustomizedAccordions />
     </div>
   );
 }
