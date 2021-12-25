@@ -4,7 +4,9 @@ export default class MyDocument extends Document {
    render() {
       return (
          <Html>
-            <Head />
+            <Head> 
+               <link rel="shortcut icon" href="icons/favicon-32x32.png" />
+            </Head>
             <body>
                <div id='modal-root' /> 
                <Main />
