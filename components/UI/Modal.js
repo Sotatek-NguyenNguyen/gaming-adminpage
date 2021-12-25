@@ -4,7 +4,7 @@ import Button from "../UI/Button.js";
 import Input from "../../components/UI/Input.js";
 
 const BackDrops = (props) => {
-  return <div className="backdrop" onClick={props.onClick}></div>;
+  return <div className="backdrop" onClick={props.onCloseModal}></div>;
 };
 
 const ModalOverlay = (props) => {
@@ -21,7 +21,7 @@ const ModalOverlay = (props) => {
       </div>
 
       <div className="modal__actions">
-        <Button className="btn-main--outline">Cancel</Button>
+        <Button className="btn-main--outline" onClick={props.onCloseModal}>Cancel</Button>
         <Button className="btn-main">Confirm</Button>
       </div>
     </div>
@@ -37,9 +37,9 @@ function Modal(props) {
 
   return mounted ? (
     <React.Fragment>
-      {ReactDOM.createPortal(<BackDrops />, document.getElementById("modal-root"))}
+      {ReactDOM.createPortal(<BackDrops onCloseModal={props.onCloseModal} />, document.getElementById("modal-root"))}
       {ReactDOM.createPortal(
-        <ModalOverlay>{props.children}</ModalOverlay>,
+        <ModalOverlay onCloseModal={props.onCloseModal}>{props.children}</ModalOverlay>,
         document.getElementById("modal-root")
       )}
     </React.Fragment>
