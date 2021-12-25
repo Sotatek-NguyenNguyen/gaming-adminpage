@@ -3,7 +3,6 @@ import Layout from "../../components/Layouts/Layout";
 import Dropdown from "../../components/UI/Dropdown";
 import Card from "../../components/UI/Card.js";
 import BasicTable from "../../components/UI/Table/BasicTable";
-import Modal from "../../components/UI/Modal";
 
 function OverviewPage() {
   const dropdownOptions = [
@@ -48,7 +47,6 @@ function OverviewPage() {
 
   return (
     <React.Fragment>
-      <Modal />
       <div className="time-period">
         <span>Time period:</span>
         <Dropdown options={dropdownOptions} />
