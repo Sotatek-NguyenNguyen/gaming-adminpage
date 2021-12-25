@@ -6,19 +6,89 @@ import SimpleAccordion from "../../components/UI/Accordion";
 import Modal from "../../components/UI/Modal.js";
 
 function CatalogPage() {
-  const [showModal, setShowModal] = useState(false);
-  
-  const handleCloseMdodal = () => {
-    setShowModal(false);
-  }
+  const [showDepositModal, setShowDepositModal] = useState(false);
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+  const [showGrantTokenModal, setShowGrantTokenModal] = useState(false);
+  const [showDeductTokenModal, setShowDeductTokenModal] = useState(false);
+
+  const handleCloseModal = () => {
+    setShowDepositModal(false);
+    setShowWithdrawModal(false);
+    setShowGrantTokenModal(false);
+    setShowDeductTokenModal(false);
+  };
 
   const handleGameBalanceSubmit = (e) => {
     e.preventDefault();
-  }
+  };
+
+  const DepositModal = () => {
+    return (
+      <Modal
+        title="Confirm Deposit Token?"
+        address={
+          <>
+            Destination Address <br />
+            4zj7KF13agrr3VYEt3RxxhDtzHGQmL7KdhzGZ9nzp1xD
+          </>
+        }
+        onCloseModal={handleCloseModal}
+      />
+    );
+  };
+
+  const WithDrawModal = () => {
+    return (
+      <Modal
+        title="Confirm Withdraw Token?"
+        address={
+          <>
+            Destination Address <br />
+            4zj7KF13agrr3VYEt3RxxhDtzHGQmL7KdhzGZ9nzp1xD
+          </>
+        }
+        onCloseModal={handleCloseModal}
+      />
+    );
+  };
+
+  const GrantTokenModal = () => {
+    return (
+      <Modal
+        title="Confirm Sending Token?"
+        address={
+          <>
+            Destination Address <br />
+            4zj7KF13agrr3VYEt3RxxhDtzHGQmL7KdhzGZ9nzp1xD
+          </>
+        }
+        onCloseModal={handleCloseModal}
+      />
+    );
+  };
+
+  const DeductTokenModal = () => {
+    return (
+      <Modal
+        title="Confirm Deduct Token?"
+        address={
+          <>
+            Originate Wallet Address  <br />
+            4zj7KF13agrr3VYEt3RxxhDtzHGQmL7KdhzGZ9nzp1xD
+          </>
+        }
+        onCloseModal={handleCloseModal}
+      />
+    );
+  };
 
   return (
     <div className="catalog">
-      {showModal && <Modal onCloseModal={handleCloseMdodal} />}
+      {showDepositModal && <DepositModal />}
+      {showWithdrawModal && <WithDrawModal />}
+      {showGrantTokenModal && <GrantTokenModal />}
+      {showDeductTokenModal && <DeductTokenModal />}
+
       <div className="form-container">
         <div className="form-container__header">
           <h4>Game Balance</h4>
@@ -37,13 +107,24 @@ function CatalogPage() {
             <Input type="number" id="in-game" />
 
             <div className="form-actions">
-              <Button className="btn-main--outline">Withdraw</Button>
-              <Button className="btn-main" onClick={() => setShowModal(true)}>Deposit</Button>
+              <Button
+                className="btn-main--outline"
+                onClick={() => setShowWithdrawModal(true)}
+              >
+                Withdraw
+              </Button>
+              <Button
+                className="btn-main"
+                onClick={() => setShowDepositModal(true)}
+              >
+                Deposit
+              </Button>
             </div>
           </form>
         </div>
       </div>
-      <SimpleAccordion />
+      <SimpleAccordion onGrantToKenSubmit={() => setShowGrantTokenModal(true)}
+      onDeductTokenSubmit={() => setShowDeductTokenModal(true)} />
     </div>
   );
 }

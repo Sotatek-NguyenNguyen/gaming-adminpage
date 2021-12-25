@@ -8,20 +8,25 @@ const BackDrops = (props) => {
 };
 
 const ModalOverlay = (props) => {
+  const { onCloseModal, title, address } = props;
   return (
     <div className="modal">
-      <div className="modal__title">Confirm Deposit Token?</div>
+      <div className="modal__title">{title}</div>
 
       <div className="modal__content">
-        <div className="address">
-          Destination Address <br />
-          4zj7KF13agrr3VYEt3RxxhDtzHGQmL7KdhzGZ9...
-        </div>
-        <Input placeholder="Token Amount*" min="0" type="number" id="token-amount" />
+        <div className="address">{address}</div>
+        <Input
+          placeholder="Token Amount*"
+          min="0"
+          type="number"
+          id="token-amount"
+        />
       </div>
 
       <div className="modal__actions">
-        <Button className="btn-main--outline" onClick={props.onCloseModal}>Cancel</Button>
+        <Button className="btn-main--outline" onClick={onCloseModal}>
+          Cancel
+        </Button>
         <Button className="btn-main">Confirm</Button>
       </div>
     </div>
@@ -37,9 +42,12 @@ function Modal(props) {
 
   return mounted ? (
     <React.Fragment>
-      {ReactDOM.createPortal(<BackDrops onCloseModal={props.onCloseModal} />, document.getElementById("modal-root"))}
       {ReactDOM.createPortal(
-        <ModalOverlay onCloseModal={props.onCloseModal}>{props.children}</ModalOverlay>,
+        <BackDrops onCloseModal={props.onCloseModal} />,
+        document.getElementById("modal-root")
+      )}
+      {ReactDOM.createPortal(
+        <ModalOverlay {...props}></ModalOverlay>,
         document.getElementById("modal-root")
       )}
     </React.Fragment>

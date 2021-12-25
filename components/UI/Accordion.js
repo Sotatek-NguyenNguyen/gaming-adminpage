@@ -7,7 +7,18 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Input from "./Input.js";
 import Button from "./Button.js";
 
-export default function SimpleAccordion() {
+export default function SimpleAccordion(props) {
+  const grantTokenSubmitHandler = e => {
+    e.preventDefault();
+    props.onGrantToKenSubmit()
+  };
+
+  const deductTokenSubmitHandler = e => {
+    e.preventDefault();
+    props.onDeductTokenSubmit()
+  };
+
+
   return (
     <div className="accordion-list">
       <Accordion>
@@ -21,7 +32,7 @@ export default function SimpleAccordion() {
         </AccordionSummary>
 
         <AccordionDetails>
-          <form>
+          <form onSubmit={grantTokenSubmitHandler}>
             <label htmlFor="token-amount">
               <h5>Enter Token amount: * </h5>
             </label>
@@ -58,7 +69,7 @@ export default function SimpleAccordion() {
           <Typography variant="h7">Deduct tokens</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <form>
+          <form onSubmit={deductTokenSubmitHandler}>
             <label htmlFor="token-amount">
               <h5>Enter Token amount: * </h5>
             </label>
