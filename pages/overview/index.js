@@ -52,7 +52,7 @@ function OverviewPage() {
         <Dropdown options={dropdownOptions} />
       </div>
 
-      <div className="card-list">
+      {/* <div className="card-list">
           {
             tablesData.map(tb => <BasicTable 
               key={tb.id} 
@@ -60,6 +60,10 @@ function OverviewPage() {
               rows={tb.rows}
               />)
           }
+      </div> */}
+      <div className="card-list">
+      <Card />
+      <Card />
       </div>
     </React.Fragment>
   );
