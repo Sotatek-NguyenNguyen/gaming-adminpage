@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -18,6 +18,24 @@ function DataTable({ columns, data, tableMaxHeight, message}) {
     height: "80px",
     lineHeight: "80px",
     textAlign: "center"
+  }
+  const styleTextOverflow = {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    width: "100%",
+    display:"block",
+    margin: "0px auto"
+  }
+  const styleLabel = (style, highlightLabel, label) => {
+    let styleLabel = {...styleTextOverflow};
+    if(style){
+      styleLabel = {...styleLabel, ...style}
+    }
+    if(highlightLabel && highlightLabel[label]){
+      styleLabel = {...styleLabel, ...style, ...highlightLabel[label]}
+    }
+    return styleLabel;
   }
 
   function renderMessageIfEmptyData(){
@@ -50,14 +68,29 @@ function DataTable({ columns, data, tableMaxHeight, message}) {
           <TableBody style={setMaxHeightBodyTable}>
             { renderMessageIfEmptyData() }
 
-            {data.map((item) => (
+            {data.map((item, index) => (
               <TableRow
-                key={item[columns[0].field]}
+                key={`${item[columns[0].field]}-${index}`}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 {
                   columns.map( col => {
-                    return (<TableCell key={col.field} align="center">{item[col.field]}</TableCell>)
+                    return (
+                      <TableCell key={col.field} align='center'>
+                        {
+                          col.prefixLink 
+                          ? <a style={styleLabel(col.style, col.highlightLabel, item[col.field])} 
+                               href={`${col.prefixLink}/${item[col.field]}`}
+                            >
+                               {item[col.field]}
+                            </a>
+                          : <span 
+                               style={styleLabel(col.style, col.highlightLabel, item[col.field])}>
+                               {item[col.field]}
+                            </span>
+                        }
+                      </TableCell>
+                    )
                   })
                 }
               </TableRow>
@@ -73,7 +106,7 @@ DataTable.defaultProps = {
   columns: [],
   data: [],
   tableMaxHeight: 500,
-  message: 'No item available'
+  message: 'No item available',
 };
 
 export default DataTable;

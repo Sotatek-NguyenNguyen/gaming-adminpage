@@ -5,11 +5,19 @@ import Button from "../../components/UI/Button.js";
 import SimpleAccordion from "../../components/UI/Accordion";
 import Modal from "../../components/UI/Modal.js";
 
+import Inventory from '../../components/playerTransaction/inventory';
+import TransactionsHistory from '../../components/playerTransaction/transactionsHistory';
+
 function CatalogPage() {
   const [showDepositModal, setShowDepositModal] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showGrantTokenModal, setShowGrantTokenModal] = useState(false);
   const [showDeductTokenModal, setShowDeductTokenModal] = useState(false);
+  const [tab, setTab] = useState('inventory');
+
+  const changeTab = (tab) => () => {
+    setTab(tab);
+  }
 
   const handleCloseModal = () => {
     setShowDepositModal(false);
@@ -125,6 +133,20 @@ function CatalogPage() {
       </div>
       <SimpleAccordion onGrantToKenSubmit={() => setShowGrantTokenModal(true)}
       onDeductTokenSubmit={() => setShowDeductTokenModal(true)} />
+
+      <section className='player__info container--custom'>
+        <div className='info__tabs'>
+          <p onClick={changeTab('inventory')}
+             style={{ fontWeight: tab === 'inventory' ? 700 : 400 }}
+          > Inventory </p>
+          <p onClick={changeTab('transactionHistory')}
+             style={{ fontWeight: tab === 'transactionHistory' ? 700 : 400 }}
+          > Transaction History </p>
+        </div>
+        <div>
+          {tab === 'inventory' ? <Inventory /> : <TransactionsHistory />}
+        </div>
+      </section>
     </div>
   );
 }
