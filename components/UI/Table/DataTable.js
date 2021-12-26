@@ -19,6 +19,14 @@ function DataTable({ columns, data, tableMaxHeight, message}) {
     lineHeight: "80px",
     textAlign: "center"
   }
+  const styleTextOverflow = {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    width: "100%",
+    display:"block",
+    margin: "0px auto"
+  }
 
   function renderMessageIfEmptyData(){
     if(data.length > 0 ) return;
@@ -57,7 +65,7 @@ function DataTable({ columns, data, tableMaxHeight, message}) {
               >
                 {
                   columns.map( col => {
-                    return (<TableCell key={col.field} align="center">{item[col.field]}</TableCell>)
+                    return (<TableCell key={col.field} align='center'><span style={styleTextOverflow}>{item[col.field]}</span></TableCell>)
                   })
                 }
               </TableRow>

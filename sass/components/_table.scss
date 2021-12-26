@@ -7,7 +7,7 @@
 
     tbody{
         overflow-x: hidden;
-        overflow-y: auto;
+        overflow-y: overlay;
         display: block;
 
         &::-webkit-scrollbar-track{

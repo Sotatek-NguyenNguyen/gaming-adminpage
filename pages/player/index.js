@@ -10,82 +10,66 @@ function PlayerPage() {
     {title: 'Highest value to date', value: 1}
   ];
   const tableColumns = [
-    { title: 'User ID', field: 'id'},
-    { title: 'Username', field: 'name' },
-    { title: 'Age', field: 'age'},
-    { title: 'Email', field: 'email' },
-    { title: 'Country', field: 'country' }
+    { title: 'Player ID', field: 'id'},
+    { title: 'Wallet Address', field: 'wallet' },
+    { title: 'Create On', field: 'createOn'},
+    { title: 'Status', field: 'status' }
   ];
   const tablesData = [
     {
-      id: '2233',
-      name: 'test01',
-      age: 21,
-      email: 'test01@gmail.com',
-      country: 'VietNam'
+      id: '1asdf125asdf13asf5sdh',
+      wallet: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
+      createOn: '2021-11-18 11:29:00',
+      status: 'Active'
     },
     {
-      id: 'asdf',
-      name: 'test03',
-      age: 21,
-      email: 'test01@gmail.com',
-      country: 'VietNam'
+      id: '1asdf125asdf13asf5sdh',
+      wallet: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
+      createOn: '2021-11-18 11:29:00',
+      status: 'Active'
     },
     {
-      id: 'djf',
-      name: 'test04',
-      age: 21,
-      email: 'test01@gmail.com',
-      country: 'VietNam'
+      id: '1asdf125asdf13asf5sdh',
+      wallet: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
+      createOn: '2021-11-18 11:29:00',
+      status: 'Active'
     },
     {
-      id: 'afd',
-      name: 'test05',
-      age: 21,
-      email: 'test01@gmail.com',
-      country: 'VietNam'
+      id: '1asdf125asdf13asf5sdh',
+      wallet: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
+      createOn: '2021-11-18 11:29:00',
+      status: 'Active'
     },
     {
-      id: 'djf',
-      name: 'test04',
-      age: 21,
-      email: 'test01@gmail.com',
-      country: 'VietNam'
+      id: '1asdf125asdf13asf5sdh',
+      wallet: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
+      createOn: '2021-11-18 11:29:00',
+      status: 'Active'
     },
     {
-      id: 'afd',
-      name: 'test05',
-      age: 21,
-      email: 'test01@gmail.com',
-      country: 'VietNam'
+      id: '1asdf125asdf13asf5sdh',
+      wallet: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
+      createOn: '2021-11-18 11:29:00',
+      status: 'Active'
     },
     {
-      id: 'djf',
-      name: 'test04',
-      age: 21,
-      email: 'test01@gmail.com',
-      country: 'VietNam'
+      id: '1asdf125asdf13asf5sdh',
+      wallet: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
+      createOn: '2021-11-18 11:29:00',
+      status: 'Active'
     },
     {
-      id: 'afd',
-      name: 'test05',
-      age: 21,
-      email: 'test01@gmail.com',
-      country: 'VietNam'
+      id: '1asdf125asdf13asf5sdh',
+      wallet: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
+      createOn: '2021-11-18 11:29:00',
+      status: 'Active'
     },
+
     {
-      id: 'djf',
-      name: 'test04',
-      age: 21,
-      email: 'test01@gmail.com',
-      country: 'VietNam'
-    },
-    {
-      id: 'afd',
-      name: 'test05',
-      age: 21,
-      email: 'test01@gmail.com',
-      country: 'VietNam'
+      id: '1asdf125asdf13asf5sdh',
+      wallet: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
+      createOn: '2021-11-18 11:29:00',
+      status: 'Active'
     }
   ];
 
@@ -104,7 +88,7 @@ function PlayerPage() {
       </section>
 
       <div style={{marginTop: 8}}>
-        <DataTable columns={tableColumns} data={[]} tableMaxHeight={300} message="No transaction available"/>
+        <DataTable columns={tableColumns} data={tablesData} tableMaxHeight={300} message="No transaction available"/>
       </div>
 
     </div>
