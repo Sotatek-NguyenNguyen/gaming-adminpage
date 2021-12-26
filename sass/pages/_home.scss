@@ -100,4 +100,13 @@
       height: 32px;
     }
   }
+
+  &:hover, &:active {
+     background-color: $background-ternary;
+     
+     .wallet-item__title {
+       color: $color-primary;
+       font-weight: 600;
+     }
+  }
 }
