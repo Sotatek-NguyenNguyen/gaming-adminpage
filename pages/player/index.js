@@ -9,64 +9,71 @@ function PlayerPage() {
     {title: 'Most recent logins', value: 0},
     {title: 'Highest value to date', value: 1}
   ];
+  const styleLinkTable = {
+    color: "#1A85D8"
+  }
+  const styleStatusTable = {
+    color: "#008A25",
+    textTransform: "uppercase"
+  }
   const tableColumns = [
-    { title: 'Player ID', field: 'id'},
+    { title: 'Player ID', field: 'id', prefixLink:'player', style: styleLinkTable},
     { title: 'Wallet Address', field: 'wallet' },
     { title: 'Create On', field: 'createOn'},
-    { title: 'Status', field: 'status' }
+    { title: 'Status', field: 'status', style: styleStatusTable}
   ];
   const tablesData = [
     {
-      id: '1asdf125asdf13asf5sdh',
+      id: "123as1df5saf35asdf1asdf",
       wallet: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
       createOn: '2021-11-18 11:29:00',
       status: 'Active'
     },
     {
-      id: '1asdf125asdf13asf5sdh',
+      id: "123as1df5sdf35asdf1asdf",
       wallet: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
       createOn: '2021-11-18 11:29:00',
       status: 'Active'
     },
     {
-      id: '1asdf125asdf13asf5sdh',
+      id: "123as1df5adf35asdf1asdf",
+      wallet: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
+      createOn: '2021-11-18 11:29:00',
+      status: 'Minted'
+    },
+    {
+      id: "123as1df5sdf35asf1asdf",
       wallet: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
       createOn: '2021-11-18 11:29:00',
       status: 'Active'
     },
     {
-      id: '1asdf125asdf13asf5sdh',
+      id: "123as1df5adf35sdf1asdf",
       wallet: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
       createOn: '2021-11-18 11:29:00',
       status: 'Active'
     },
     {
-      id: '1asdf125asdf13asf5sdh',
+      id: "12as1df5sdf35asdf1asdf",
+      wallet: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
+      createOn: '2021-11-18 11:29:00',
+      status: 'Minted'
+    },
+    {
+      id: "123as1df5sdf3j5asdf1asdf",
       wallet: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
       createOn: '2021-11-18 11:29:00',
       status: 'Active'
     },
     {
-      id: '1asdf125asdf13asf5sdh',
-      wallet: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
-      createOn: '2021-11-18 11:29:00',
-      status: 'Active'
-    },
-    {
-      id: '1asdf125asdf13asf5sdh',
-      wallet: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
-      createOn: '2021-11-18 11:29:00',
-      status: 'Active'
-    },
-    {
-      id: '1asdf125asdf13asf5sdh',
+      id: "123as1df5asdf3j5asf1asdf",
       wallet: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
       createOn: '2021-11-18 11:29:00',
       status: 'Active'
     },
 
     {
-      id: '1asdf125asdf13asf5sdh',
+      id: "123asj1df5sdf3j5asdf1sdf",
       wallet: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
       createOn: '2021-11-18 11:29:00',
       status: 'Active'
@@ -88,7 +95,7 @@ function PlayerPage() {
       </section>
 
       <div style={{marginTop: 8}}>
-        <DataTable columns={tableColumns} data={tablesData} tableMaxHeight={300} message="No transaction available"/>
+        <DataTable columns={tableColumns} data={tablesData} tableMaxHeight={300} message="No player available"/>
       </div>
 
     </div>
