@@ -2,7 +2,6 @@ import React from "react";
 import Layout from "../../components/Layouts/Layout";
 import Dropdown from "../../components/UI/Dropdown";
 import Card from "../../components/UI/Card.js";
-import BasicTable from "../../components/UI/Table/BasicTable";
 
 function OverviewPage() {
   const dropdownOptions = [
@@ -15,7 +14,7 @@ function OverviewPage() {
     return { name, amount, change };
   }
 
-  const tablesData = [
+  const cardData = [
     {
       id: 1,
       title: "Deposits",
@@ -51,19 +50,14 @@ function OverviewPage() {
         <span>Time period:</span>
         <Dropdown options={dropdownOptions} />
       </div>
-
-      {/* <div className="card-list">
-          {
-            tablesData.map(tb => <BasicTable 
-              key={tb.id} 
-              title={tb.title}
-              rows={tb.rows}
-              />)
-          }
-      </div> */}
+      
       <div className="card-list">
-      <Card />
-      <Card />
+       {
+         cardData.map(card => <Card 
+          key={card.id}
+          title={card.title}
+          rows={card.rows} />)
+       }
       </div>
     </React.Fragment>
   );
