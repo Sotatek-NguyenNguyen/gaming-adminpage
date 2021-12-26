@@ -6,6 +6,12 @@ import Layout from "../../components/Layouts/Layout";
 
 function SettingsPage() {
   const editorRef = useRef(null);
+  const inputFileRef = useRef(null);
+  const nameFile = useRef(null);
+
+  const addFile = () => {
+    nameFile.current.innerHTML = inputFileRef.current.files.item(0).name;
+  }
   return (
     <div className="container--custom">
       <form className="container--main">
@@ -19,10 +25,10 @@ function SettingsPage() {
             <div className='form__input'>
               <label htmlFor='gameBackground'>Game Background:*</label>
               <label htmlFor='gameBackground' className="custom-file-upload">
-                <input type="file" id='gameBackground' name='gameBackground'/>
+                <input type="file" id='gameBackground' name='gameBackground' ref={inputFileRef} onChange={addFile}/>
                 Choose file
               </label>
-              <span >No file Chosen</span>  
+              <span ref={nameFile} >No file Chosen</span>  
             </div>
           </section>
           <section className="info--right">
