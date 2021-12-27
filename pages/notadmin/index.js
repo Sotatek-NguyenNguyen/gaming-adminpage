@@ -8,15 +8,19 @@ function NotGamifyAdminPage() {
   return (
     <div
       style={{
-        fontSize: "14px",
+        fontSize: "16px",
         lineHeight: "24px",
         position: "absolute",
-        top: "15%",
-        left: "23%",
+        top: "12%",
+        left: "10%",
         display: "flex",
         alignItems: "center",
+        justifyContent: "center",
         width: "682px",
         height: "101px",
+        margin: '0 auto', 
+        background: '#fff',
+        borderRadius: '16px'
       }}
     >
       <WarningIcon
