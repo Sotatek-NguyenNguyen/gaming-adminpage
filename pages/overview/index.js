@@ -5,9 +5,18 @@ import Card from "../../components/UI/Card.js";
 import { getJSON } from "../../common.js";
 import { ADMIN_PAGE_BACKEND_URL } from "../../config";
 
+function getAllDeposit(transactionData) {
+   return transactionData.filter(trans => trans.type === "deposit")
+};
+
+const getAllWithDraw = (transactionData) => {
+  return transactionData.filter(trans => trans.type === 'withdrawn');
+}
+
 function OverviewPage() {
   const [transactionData, setTransactionData] = useState([]);
   const [userList, setUserList] = useState([]);
+
   const dropdownOptions = [
     { title: "Last 24 hours", value: 1 },
     { title: "Last 7 days", value: 7 },
@@ -21,6 +30,7 @@ function OverviewPage() {
       );
 
       if (res.status === 200) setTransactionData(res.data.data);
+      console.log(transactionData.filter(trans => trans.type === "deposit"))
     } catch (error) {
       throw error;
     }
@@ -32,7 +42,7 @@ function OverviewPage() {
         `${ADMIN_PAGE_BACKEND_URL}/admin/users?page=1&pageSize=20`
       );
 
-      if (res.status === 200) console.log(res);
+      if (res.status === 200) setUserList(res.data.data);      
     } catch (error) {
       throw error;
     }
