@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Layout from "../../components/Layouts/Layout";
 import Dropdown from "../../components/UI/Dropdown";
 import Card from "../../components/UI/Card.js";
@@ -7,26 +7,41 @@ import { ADMIN_PAGE_BACKEND_URL } from "../../config";
 
 function OverviewPage() {
   const [transactionData, setTransactionData] = useState([]);
+  const [userList, setUserList] = useState([]);
   const dropdownOptions = [
     { title: "Last 24 hours", value: 1 },
     { title: "Last 7 days", value: 7 },
     { title: "Last 30 days", value: 30 },
   ];
 
-  useEffect(() => {
-    const getTransactionData = async () => {
-      try {
-        const res = await getJSON(
-          `${ADMIN_PAGE_BACKEND_URL}/admin/users/transactions?page=1&pageSize=20`
-        );
-        if (res.status === 200) setTransactionData(res.data);
-      } catch (error) {
-        throw error;
-      }
-    };
+  const getTransactionData = useCallback(async () => {
+    try {
+      const res = await getJSON(
+        `${ADMIN_PAGE_BACKEND_URL}/admin/users/transactions?page=1&pageSize=20`
+      );
 
-    getTransactionData().catch((err) => console.error(err.message));
+      if (res.status === 200) setTransactionData(res.data.data);
+    } catch (error) {
+      throw error;
+    }
   }, []);
+
+  const getListUser = useCallback(async () => {
+    try {
+      const res = await getJSON(
+        `${ADMIN_PAGE_BACKEND_URL}/admin/users?page=1&pageSize=20`
+      );
+
+      if (res.status === 200) console.log(res);
+    } catch (error) {
+      throw error;
+    }
+  }, []);
+
+  useEffect(() => {
+    getTransactionData().catch((err) => console.error(err.message));
+    getListUser().catch((err) => console.error(err.message));
+  }, [getTransactionData]);
 
   function createData(name, amount, change) {
     return { name, amount, change };
