@@ -31,10 +31,6 @@ function CatalogPage() {
     setShowDeductTokenModal(false);
   };
 
-  const handleGameBalanceSubmit = (e) => {
-    e.preventDefault();
-  };
-
   const DepositModal = () => {
     return (
       <Modal
@@ -113,18 +109,18 @@ function CatalogPage() {
     setTokenData({ amount, userAddress, note });
   };
 
-  const sendingToken = async () => {
+  const sendingToken = () => {
     sendJSON(`${ADMIN_PAGE_BACKEND_URL}/users/grant-token`, tokenData)
-    .then(res => console.log(res))
-    .finally(() => setTokenData({}))
-    .catch(err => console.error(err.message))
+      .then((res) => console.log(res))
+      .finally(() => setTokenData({}))
+      .catch((err) => console.error(err.message));
   };
 
   const deductToken = () => {
     sendJSON(`${ADMIN_PAGE_BACKEND_URL}/users/deduct-token`, tokenData)
-    .then(res => console.log(res))
-    .finally(() => setTokenData({}))
-    .catch(err => console.error(err.message))
+      .then((res) => console.log(res))
+      .finally(() => setTokenData({}))
+      .catch((err) => console.error(err.message));
   };
 
   const getGameBalance = async () => {
@@ -156,7 +152,7 @@ function CatalogPage() {
         </div>
 
         <div className="form-container__content">
-          <form onSubmit={handleGameBalanceSubmit}>
+          <form onSubmit={(e) => e.preventDefault()}>
             <label htmlFor="actual-game">
               <h5>Actual game balance</h5>
             </label>
