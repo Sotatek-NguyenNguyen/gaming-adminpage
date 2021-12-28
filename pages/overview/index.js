@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import Layout from "../../components/Layouts/Layout";
 import Dropdown from "../../components/UI/Dropdown";
 import Card from "../../components/UI/Card.js";
@@ -23,8 +23,8 @@ const cardData = [
     title: "Deposits",
     rows: [
       createData("Last 24 hours", 1, 0.5),
-      createData("1 day ago", 3, "NA"),
-      createData("7 days ago", 5, 1),
+      createData("7 days ago", 3, "NA"),
+      createData("30 days ago", 5, 1),
     ],
   },
   {
@@ -32,8 +32,8 @@ const cardData = [
     title: "New Users",
     rows: [
       createData("Last 24 hours", 1, 0.5),
-      createData("1 day ago", 3, "NA"),
-      createData("7 days ago", 5, 1),
+      createData("7 days ago", 3, "NA"),
+      createData("30 days ago", 5, 1),
     ],
   },
   {
@@ -52,19 +52,26 @@ function OverviewPage() {
   const [userList, setUserList] = useState([]);
   const [filterValue, setFiterValue] = useState(1);
 
-  const dropdownOptions = [
+  const dropdownOptions = useMemo(() => [
     { title: "Last 24 hours", value: 1 },
     { title: "Last 7 days", value: 7 },
     { title: "Last 30 days", value: 30 },
-  ];
+  ], []);
 
   const handleDropdownChange = (value) => {
     setFiterValue(value);
   };
 
-  const filterDataByDateRange = () => {
-    const startDate = new Date().getTime();
-    const endDate = getDateBefore(filterValue);
+  const filterDataByDateRange = (data, filteredDate) => {
+    const startDate = getDateBefore(filteredDate);
+    const endDate = new Date();
+    console.log(startDate)
+    const deposits = getAllDeposit(data);
+
+    console.log(deposits.filter(deposit => {
+      const date = new Date(deposit.createdAt);
+      if (date >= startDate) return (date >= startDate && date <= endDate)
+    }))
   };
 
   const getTransactionData = useCallback(async () => {
@@ -97,8 +104,8 @@ function OverviewPage() {
   }, [getTransactionData]);
 
   useEffect(() => {
-    filterDataByDateRange()
-  }, [filterValue]);
+    filterDataByDateRange(transactionData, filterValue)
+  }, [filterValue, transactionData]);
 
   return (
     <React.Fragment>
