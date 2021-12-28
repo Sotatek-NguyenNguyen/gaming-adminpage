@@ -65,13 +65,11 @@ function OverviewPage() {
   const filterDataByDateRange = (data, filteredDate) => {
     const startDate = getDateBefore(filteredDate);
     const endDate = new Date();
-    console.log(startDate)
-    const deposits = getAllDeposit(data);
 
-    console.log(deposits.filter(deposit => {
+    data.filter(deposit => {
       const date = new Date(deposit.createdAt);
       if (date >= startDate) return (date >= startDate && date <= endDate)
-    }))
+    })
   };
 
   const getTransactionData = useCallback(async () => {
