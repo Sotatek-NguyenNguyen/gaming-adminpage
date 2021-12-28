@@ -50,7 +50,6 @@ export const AuthProvider = ({ children }) => {
         });
         token = tokenResponse.accessToken;
       } else {
-        /* token = await createTokenWithWalletAdapter(adapter._wallet); */
         const signatureMsg = await signatureMsgAuth({ address: walletAddress.toString() });
         const encodedMessage = new TextEncoder().encode(signatureMsg?.signatureMsg);
         const { signature } = await adapter._wallet.sign(Buffer.from(encodedMessage), 'object');
