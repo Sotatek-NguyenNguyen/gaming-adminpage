@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import Button from "../UI/Button.js";
 import Input from "../../components/UI/Input.js";
@@ -9,6 +9,11 @@ const BackDrops = (props) => {
 
 const ModalOverlay = (props) => {
   const { onCloseModal, title, address, tokenAmount, inputDisabled } = props;
+  const amountRef = useRef();
+  const handleClick = () => {
+    if (inputDisabled) props.onClick();
+    else props.onClick(amountRef?.current?.value)
+  };
   return (
     <div className="modal">
       <div className="modal__title">{title}</div>
@@ -16,11 +21,12 @@ const ModalOverlay = (props) => {
       <div className="modal__content">
         <div className="address">{address}</div>
         <Input
-          placeholder={`Token Amount*: ${tokenAmount ? tokenAmount : ''}`}
+          placeholder={`Token Amount*: ${tokenAmount ? tokenAmount : ""}`}
           min="0"
           type="number"
           id="token-amount"
           disabled={inputDisabled}
+          ref={amountRef}
         />
       </div>
 
@@ -28,7 +34,12 @@ const ModalOverlay = (props) => {
         <Button className="btn-main--outline" onClick={onCloseModal}>
           Cancel
         </Button>
-        <Button onClick={props.onClick} className="btn-main">Confirm</Button>
+        <Button
+          onClick={handleClick}
+          className="btn-main"
+        >
+          Confirm
+        </Button>
       </div>
     </div>
   );

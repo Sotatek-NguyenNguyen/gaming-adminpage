@@ -59,6 +59,7 @@ function CatalogPage() {
         }
         onCloseModal={handleCloseModal}
         inputDisabled={false}
+        onClick={withDrawFromActualGameBalance}
       />
     );
   };
@@ -98,6 +99,15 @@ function CatalogPage() {
       />
     );
   };
+
+  const withDrawFromActualGameBalance = (amount) => {
+    console.log(amount)
+    // try {
+    //   const res = await sendJSON(`${ADMIN_PAGE_BACKEND_URL}/game-balance/withdrawals`);
+    // }catch (error) { 
+    //     console.error(err.message)
+    // }
+  }
 
   const grantTokenHandler = (amount, userAddress, note) => {
     setShowGrantTokenModal(true);
