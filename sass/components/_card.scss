@@ -1,27 +1,33 @@
 .card {
   background: $color--white;
-  width: 21.375rem;
-  height: 300px;
-  border-radius: 4px;
+  width: 350px;
+  height: 22.688rem;
+  border-radius: 16px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 
   &__header {
-    height: 65px;
-    background: $background-primary-light;
+    height: 48px;
+    width: 300px;
+    margin: 24px auto;
+    border-radius: 32px;
+    background: $background-ternary;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     letter-spacing: 0.15008px;
-    font-weight: bold;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 16px;
+    color: $color-primary;
+    padding-right: 10px;
+    padding-left: 4px;
 
     &--title {
-      text-transform: uppercase;
-      background: $color--white;
-      border: 1px solid #DFDFDF;
-      border-radius: 4px;
-      width: 116px;
+      background: $color-primary;
+      color: $color--white;
+      border: 1px solid #dfdfdf;
+      font-weight: bold;
+      border-radius: 32px;
+      width: 100px;
       height: 40px;
       display: flex;
       justify-content: center;
@@ -30,15 +36,23 @@
   }
 
   &__content {
-
-    &--item {
-      display: flex;
-      justify-content: space-around;
-      padding: 10px 0;
-      border-bottom: 1px solid $background-primary-dark;
-    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+    height: 144px;
+    margin: 0 auto;
   }
 
-  &__actions {
+  &__row {
+    width: 279px;
+    height: 48px;
+    color: $color-grey-dark;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: space-between;
+    padding: 12px 10px;
+    border-bottom: 1px solid $background-ternary;
   }
 }

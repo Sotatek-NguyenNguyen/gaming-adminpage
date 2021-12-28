@@ -3,6 +3,7 @@
 
 @import "base/base";
 @import "base/typography";
+@import "base/animation";
 @import "base/utilities";
 
 @import "layout/header";
@@ -12,9 +13,13 @@
 
 @import "components/account-badge";
 @import "components/dropdown";
+@import "components/modal";
 @import "components/card";
+@import "components/table";
 
 @import "pages/home";
 @import "pages/player";
 @import "pages/playerDetail";
+@import "pages/setting";
 @import "pages/overview";
+@import "pages/catalog";

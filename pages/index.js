@@ -87,7 +87,7 @@ function HomePage() {
   const WalletList = () => {
     return (
       <div className="wallet-list">
-        <div className="wallet-list--heading">Connect a wallet</div>
+        <div className="wallet-list--heading">Connect Your Wallet</div>
 
         <div className="wallet-list--main">
           <WalletMultiButton />
