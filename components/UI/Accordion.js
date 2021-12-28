@@ -9,6 +9,7 @@ import Button from "./Button.js";
 
 export default function SimpleAccordion(props) {
   
+  
   const grantTokenSubmitHandler = e => {
     e.preventDefault();
     props.onGrantToKenSubmit()

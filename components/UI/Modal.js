@@ -16,10 +16,11 @@ const ModalOverlay = (props) => {
       <div className="modal__content">
         <div className="address">{address}</div>
         <Input
-          placeholder="Token Amount*"
+          placeholder={`Token Amount*:`}
           min="0"
           type="number"
           id="token-amount"
+          disabled
         />
       </div>
 

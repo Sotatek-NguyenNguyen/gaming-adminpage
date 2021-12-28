@@ -99,7 +99,7 @@ function CatalogPage() {
       const res = await getJSON(`${ADMIN_PAGE_BACKEND_URL}/admin/game-balance`);
       if (res.status === 200) {
         setActualGameBalance(res?.data.actualGameBalance)
-        // setInGameBalance(res?.data.inGameBalance)
+        setInGameBalance(res?.data.inGameBalance)
       }
     } catch(error) {
       throw error;
@@ -151,7 +151,8 @@ function CatalogPage() {
           </form>
         </div>
       </div>
-      <SimpleAccordion onGrantToKenSubmit={() => setShowGrantTokenModal(true)}
+      <SimpleAccordion
+       onGrantToKenSubmit={() => setShowGrantTokenModal(true)}
       onDeductTokenSubmit={() => setShowDeductTokenModal(true)} />
 
       <section className='player__info container--custom'>
