@@ -1,2 +1,2 @@
-export const ADMIN_PAGE_BACKEND_URL = 'https://api-gaming.dev.gamifyclub.com';
+export const ADMIN_PAGE_BACKEND_URL = 'https://api-gaming.dev.gamifyclub.com/admin';
 export const JWT_TOKEN_DUMMY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MWM5N2M2NGY0Nzc1YTJkYjZlYWFjOWMiLCJhZGRyZXNzIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2NDA1OTQ2OTEsImV4cCI6MTY0MTE5OTQ5MX0.k7A70Khkyo4nXHgSp1GMbRFfbpx4k4bjShhZNTGnxZk";

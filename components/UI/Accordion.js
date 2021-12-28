@@ -15,23 +15,34 @@ export default function SimpleAccordion(props) {
   const amountDeductToken = useRef();
   const deductWalletAddress = useRef();
   const deductNote = useRef();
-  
-  const grantTokenSubmitHandler = e => {
+
+  const resetForm = () => {
+    amountGrantToken.current.value = "";
+    grantWalletAddress.current.value = "";
+    grantNote.current.value = "";
+
+    amountDeductToken.current.value = "";
+    deductWalletAddress.current.value = "";
+    deductNote.current.value = "";
+  };
+
+  const grantTokenSubmitHandler = (e) => {
     e.preventDefault();
     const amount = +amountGrantToken.current.value;
     const userAddress = grantWalletAddress.current.value;
     const note = grantNote.current.value;
     props.onGrantToKenSubmit(amount, userAddress, note);
+    resetForm();
   };
 
-  const deductTokenSubmitHandler = e => {
+  const deductTokenSubmitHandler = (e) => {
     e.preventDefault();
     const amount = +amountDeductToken.current.value;
     const userAddress = deductWalletAddress.current.value;
     const note = deductNote.current.value;
-    props.onDeductTokenSubmit(amount, userAddress, note)
+    props.onDeductTokenSubmit(amount, userAddress, note);
+    resetForm();
   };
-
 
   return (
     <div className="accordion-list">
@@ -50,7 +61,13 @@ export default function SimpleAccordion(props) {
             <label htmlFor="token-amount">
               <h5>Enter Token amount: * </h5>
             </label>
-            <Input required ref={amountGrantToken} placeholder="Token Amount" type="number" id="token-amount" />
+            <Input
+              required
+              ref={amountGrantToken}
+              placeholder="Token Amount"
+              type="number"
+              id="token-amount"
+            />
 
             <label htmlFor="wallet-address">
               <h5>Destination Wallet address: *</h5>
@@ -89,7 +106,13 @@ export default function SimpleAccordion(props) {
             <label htmlFor="token-amount">
               <h5>Enter Token amount: * </h5>
             </label>
-            <Input required ref={amountDeductToken} placeholder="Token Amount" type="text" id="token-amount" />
+            <Input
+              required
+              ref={amountDeductToken}
+              placeholder="Token Amount"
+              type="text"
+              id="token-amount"
+            />
 
             <label htmlFor="wallet-address">
               <h5>Originate Player’s wallet address: *</h5>

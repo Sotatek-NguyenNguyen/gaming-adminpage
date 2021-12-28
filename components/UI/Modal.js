@@ -8,7 +8,7 @@ const BackDrops = (props) => {
 };
 
 const ModalOverlay = (props) => {
-  const { onCloseModal, title, address, tokenAmount } = props;
+  const { onCloseModal, title, address, tokenAmount, inputDisabled } = props;
   return (
     <div className="modal">
       <div className="modal__title">{title}</div>
@@ -16,11 +16,11 @@ const ModalOverlay = (props) => {
       <div className="modal__content">
         <div className="address">{address}</div>
         <Input
-          placeholder={`Token Amount*: ${tokenAmount}`}
+          placeholder={`Token Amount*: ${tokenAmount ? tokenAmount : ''}`}
           min="0"
           type="number"
           id="token-amount"
-          disabled
+          disabled={inputDisabled}
         />
       </div>
 
@@ -28,7 +28,7 @@ const ModalOverlay = (props) => {
         <Button className="btn-main--outline" onClick={onCloseModal}>
           Cancel
         </Button>
-        <Button className="btn-main">Confirm</Button>
+        <Button onClick={props.onClick} className="btn-main">Confirm</Button>
       </div>
     </div>
   );

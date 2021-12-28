@@ -7,7 +7,7 @@ import Modal from "../../components/UI/Modal.js";
 
 import Inventory from "../../components/playerTransaction/inventory";
 import TransactionsHistory from "../../components/playerTransaction/transactionsHistory";
-import { getJSON } from "../../common";
+import { getJSON, sendJSON } from "../../common";
 import { ADMIN_PAGE_BACKEND_URL } from "../../config";
 
 function CatalogPage() {
@@ -18,7 +18,7 @@ function CatalogPage() {
   const [tab, setTab] = useState("inventory");
   const [actualGameBalance, setActualGameBalance] = useState("");
   const [inGameBalance, setInGameBalance] = useState("");
-  const [tokenAmount, setTokenAmount] = useState("");
+  const [tokenData, setTokenData] = useState({});
 
   const changeTab = (tab) => () => {
     setTab(tab);
@@ -39,7 +39,6 @@ function CatalogPage() {
     return (
       <Modal
         title="Confirm Deposit Token?"
-        tokenAmount={tokenAmount}
         address={
           <>
             Destination Address <br />
@@ -47,6 +46,7 @@ function CatalogPage() {
           </>
         }
         onCloseModal={handleCloseModal}
+        inputDisabled={false}
       />
     );
   };
@@ -55,7 +55,6 @@ function CatalogPage() {
     return (
       <Modal
         title="Confirm Withdraw Token?"
-        tokenAmount={tokenAmount}
         address={
           <>
             Destination Address <br />
@@ -63,6 +62,7 @@ function CatalogPage() {
           </>
         }
         onCloseModal={handleCloseModal}
+        inputDisabled={false}
       />
     );
   };
@@ -71,7 +71,8 @@ function CatalogPage() {
     return (
       <Modal
         title="Confirm Sending Token?"
-        tokenAmount={tokenAmount}
+        onClick={sendingToken}
+        tokenAmount={tokenData.amount}
         address={
           <>
             Destination Address <br />
@@ -79,6 +80,7 @@ function CatalogPage() {
           </>
         }
         onCloseModal={handleCloseModal}
+        inputDisabled={true}
       />
     );
   };
@@ -87,7 +89,8 @@ function CatalogPage() {
     return (
       <Modal
         title="Confirm Deduct Token?"
-        tokenAmount={tokenAmount}
+        onClick={deductToken}
+        tokenAmount={tokenData.amount}
         address={
           <>
             Originate Wallet Address <br />
@@ -95,22 +98,32 @@ function CatalogPage() {
           </>
         }
         onCloseModal={handleCloseModal}
+        inputDisabled={true}
       />
     );
   };
 
   const grantTokenHandler = (amount, userAddress, note) => {
     setShowGrantTokenModal(true);
-    console.log(amount)
+    setTokenData({ amount, userAddress, note });
   };
 
   const deductTokenHandler = (amount, userAddress, note) => {
     setShowDeductTokenModal(true);
+    setTokenData({ amount, userAddress, note });
   };
+
+  const sendingToken = async () => {
+    sendJSON(`${ADMIN_PAGE_BACKEND_URL}/users/grant-token`, tokenData)
+    .then(res => console.log(res))
+    .catch(err => console.error(err.message))
+  };
+
+  const deductToken = async () => {};
 
   const getGameBalance = async () => {
     try {
-      const res = await getJSON(`${ADMIN_PAGE_BACKEND_URL}/admin/game-balance`);
+      const res = await getJSON(`${ADMIN_PAGE_BACKEND_URL}/game-balance`);
       if (res.status === 200) {
         setActualGameBalance(res?.data.actualGameBalance);
         setInGameBalance(res?.data.inGameBalance);
@@ -181,15 +194,13 @@ function CatalogPage() {
             onClick={changeTab("inventory")}
             style={{ fontWeight: tab === "inventory" ? 700 : 400 }}
           >
-            {" "}
-            Inventory{" "}
+            Inventory
           </p>
           <p
             onClick={changeTab("transactionHistory")}
             style={{ fontWeight: tab === "transactionHistory" ? 700 : 400 }}
           >
-            {" "}
-            Transaction History{" "}
+            Transaction History
           </p>
         </div>
         <div>
