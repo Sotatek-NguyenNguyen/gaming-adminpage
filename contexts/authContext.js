@@ -11,6 +11,7 @@ const defaultState = {
 
 const AuthContext = createContext(defaultState);
 
+
 export const AuthProvider = ({ children }) => {
   const { wallet, publicKey: walletPublicKey } = useWallet();
   const [publicKey, setPublicKey] = useLocalStorageState('public_key');
