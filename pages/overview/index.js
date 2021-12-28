@@ -2,26 +2,70 @@ import React, { useCallback, useEffect, useState } from "react";
 import Layout from "../../components/Layouts/Layout";
 import Dropdown from "../../components/UI/Dropdown";
 import Card from "../../components/UI/Card.js";
-import { getJSON } from "../../common.js";
+import { getDateBefore, getJSON } from "../../common.js";
 import { ADMIN_PAGE_BACKEND_URL } from "../../config";
 
 function getAllDeposit(transactionData) {
-   return transactionData.filter(trans => trans.type === "deposit")
-};
+  return transactionData.filter((trans) => trans.type === "deposit");
+}
 
 const getAllWithDraw = (transactionData) => {
-  return transactionData.filter(trans => trans.type === 'withdrawn');
+  return transactionData.filter((trans) => trans.type === "withdrawn");
+};
+
+function createData(name, amount, change) {
+  return { name, amount, change };
 }
+
+const cardData = [
+  {
+    id: 1,
+    title: "Deposits",
+    rows: [
+      createData("Last 24 hours", 1, 0.5),
+      createData("1 day ago", 3, "NA"),
+      createData("7 days ago", 5, 1),
+    ],
+  },
+  {
+    id: 2,
+    title: "New Users",
+    rows: [
+      createData("Last 24 hours", 1, 0.5),
+      createData("1 day ago", 3, "NA"),
+      createData("7 days ago", 5, 1),
+    ],
+  },
+  {
+    id: 3,
+    title: "Reports",
+    rows: [
+      createData("New Users", 0, "NA"),
+      createData("Deposits", 5, 1),
+      createData("Withdraws", 3, "NA"),
+    ],
+  },
+];
 
 function OverviewPage() {
   const [transactionData, setTransactionData] = useState([]);
   const [userList, setUserList] = useState([]);
+  const [filterValue, setFiterValue] = useState(1);
 
   const dropdownOptions = [
     { title: "Last 24 hours", value: 1 },
     { title: "Last 7 days", value: 7 },
     { title: "Last 30 days", value: 30 },
   ];
+
+  const handleDropdownChange = (value) => {
+    setFiterValue(value);
+  };
+
+  const filterDataByDateRange = () => {
+    const startDate = new Date().getTime();
+    const endDate = getDateBefore(filterValue);
+  };
 
   const getTransactionData = useCallback(async () => {
     try {
@@ -30,7 +74,6 @@ function OverviewPage() {
       );
 
       if (res.status === 200) setTransactionData(res.data.data);
-      console.log(transactionData.filter(trans => trans.type === "deposit"))
     } catch (error) {
       throw error;
     }
@@ -42,7 +85,7 @@ function OverviewPage() {
         `${ADMIN_PAGE_BACKEND_URL}/admin/users?page=1&pageSize=20`
       );
 
-      if (res.status === 200) setUserList(res.data.data);      
+      if (res.status === 200) setUserList(res.data.data);
     } catch (error) {
       throw error;
     }
@@ -53,45 +96,18 @@ function OverviewPage() {
     getListUser().catch((err) => console.error(err.message));
   }, [getTransactionData]);
 
-  function createData(name, amount, change) {
-    return { name, amount, change };
-  }
-
-  const cardData = [
-    {
-      id: 1,
-      title: "Deposits",
-      rows: [
-        createData("Last 24 hours", 1, 0.5),
-        createData("1 day ago", 3, "NA"),
-        createData("7 days ago", 5, 1),
-      ],
-    },
-    {
-      id: 2,
-      title: "New Users",
-      rows: [
-        createData("Last 24 hours", 1, 0.5),
-        createData("1 day ago", 3, "NA"),
-        createData("7 days ago", 5, 1),
-      ],
-    },
-    {
-      id: 3,
-      title: "Reports",
-      rows: [
-        createData("New Users", 0, "NA"),
-        createData("Deposits", 5, 1),
-        createData("Withdraws", 3, "NA"),
-      ],
-    },
-  ];
+  useEffect(() => {
+    filterDataByDateRange()
+  }, [filterValue]);
 
   return (
     <React.Fragment>
       <div className="time-period">
         <span>Time period:</span>
-        <Dropdown options={dropdownOptions} />
+        <Dropdown
+          onChange={handleDropdownChange}
+          options={dropdownOptions}
+        />
       </div>
 
       <div className="card-list">

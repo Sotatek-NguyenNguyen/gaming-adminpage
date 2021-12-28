@@ -24,7 +24,7 @@ const useClickOutSide = (handler) => {
   return domNode;
 };
 
-function Dropdown({ options }) {
+function Dropdown({ options, onChange }) {
   const [isActive, setIsActive] = useState(false);
   const firstOption = options[0].title;
   const [selected, setSelected] = useState(firstOption);
@@ -32,6 +32,7 @@ function Dropdown({ options }) {
   const handleClick = (e) => {
     setSelected(e.target.textContent);
     setIsActive(false);
+    onChange(+e.target.getAttribute('value'))
   };
 
   const domNode = useClickOutSide(() => setIsActive(false));

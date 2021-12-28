@@ -42,3 +42,9 @@ export const updateJSON = async () => {
     throw new Error(error.message);
   }
 };
+
+export const getDateBefore = (days = 1) => {
+   const todayTimeStamp = new Date().getTime();
+   const daysBeforeTimeStamp = todayTimeStamp - (days * 24*60*60*1000);
+   return new Date(daysBeforeTimeStamp);
+};
