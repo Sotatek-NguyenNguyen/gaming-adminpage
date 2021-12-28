@@ -13,4 +13,23 @@ instance.interceptors.request.use((config) => {
   return config;
 });
 
+instance.interceptors.response.use(
+  (response) => {
+    const result = response.data;
+    /* if (typeof result === 'object') {
+      result.success = true;
+    } */
+    return result;
+  },
+  (error) => {
+    if (error?.response?.data) {
+      const result = error.response.data;
+      result.success = false;
+      return result;
+    }
+
+    return null;
+  },
+);
+
 export default instance;

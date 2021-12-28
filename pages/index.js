@@ -14,7 +14,7 @@ function HomePage() {
   const [showWalletList, setShowWalletList] = useState(false);
   const router = useRouter();
   const { login } = useAuth();
-  const { connected, wallet, publicKey, connect, signMessage, adapter, connecting } = useWallet();
+  const { connected, wallet, publicKey, signMessage, adapter, connecting } = useWallet();
   const { setVisible } = useWalletModal();
   const [loading, setLoading] = useState(false);
 
@@ -30,7 +30,7 @@ function HomePage() {
       setLoading(true);
       try {
         await login(publicKey, signMessage, adapter);
-        history.push('/overview');
+        router.push('/overview');
       } catch (error) {
         setLoading(false);
       }
@@ -74,7 +74,7 @@ function HomePage() {
 
   const WalletItem = (props) => {
     return (
-      <div onClick={() => setVisible(true)} className="wallet-item">
+      <div onClick={props.onClick} className="wallet-item">
         <div className="wallet-item__title">{props.name}</div>
 
         <div className="wallet-item__logo">

@@ -25,7 +25,6 @@ export const WalletConnectionProvider = ({ children }) => {
     () => [getPhantomWallet(), getSolletWallet({ network }), getSolletExtensionWallet({ network })],
     [network],
   );
-  console.log(wallets);
 
   return (
     <ConnectionProvider endpoint={endpoint}>
