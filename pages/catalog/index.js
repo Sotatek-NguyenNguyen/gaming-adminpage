@@ -5,8 +5,8 @@ import Button from "../../components/UI/Button.js";
 import SimpleAccordion from "../../components/UI/Accordion";
 import Modal from "../../components/UI/Modal.js";
 
-import Inventory from '../../components/playerTransaction/inventory';
-import TransactionsHistory from '../../components/playerTransaction/transactionsHistory';
+import Inventory from "../../components/playerTransaction/inventory";
+import TransactionsHistory from "../../components/playerTransaction/transactionsHistory";
 import { getJSON } from "../../common";
 import { ADMIN_PAGE_BACKEND_URL } from "../../config";
 
@@ -15,13 +15,14 @@ function CatalogPage() {
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showGrantTokenModal, setShowGrantTokenModal] = useState(false);
   const [showDeductTokenModal, setShowDeductTokenModal] = useState(false);
-  const [tab, setTab] = useState('inventory');
-  const [actualGameBalance, setActualGameBalance] = useState('');
-  const [inGameBalance, setInGameBalance] = useState('');
+  const [tab, setTab] = useState("inventory");
+  const [actualGameBalance, setActualGameBalance] = useState("");
+  const [inGameBalance, setInGameBalance] = useState("");
+  const [tokenAmount, setTokenAmount] = useState("");
 
   const changeTab = (tab) => () => {
     setTab(tab);
-  }
+  };
 
   const handleCloseModal = () => {
     setShowDepositModal(false);
@@ -38,6 +39,7 @@ function CatalogPage() {
     return (
       <Modal
         title="Confirm Deposit Token?"
+        tokenAmount={tokenAmount}
         address={
           <>
             Destination Address <br />
@@ -53,6 +55,7 @@ function CatalogPage() {
     return (
       <Modal
         title="Confirm Withdraw Token?"
+        tokenAmount={tokenAmount}
         address={
           <>
             Destination Address <br />
@@ -68,6 +71,7 @@ function CatalogPage() {
     return (
       <Modal
         title="Confirm Sending Token?"
+        tokenAmount={tokenAmount}
         address={
           <>
             Destination Address <br />
@@ -83,9 +87,10 @@ function CatalogPage() {
     return (
       <Modal
         title="Confirm Deduct Token?"
+        tokenAmount={tokenAmount}
         address={
           <>
-            Originate Wallet Address  <br />
+            Originate Wallet Address <br />
             4zj7KF13agrr3VYEt3RxxhDtzHGQmL7KdhzGZ9nzp1xD
           </>
         }
@@ -94,20 +99,29 @@ function CatalogPage() {
     );
   };
 
+  const grantTokenHandler = (amount, userAddress, note) => {
+    setShowGrantTokenModal(true);
+    console.log(amount)
+  };
+
+  const deductTokenHandler = (amount, userAddress, note) => {
+    setShowDeductTokenModal(true);
+  };
+
   const getGameBalance = async () => {
     try {
       const res = await getJSON(`${ADMIN_PAGE_BACKEND_URL}/admin/game-balance`);
       if (res.status === 200) {
-        setActualGameBalance(res?.data.actualGameBalance)
-        setInGameBalance(res?.data.inGameBalance)
+        setActualGameBalance(res?.data.actualGameBalance);
+        setInGameBalance(res?.data.inGameBalance);
       }
-    } catch(error) {
+    } catch (error) {
       throw error;
     }
   };
 
   useEffect(() => {
-    getGameBalance().catch(err => console.error(err.message))
+    getGameBalance().catch((err) => console.error(err.message));
   }, []);
 
   return (
@@ -127,7 +141,12 @@ function CatalogPage() {
             <label htmlFor="actual-game">
               <h5>Actual game balance</h5>
             </label>
-            <Input disabled type="number" id="actual-game" value={actualGameBalance} />
+            <Input
+              disabled
+              type="number"
+              id="actual-game"
+              value={actualGameBalance}
+            />
 
             <label htmlFor="in-game">
               <h5>In-game balance</h5>
@@ -152,20 +171,29 @@ function CatalogPage() {
         </div>
       </div>
       <SimpleAccordion
-       onGrantToKenSubmit={() => setShowGrantTokenModal(true)}
-      onDeductTokenSubmit={() => setShowDeductTokenModal(true)} />
+        onGrantToKenSubmit={grantTokenHandler}
+        onDeductTokenSubmit={deductTokenHandler}
+      />
 
-      <section className='player__info container--custom'>
-        <div className='info__tabs'>
-          <p onClick={changeTab('inventory')}
-             style={{ fontWeight: tab === 'inventory' ? 700 : 400 }}
-          > Inventory </p>
-          <p onClick={changeTab('transactionHistory')}
-             style={{ fontWeight: tab === 'transactionHistory' ? 700 : 400 }}
-          > Transaction History </p>
+      <section className="player__info container--custom">
+        <div className="info__tabs">
+          <p
+            onClick={changeTab("inventory")}
+            style={{ fontWeight: tab === "inventory" ? 700 : 400 }}
+          >
+            {" "}
+            Inventory{" "}
+          </p>
+          <p
+            onClick={changeTab("transactionHistory")}
+            style={{ fontWeight: tab === "transactionHistory" ? 700 : 400 }}
+          >
+            {" "}
+            Transaction History{" "}
+          </p>
         </div>
         <div>
-          {tab === 'inventory' ? <Inventory /> : <TransactionsHistory />}
+          {tab === "inventory" ? <Inventory /> : <TransactionsHistory />}
         </div>
       </section>
     </div>

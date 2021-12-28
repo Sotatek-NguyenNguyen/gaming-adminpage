@@ -8,7 +8,7 @@ const BackDrops = (props) => {
 };
 
 const ModalOverlay = (props) => {
-  const { onCloseModal, title, address } = props;
+  const { onCloseModal, title, address, tokenAmount } = props;
   return (
     <div className="modal">
       <div className="modal__title">{title}</div>
@@ -16,7 +16,7 @@ const ModalOverlay = (props) => {
       <div className="modal__content">
         <div className="address">{address}</div>
         <Input
-          placeholder={`Token Amount*:`}
+          placeholder={`Token Amount*: ${tokenAmount}`}
           min="0"
           type="number"
           id="token-amount"

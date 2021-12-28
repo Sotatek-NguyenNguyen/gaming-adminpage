@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useRef } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -8,16 +8,28 @@ import Input from "./Input.js";
 import Button from "./Button.js";
 
 export default function SimpleAccordion(props) {
-  
+  const amountGrantToken = useRef();
+  const grantWalletAddress = useRef();
+  const grantNote = useRef();
+
+  const amountDeductToken = useRef();
+  const deductWalletAddress = useRef();
+  const deductNote = useRef();
   
   const grantTokenSubmitHandler = e => {
     e.preventDefault();
-    props.onGrantToKenSubmit()
+    const amount = +amountGrantToken.current.value;
+    const userAddress = grantWalletAddress.current.value;
+    const note = grantNote.current.value;
+    props.onGrantToKenSubmit(amount, userAddress, note);
   };
 
   const deductTokenSubmitHandler = e => {
     e.preventDefault();
-    props.onDeductTokenSubmit()
+    const amount = +amountDeductToken.current.value;
+    const userAddress = deductWalletAddress.current.value;
+    const note = deductNote.current.value;
+    props.onDeductTokenSubmit(amount, userAddress, note)
   };
 
 
@@ -38,7 +50,7 @@ export default function SimpleAccordion(props) {
             <label htmlFor="token-amount">
               <h5>Enter Token amount: * </h5>
             </label>
-            <Input placeholder="Token Amount" type="number" id="token-amount" />
+            <Input required ref={amountGrantToken} placeholder="Token Amount" type="number" id="token-amount" />
 
             <label htmlFor="wallet-address">
               <h5>Destination Wallet address: *</h5>
@@ -47,12 +59,14 @@ export default function SimpleAccordion(props) {
               placeholder="Player’s wallet address"
               type="text"
               id="wallet-address"
+              ref={grantWalletAddress}
+              required
             />
 
             <label htmlFor="transition-note">
               <h5>Transation Note: *</h5>
             </label>
-            <Input type="text" id="wallet-address" />
+            <Input required type="text" id="wallet-address" ref={grantNote} />
 
             <div className="form-actions">
               <Button className="btn-main">Grant</Button>
@@ -75,7 +89,7 @@ export default function SimpleAccordion(props) {
             <label htmlFor="token-amount">
               <h5>Enter Token amount: * </h5>
             </label>
-            <Input placeholder="Token Amount" type="text" id="token-amount" />
+            <Input required ref={amountDeductToken} placeholder="Token Amount" type="text" id="token-amount" />
 
             <label htmlFor="wallet-address">
               <h5>Originate Player’s wallet address: *</h5>
@@ -84,12 +98,14 @@ export default function SimpleAccordion(props) {
               placeholder="Player’s wallet address"
               type="text"
               id="wallet-address"
+              ref={deductWalletAddress}
+              required
             />
 
             <label htmlFor="transition-note">
               <h5>Transation Note: *</h5>
             </label>
-            <Input type="text" id="wallet-address" />
+            <Input required ref={deductNote} type="text" id="wallet-address" />
 
             <div className="form-actions">
               <Button className="btn-main">Deduct</Button>
