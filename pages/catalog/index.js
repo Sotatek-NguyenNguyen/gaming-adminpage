@@ -122,6 +122,9 @@ function CatalogPage() {
 
   const deductToken = () => {
     sendJSON(`${ADMIN_PAGE_BACKEND_URL}/users/deduct-token`, tokenData)
+    .then(res => console.log(res))
+    .finally(() => setTokenData({}))
+    .catch(err => console.error(err.message))
   };
 
   const getGameBalance = async () => {
