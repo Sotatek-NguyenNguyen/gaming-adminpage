@@ -66,8 +66,8 @@ function OverviewPage() {
     const startDate = getDateBefore(filteredDate);
     const endDate = new Date();
 
-    data.filter(deposit => {
-      const date = new Date(deposit.createdAt);
+    data.filter(el => {
+      const date = new Date(el.createdAt);
       if (date >= startDate) return (date >= startDate && date <= endDate)
     })
   };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../../components/Layouts/Layout";
 import Input from "../../components/UI/Input.js";
 import Button from "../../components/UI/Button.js";
@@ -7,6 +7,8 @@ import Modal from "../../components/UI/Modal.js";
 
 import Inventory from '../../components/playerTransaction/inventory';
 import TransactionsHistory from '../../components/playerTransaction/transactionsHistory';
+import { getJSON } from "../../common";
+import { ADMIN_PAGE_BACKEND_URL } from "../../config";
 
 function CatalogPage() {
   const [showDepositModal, setShowDepositModal] = useState(false);
@@ -14,6 +16,8 @@ function CatalogPage() {
   const [showGrantTokenModal, setShowGrantTokenModal] = useState(false);
   const [showDeductTokenModal, setShowDeductTokenModal] = useState(false);
   const [tab, setTab] = useState('inventory');
+  const [actualGameBalance, setActualGameBalance] = useState('');
+  const [inGameBalance, setInGameBalance] = useState('');
 
   const changeTab = (tab) => () => {
     setTab(tab);
@@ -90,6 +94,22 @@ function CatalogPage() {
     );
   };
 
+  const getGameBalance = async () => {
+    try {
+      const res = await getJSON(`${ADMIN_PAGE_BACKEND_URL}/admin/game-balance`);
+      if (res.status === 200) {
+        setActualGameBalance(res?.data.actualGameBalance)
+        // setInGameBalance(res?.data.inGameBalance)
+      }
+    } catch(error) {
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    getGameBalance().catch(err => console.error(err.message))
+  }, []);
+
   return (
     <div className="catalog">
       {showDepositModal && <DepositModal />}
@@ -107,12 +127,12 @@ function CatalogPage() {
             <label htmlFor="actual-game">
               <h5>Actual game balance</h5>
             </label>
-            <Input type="number" id="actual-game" />
+            <Input disabled type="number" id="actual-game" value={actualGameBalance} />
 
             <label htmlFor="in-game">
               <h5>In-game balance</h5>
             </label>
-            <Input type="number" id="in-game" />
+            <Input disabled type="number" id="in-game" value={inGameBalance} />
 
             <div className="form-actions">
               <Button

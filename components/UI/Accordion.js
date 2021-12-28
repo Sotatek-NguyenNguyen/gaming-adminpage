@@ -8,6 +8,7 @@ import Input from "./Input.js";
 import Button from "./Button.js";
 
 export default function SimpleAccordion(props) {
+  
   const grantTokenSubmitHandler = e => {
     e.preventDefault();
     props.onGrantToKenSubmit()
@@ -36,7 +37,7 @@ export default function SimpleAccordion(props) {
             <label htmlFor="token-amount">
               <h5>Enter Token amount: * </h5>
             </label>
-            <Input placeholder="Token Amount" type="text" id="token-amount" />
+            <Input placeholder="Token Amount" type="number" id="token-amount" />
 
             <label htmlFor="wallet-address">
               <h5>Destination Wallet address: *</h5>
