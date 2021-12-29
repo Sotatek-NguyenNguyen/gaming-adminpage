@@ -38,7 +38,8 @@ function TransactionsHistory(){
 
   const search = (event) => {
     event.preventDefault();
-    let newEndpoint = `${endpoint}&fromDate=${fromDateRef.current.value}&toDate=${toDateRef.current.value}`;
+    const currentEndpoint = 'admin/users/transactions?page=1&pageSize=20';
+    let newEndpoint = `${currentEndpoint}&fromDate=${fromDateRef.current.value}&toDate=${toDateRef.current.value}`;
     if(transactionIdRef.current.value !== ''){
         newEndpoint += `&transactionId=${transactionIdRef.current.value}`;
     }
