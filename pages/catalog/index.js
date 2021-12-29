@@ -100,14 +100,20 @@ function CatalogPage() {
     );
   };
 
-  const withDrawFromActualGameBalance = (amount) => {
-    console.log(amount)
-    // try {
-    //   const res = await sendJSON(`${ADMIN_PAGE_BACKEND_URL}/game-balance/withdrawals`);
-    // }catch (error) { 
-    //     console.error(err.message)
-    // }
-  }
+  const withDrawFromActualGameBalance = async (amount) => {
+    try {
+      const res = await sendJSON(
+        `${ADMIN_PAGE_BACKEND_URL}/game-balance/withdrawals`, {
+          userAddress: 'DBRxc9dpWEisSppdeFfFdjiXUso4XF4qhfRQ3Lq73wy7',
+          amount
+        }
+      );
+      if (res.status === 201) console.log(res)
+      setShowWithdrawModal(false)
+    } catch (error) {
+      console.error(err.message);
+    }
+  };
 
   const grantTokenHandler = (amount, userAddress, note) => {
     setShowGrantTokenModal(true);
@@ -122,10 +128,13 @@ function CatalogPage() {
   const sendingToken = () => {
     sendJSON(`${ADMIN_PAGE_BACKEND_URL}/users/grant-token`, tokenData)
       .then((res) => {
-        if (res.status === 201) console.log(res)
+        if (res.status === 201) console.log(res);
         // need to show success, error message for user
       })
-      .finally(() => setTokenData({}))
+      .finally(() => {
+        setTokenData({});
+        setShowGrantTokenModal(false);
+      })
       .catch((err) => console.error(err.message));
   };
 
@@ -135,7 +144,10 @@ function CatalogPage() {
         if (res.status === 201) console.log(res);
         // need to show success, error message for user
       })
-      .finally(() => setTokenData({}))
+      .finally(() => {
+        setTokenData({});
+        setShowDeductTokenModal(false);
+      })
       .catch((err) => console.error(err.message));
   };
 
