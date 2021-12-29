@@ -1,33 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../../components/Layouts/Layout";
 import Input from "../../components/UI/Input.js";
 import Button from "../../components/UI/Button.js";
 import SimpleAccordion from "../../components/UI/Accordion";
 import Modal from "../../components/UI/Modal.js";
 
-import Inventory from '../../components/playerTransaction/inventory';
-import TransactionsHistory from '../../components/playerTransaction/transactionsHistory';
+import Inventory from "../../components/playerTransaction/inventory";
+import TransactionsHistory from "../../components/playerTransaction/transactionsHistory";
+import { getJSON, sendJSON } from "../../common";
+import { ADMIN_PAGE_BACKEND_URL } from "../../config";
 
 function CatalogPage() {
   const [showDepositModal, setShowDepositModal] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showGrantTokenModal, setShowGrantTokenModal] = useState(false);
   const [showDeductTokenModal, setShowDeductTokenModal] = useState(false);
-  const [tab, setTab] = useState('inventory');
+  const [tab, setTab] = useState("inventory");
+  const [actualGameBalance, setActualGameBalance] = useState("");
+  const [inGameBalance, setInGameBalance] = useState("");
+  const [tokenData, setTokenData] = useState({});
 
   const changeTab = (tab) => () => {
     setTab(tab);
-  }
+  };
 
   const handleCloseModal = () => {
     setShowDepositModal(false);
     setShowWithdrawModal(false);
     setShowGrantTokenModal(false);
     setShowDeductTokenModal(false);
-  };
-
-  const handleGameBalanceSubmit = (e) => {
-    e.preventDefault();
   };
 
   const DepositModal = () => {
@@ -41,6 +42,7 @@ function CatalogPage() {
           </>
         }
         onCloseModal={handleCloseModal}
+        inputDisabled={false}
       />
     );
   };
@@ -56,6 +58,8 @@ function CatalogPage() {
           </>
         }
         onCloseModal={handleCloseModal}
+        inputDisabled={false}
+        onClick={withDrawFromActualGameBalance}
       />
     );
   };
@@ -64,6 +68,8 @@ function CatalogPage() {
     return (
       <Modal
         title="Confirm Sending Token?"
+        onClick={sendingToken}
+        tokenAmount={tokenData.amount}
         address={
           <>
             Destination Address <br />
@@ -71,6 +77,7 @@ function CatalogPage() {
           </>
         }
         onCloseModal={handleCloseModal}
+        inputDisabled={true}
       />
     );
   };
@@ -79,16 +86,68 @@ function CatalogPage() {
     return (
       <Modal
         title="Confirm Deduct Token?"
+        onClick={deductToken}
+        tokenAmount={tokenData.amount}
         address={
           <>
-            Originate Wallet Address  <br />
+            Originate Wallet Address <br />
             4zj7KF13agrr3VYEt3RxxhDtzHGQmL7KdhzGZ9nzp1xD
           </>
         }
         onCloseModal={handleCloseModal}
+        inputDisabled={true}
       />
     );
   };
+
+  const withDrawFromActualGameBalance = (amount) => {
+    console.log(amount)
+    // try {
+    //   const res = await sendJSON(`${ADMIN_PAGE_BACKEND_URL}/game-balance/withdrawals`);
+    // }catch (error) { 
+    //     console.error(err.message)
+    // }
+  }
+
+  const grantTokenHandler = (amount, userAddress, note) => {
+    setShowGrantTokenModal(true);
+    setTokenData({ amount, userAddress, note });
+  };
+
+  const deductTokenHandler = (amount, userAddress, note) => {
+    setShowDeductTokenModal(true);
+    setTokenData({ amount, userAddress, note });
+  };
+
+  const sendingToken = () => {
+    sendJSON(`${ADMIN_PAGE_BACKEND_URL}/users/grant-token`, tokenData)
+      .then((res) => console.log(res))
+      .finally(() => setTokenData({}))
+      .catch((err) => console.error(err.message));
+  };
+
+  const deductToken = () => {
+    sendJSON(`${ADMIN_PAGE_BACKEND_URL}/users/deduct-token`, tokenData)
+      .then((res) => console.log(res))
+      .finally(() => setTokenData({}))
+      .catch((err) => console.error(err.message));
+  };
+
+  const getGameBalance = async () => {
+    try {
+      const res = await getJSON(`${ADMIN_PAGE_BACKEND_URL}/game-balance`);
+      if (res.status === 200) {
+        setActualGameBalance(res?.data.actualGameBalance);
+        setInGameBalance(res?.data.inGameBalance);
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    getGameBalance().catch((err) => console.error(err.message));
+  }, []);
 
   return (
     <div className="catalog">
@@ -103,16 +162,21 @@ function CatalogPage() {
         </div>
 
         <div className="form-container__content">
-          <form onSubmit={handleGameBalanceSubmit}>
+          <form onSubmit={(e) => e.preventDefault()}>
             <label htmlFor="actual-game">
               <h5>Actual game balance</h5>
             </label>
-            <Input type="number" id="actual-game" />
+            <Input
+              disabled
+              type="number"
+              id="actual-game"
+              value={actualGameBalance}
+            />
 
             <label htmlFor="in-game">
               <h5>In-game balance</h5>
             </label>
-            <Input type="number" id="in-game" />
+            <Input disabled type="number" id="in-game" value={inGameBalance} />
 
             <div className="form-actions">
               <Button
@@ -131,20 +195,28 @@ function CatalogPage() {
           </form>
         </div>
       </div>
-      <SimpleAccordion onGrantToKenSubmit={() => setShowGrantTokenModal(true)}
-      onDeductTokenSubmit={() => setShowDeductTokenModal(true)} />
+      <SimpleAccordion
+        onGrantToKenSubmit={grantTokenHandler}
+        onDeductTokenSubmit={deductTokenHandler}
+      />
 
-      <section className='player__info container--custom'>
-        <div className='info__tabs'>
-          <p onClick={changeTab('inventory')}
-             style={{ fontWeight: tab === 'inventory' ? 700 : 400 }}
-          > Inventory </p>
-          <p onClick={changeTab('transactionHistory')}
-             style={{ fontWeight: tab === 'transactionHistory' ? 700 : 400 }}
-          > Transaction History </p>
+      <section className="player__info container--custom">
+        <div className="info__tabs">
+          <p
+            onClick={changeTab("inventory")}
+            style={{ fontWeight: tab === "inventory" ? 700 : 400 }}
+          >
+            Inventory
+          </p>
+          <p
+            onClick={changeTab("transactionHistory")}
+            style={{ fontWeight: tab === "transactionHistory" ? 700 : 400 }}
+          >
+            Transaction History
+          </p>
         </div>
         <div>
-          {tab === 'inventory' ? <Inventory /> : <TransactionsHistory />}
+          {tab === "inventory" ? <Inventory /> : <TransactionsHistory />}
         </div>
       </section>
     </div>
