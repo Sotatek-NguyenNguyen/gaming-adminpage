@@ -121,14 +121,20 @@ function CatalogPage() {
 
   const sendingToken = () => {
     sendJSON(`${ADMIN_PAGE_BACKEND_URL}/users/grant-token`, tokenData)
-      .then((res) => console.log(res))
+      .then((res) => {
+        if (res.status === 201) console.log(res)
+        // need to show success, error message for user
+      })
       .finally(() => setTokenData({}))
       .catch((err) => console.error(err.message));
   };
 
   const deductToken = () => {
     sendJSON(`${ADMIN_PAGE_BACKEND_URL}/users/deduct-token`, tokenData)
-      .then((res) => console.log(res))
+      .then((res) => {
+        if (res.status === 201) console.log(res);
+        // need to show success, error message for user
+      })
       .finally(() => setTokenData({}))
       .catch((err) => console.error(err.message));
   };
