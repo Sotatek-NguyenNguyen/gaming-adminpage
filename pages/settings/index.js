@@ -16,25 +16,31 @@ function SettingsPage() {
   const tokenCodeRef = useRef(null);
   const tokenNameRef = useRef(null);
   const walletAddressRef = useRef(null);
-  
+  const webhookRef = useRef(null);
+  const itemInfoRef = useRef(null);
+
   const [disabledEditGameInfo, setDisabledEditGameInfo] = useState(true);
-  const [editorInitValue, setEditorInitValue] = useState('');
+  const [editorInitValue, setEditorInitValue] = useState("");
 
   const getGameInfo = async () => {
     try {
       const res = await getJSON(`${ADMIN_PAGE_BACKEND_URL}/game-info`);
       const gameInfo = res?.data;
 
+      console.log(gameInfo)
+
       if (res && res.status === 200) {
-        nameRef.current.value = gameInfo.name;
-        backgroundURLRef.current.value = gameInfo.backgroundURL;
-        logoURLRef.current.value = gameInfo.logoURL;
-        setEditorInitValue(gameInfo.description);
-        videoIntroURLRef.current.value  = gameInfo.videoIntroURL;
-        gameURLRef.current.value = gameInfo.gameURL;
-        tokenCodeRef.current.value = gameInfo.tokenCode;
-        tokenNameRef.current.value = gameInfo.tokenName;
-        walletAddressRef.current.value = gameInfo.walletAddress;
+        nameRef.current.value = gameInfo?.name;
+        backgroundURLRef.current.value = gameInfo?.backgroundURL;
+        logoURLRef.current.value = gameInfo?.logoURL;
+        setEditorInitValue(gameInfo?.description);
+        videoIntroURLRef.current.value = gameInfo?.videoIntroURL;
+        gameURLRef.current.value = gameInfo?.gameURL;
+        tokenCodeRef.current.value = gameInfo?.tokenCode;
+        tokenNameRef.current.value = gameInfo?.tokenName;
+        walletAddressRef.current.value = gameInfo?.walletAddress;
+        webhookRef.current.value = gameInfo?.webhookUrl;
+        itemInfoRef.current.value = gameInfo?.getItemUrl;
       }
     } catch (err) {
       throw err;
@@ -42,17 +48,18 @@ function SettingsPage() {
   };
 
   const updateGameInfo = () => {
-    if(editorRef.current) {
-      console.log(editorRef.current.getContent())
+    if (editorRef.current) {
+      console.log(editorRef.current.getContent());
     }
   };
 
   useEffect(() => {
     getGameInfo().catch((err) => console.error(err.message));
   }, []);
+
   return (
     <div className="container--custom">
-      <form className="container--main" onSubmit={e => e.preventDefault()}>
+      <form className="container--main" onSubmit={(e) => e.preventDefault()}>
         <h3>Game information</h3>
         <div className="game__info">
           <section className="info--left">
@@ -130,6 +137,30 @@ function SettingsPage() {
           </section>
         </div>
 
+        <div className="game__data">
+          <div className="form__input">
+            <label htmlFor="webhook">Webhook Endpoint (URL - POST)</label>
+            <Input
+              id="webhook"
+              type="text"
+              placeholder="api-webhook"
+              ref={webhookRef}
+              disabled={disabledEditGameInfo}
+            />
+          </div>
+
+          <div className="form__input">
+            <label htmlFor="item-info">Item Info API (URL - POST)</label>
+            <Input
+              id="item-info"
+              placeholder="api-get-sth"
+              type="text"
+              ref={itemInfoRef}
+              disabled={disabledEditGameInfo}
+            />
+          </div>
+        </div>
+
         <div className="game__detail">
           <section className="currentCode_and_name">
             <h3>Current code and display name</h3>
@@ -177,16 +208,20 @@ function SettingsPage() {
           </section>
         </div>
         {disabledEditGameInfo && (
-          <Button variant="contained" onClick={() => setDisabledEditGameInfo(false)} className="btn-main edit_game_info">
+          <Button
+            variant="contained"
+            onClick={() => setDisabledEditGameInfo(false)}
+            className="btn-main edit_game_info"
+          >
             Edit
           </Button>
         )}
 
-         {!disabledEditGameInfo && (
-           <Button onClick={updateGameInfo} className="btn-main edit_game_info">
-             Save
-           </Button>
-         )}
+        {!disabledEditGameInfo && (
+          <Button onClick={updateGameInfo} className="btn-main edit_game_info">
+            Save
+          </Button>
+        )}
       </form>
     </div>
   );

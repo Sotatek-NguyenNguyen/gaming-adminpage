@@ -82,6 +82,15 @@
   }
 }
 
+.game__data {
+  width: 100%;
+  margin-top: 30px;
+  border-bottom: 0.3px solid rgba(0, 0, 0, 0.3);
+  padding-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
 .game__detail{
   width: 100%;
   margin-top: 30px;
