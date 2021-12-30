@@ -3,7 +3,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import Button from "../../components/UI/Button.js";
 import Input from "../../components/UI/Input.js";
 import Layout from "../../components/Layouts/Layout";
-import { getJSON } from "../../common.js";
+import { getJSON, updateJSON } from "../../common.js";
 import { ADMIN_PAGE_BACKEND_URL } from "../../config";
 
 function SettingsPage() {
@@ -27,8 +27,6 @@ function SettingsPage() {
       const res = await getJSON(`${ADMIN_PAGE_BACKEND_URL}/game-info`);
       const gameInfo = res?.data;
 
-      console.log(gameInfo)
-
       if (res && res.status === 200) {
         nameRef.current.value = gameInfo?.name;
         backgroundURLRef.current.value = gameInfo?.backgroundURL;
@@ -47,9 +45,26 @@ function SettingsPage() {
     }
   };
 
-  const updateGameInfo = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
+  const updateGameInfo = async () => {
+    const updatedGameInfoData = {
+      name: nameRef.current.value,
+      videoIntroURL: videoIntroURLRef.current.value,
+      logoURL: logoURLRef.current.value,
+      backgroundURL: backgroundURLRef.current.value,
+      description: (editorRef.current && editorRef.current.getContent()),
+      gameURL: gameURLRef.current.value,
+      webhookUrl: webhookRef.current.value,
+      getItemUrl: itemInfoRef.current.value,
+      tokenCode: tokenCodeRef.current.value,
+      tokenNameRef: tokenNameRef.current.value,
+      walletAddressRef: walletAddressRef.current.value
+    }
+    
+    try {
+      const res = await updateJSON(`${ADMIN_PAGE_BACKEND_URL}/game-info`, updatedGameInfoData);
+      if (res.status === 200) console.log('Game info updated successfully!')
+    } catch (err) {
+      console.error(err.message)
     }
   };
 
