@@ -28,7 +28,7 @@ export const sendJSON = async (url, data) => {
   }
 };
 
-export const updateJSON = async () => {
+export const updateJSON = async (url, updateData) => {
   try {
     const res = await axios.put(url, updateData, {
       headers: {
