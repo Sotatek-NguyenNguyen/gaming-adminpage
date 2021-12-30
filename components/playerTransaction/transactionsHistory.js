@@ -1,104 +1,66 @@
-import React from 'react'
+import React, {useState, useEffect, useRef, useCallback} from 'react'
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import DataTable from '../UI/Table/DataTable';
+import {  getJSON } from "../../common.js";
+import { ADMIN_PAGE_BACKEND_URL } from "../../config";
 
 function TransactionsHistory(){
-  const tableColumns = [
-    { title: 'Status', field: 'status'},
-    { title: 'Deposit Address', field: 'address' },
-    { title: 'Deposit Amount', field: 'amount' },
-    { title: 'TimeStamp', field: 'time'},
-  ];
-  const tablesData = [
-    {
-      status: "Deposited",
-      address: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
-      amount: 0.5,
-      id: 'G24DS5GDS3D3F2G1S5D4G1S',
-      time: '2021-11-18 11:29:00',
-    },
-    {
-      status: "Deposited",
-      address: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
-      amount: 1,
-      id: 'G24DS5GDS31GSDD4G1S',
-      time: '2021-11-18 11:29:00',
-    },
-    {
-      status: "Deposited",
-      address: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
-      amount: 100,
-      id: 'G24DS5GDSSD3F2G1S5D4G1S',
-      time: '2021-11-18 11:29:00',
-    },
-    {
-      status: "Deposited",
-      address: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
-      amount: 1,
-      id: 'S31GSD3F2G1S5D4G1S',
-      time: '2021-11-18 11:29:00',
-    },
-    {
-      status: "Deposited",
-      address: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
-      amount: 1,
-      id: 'GD31GSD3F2G1S5D4G1S',
-      time: '2021-11-18 11:29:00',
-    },
-    {
-      status: "Deposited",
-      address: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
-      amount: 0.5,
-      id: 'G24D1GSD3F2G1S5D4G1S',
-      time: '2021-11-18 11:29:00',
-    },
-    {
-      status: "Deposited",
-      address: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
-      amount: 100,
-      id: 'G24DS5GDS1S5D4G1S',
-      time: '2021-11-18 11:29:00',
-    },
-    {
-      status: "Deposited",
-      address: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
-      amount: 100,
-      id: 'G5GDS31GSD3F2G1S5S',
-      time: '2021-11-18 11:29:00',
-    },
-    {
-      status: "Deposited",
-      address: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
-      amount: 1,
-      id: '24DS5GD3F2G1S5D4G1S',
-      time: '2021-11-18 11:29:00',
-    },
-    {
-      status: "Deposited",
-      address: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
-      amount: 100,
-      id: 'GS5GDS31GSD3F25D4G1S',
-      time: '2021-11-18 11:29:00',
-    },
+  const [transactionData, setTransactionsData] = useState([]);
+  const [endpoint, setEndpoint] = useState(['admin/users/transactions?page=1&pageSize=20']);
+  const [query] = useState({
+    transactionId: '',
+    fromDate: new Date(new Date().getTime() - 24*60*60*1000).toISOString().split('T')[0], // from yesterday
+    toDate: new Date(new Date().getTime() + 24*60*60*1000).toISOString().split('T')[0] // from tomorrow
+  })
 
-    {
-      status: "Deposited",
-      address: '4SDGDSG24DS5GDS31GSD3F2G1S5D4G1SDF2G1S3DGF1S5DF4G',
-      amount: 0.5,
-      id: 'G1GSD3F2G1S5D4G1S',
-      time: '2021-11-18 11:29:00',
-    },
+  const tableColumns = [
+    { title: 'Status', field: 'type'},
+    { title: 'Deposit Address', field: 'userAddress' },
+    { title: 'Deposit Amount', field: 'amount' },
+    { title: 'TimeStamp', field: 'createdAt'},
   ];
+
+  const getTransactionHistory = useCallback(()=>{
+      getJSON(`${ADMIN_PAGE_BACKEND_URL}/${endpoint}`)
+      .then(res => {
+        setTransactionsData(res.data.data);
+      })
+      .catch (err => {throw err})
+  },[endpoint]);
+  useEffect(()=>{
+    getTransactionHistory();
+  },[getTransactionHistory]);
+
+  const transactionIdRef = useRef(null);
+  const fromDateRef = useRef(null);
+  const toDateRef = useRef(null);
+
+  const search = (event) => {
+    event.preventDefault();
+    const currentEndpoint = 'admin/users/transactions?page=1&pageSize=20';
+    let newEndpoint = `${currentEndpoint}&fromDate=${fromDateRef.current.value}&toDate=${toDateRef.current.value}`;
+    if(transactionIdRef.current.value !== ''){
+        newEndpoint += `&transactionId=${transactionIdRef.current.value}`;
+    }
+    
+    setEndpoint(newEndpoint);
+  }
+
+  const clearQuery = () => {
+    transactionIdRef.current.value = query.transactionId;
+    fromDateRef.current.value = query.fromDate;
+    toDateRef.current.value = query.toDate;
+  }
 
   return(
     <>
       <section className='card-custom card__transactions'>
         <h5 className='card__title'>Transaction search</h5>
-        <div className='card__body'>
+        <form className='card__body' onSubmit={search}>
           <div>
             <label htmlFor='transactionID'>Enter transaction ID:</label>
-            <input type='text' id='transactionID' />
+            <input type='text' id='transactionID' ref={transactionIdRef}/>
           </div>
           
           <div className='filter-by-date'>
@@ -106,34 +68,36 @@ function TransactionsHistory(){
               id="date"
               label="From"
               type="date"
-              defaultValue="2017-05-24"
+              defaultValue={query.fromDate}
               InputLabelProps={{
                 shrink: true,
               }}
+              inputRef={fromDateRef}
             />
             <TextField
               id="date"
               label="To"
               type="date"
-              defaultValue="2017-05-24"
+              defaultValue={query.toDate}
               InputLabelProps={{
                 shrink: true,
               }}
+              inputRef={toDateRef}
             />
           </div>
 
           <div className='card__interactive'>
-            <Button variant="outlined" className='btn-main--outline'>Clear</Button>
-            <Button variant="contained" className='btn-main'>Search</Button>
+            <Button variant="outlined" className='btn-main--outline' onClick={clearQuery}>Clear</Button>
+            <Button variant="contained" type="submit" className='btn-main'>Search</Button>
           </div>
-        </div>
+        </form>
       </section>
 
       <div style={{marginTop: 8}}>
-        <DataTable columns={tableColumns} data={tablesData} tableMaxHeight={300} message="No transaction available"/>
+        <DataTable columns={tableColumns} data={transactionData} tableMaxHeight={300} message="No transaction available"/>
       </div>
     </>
   )
 }
 
-export default TransactionsHistory
+export default React.memo(TransactionsHistory)
