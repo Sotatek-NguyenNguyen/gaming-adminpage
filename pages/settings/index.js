@@ -41,17 +41,11 @@ function SettingsPage() {
             </div>
             <div className="form__input">
               <label htmlFor="gameBackground">Game Background:*</label>
-              <label htmlFor="gameBackground" className="custom-file-upload">
-                <Input
-                  type="file"
-                  id="gameBackground"
-                  name="gameBackground"
-                  ref={inputFileRef}
-                  onChange={addFile}
-                />
-                Choose file
-              </label>
-              <span ref={nameFile}>No file Chosen</span>
+              <Input value={gameInfo?.backgroundURL}
+                type="text"
+                disabled
+                id="gameBackground"
+              />
             </div>
           </section>
 
@@ -99,12 +93,12 @@ function SettingsPage() {
             <h3>Current code and display name</h3>
             <div className="form__input">
               <label htmlFor="currentCode">Current Code:*</label>
-              <input type="text" id="currentCode" value={gameInfo?.currencyCode} disabled />
+              <input type="text" id="currentCode" value={gameInfo?.tokenCode} disabled />
             </div>
 
             <div className="form__input">
               <label htmlFor="displayName"> Display Name:*</label>
-              <input type="text" id="displayName" value={gameInfo?.currencyName} disabled />
+              <input type="text" id="displayName" value={gameInfo?.tokenName} disabled />
             </div>
           </section>
           <section className="deposit_and_recharge">
