@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import { Button } from "@mui/material";
+import Button from "../../components/UI/Button.js";
 import Input from "../../components/UI/Input.js";
 import Layout from "../../components/Layouts/Layout";
 import { getJSON } from "../../common.js";
@@ -10,40 +10,43 @@ function SettingsPage() {
   const editorRef = useRef(null);
   const inputFileRef = useRef(null);
   const nameFile = useRef(null);
+  const [disabledEditGameInfo, setDisabledEditGameInfo] = useState(true);
   const [gameInfo, setGameInfo] = useState();
-
-  const addFile = () => {
-    nameFile.current.innerHTML = inputFileRef.current.files.item(0).name;
-  };
 
   const getGameInfo = async () => {
     try {
       const res = await getJSON(`${ADMIN_PAGE_BACKEND_URL}/game-info`);
-      console.log(res.data)
-      if (res.status === 200) setGameInfo(res?.data)
+      console.log(res.data);
+      if (res.status === 200) setGameInfo(res?.data);
     } catch (err) {
       throw err;
     }
   };
 
   useEffect(() => {
-    getGameInfo().catch(err => console.error(err.message));
+    getGameInfo().catch((err) => console.error(err.message));
   }, []);
   return (
     <div className="container--custom">
-      <form className="container--main">
+      <form className="container--main" onSubmit={e => e.preventDefault()}>
         <h3>Game information</h3>
         <div className="game__info">
           <section className="info--left">
             <div className="form__input">
               <label htmlFor="gameName">Game Name:*</label>
-              <Input value={gameInfo?.name} type="text" id="gameName" disabled />
+              <Input
+                value={gameInfo?.name}
+                type="text"
+                id="gameName"
+                disabled={disabledEditGameInfo}
+              />
             </div>
             <div className="form__input">
               <label htmlFor="gameBackground">Game Background:*</label>
-              <Input value={gameInfo?.backgroundURL}
+              <Input
+                value={gameInfo?.backgroundURL}
                 type="text"
-                disabled
+                disabled={disabledEditGameInfo}
                 id="gameBackground"
               />
             </div>
@@ -52,15 +55,30 @@ function SettingsPage() {
           <section className="info--right">
             <div className="form__input">
               <label htmlFor="gameLogo">Game Logo Url:*</label>
-              <Input type="text" id="gameLogo" value={gameInfo?.logoURL} disabled />
+              <Input
+                type="text"
+                id="gameLogo"
+                value={gameInfo?.logoURL}
+                disabled={disabledEditGameInfo}
+              />
             </div>
             <div className="form__input">
               <label htmlFor="gameIntro">Game Intro Video Url:*</label>
-              <Input type="text" id="gameIntro" value={gameInfo?.videoIntroURL} disabled />
+              <Input
+                type="text"
+                id="gameIntro"
+                value={gameInfo?.videoIntroURL}
+                disabled={disabledEditGameInfo}
+              />
             </div>
             <div className="form__input">
               <label htmlFor="gameUrl">Game Url:*</label>
-              <Input type="text" id="gameUrl" disabled value={gameInfo?.gameURL} />
+              <Input
+                type="text"
+                id="gameUrl"
+                disabled={disabledEditGameInfo}
+                value={gameInfo?.gameURL}
+              />
             </div>
           </section>
 
@@ -69,7 +87,7 @@ function SettingsPage() {
             <Editor
               onInit={(evt, editor) => (editorRef.current = editor)}
               value={gameInfo?.description}
-              disabled
+              disabled={disabledEditGameInfo}
               init={{
                 height: 200,
                 menubar: false,
@@ -93,36 +111,58 @@ function SettingsPage() {
             <h3>Current code and display name</h3>
             <div className="form__input">
               <label htmlFor="currentCode">Current Code:*</label>
-              <input type="text" id="currentCode" value={gameInfo?.tokenCode} disabled />
+              <Input
+                type="text"
+                id="currentCode"
+                value={gameInfo?.tokenCode}
+                disabled={disabledEditGameInfo}
+              />
             </div>
 
             <div className="form__input">
               <label htmlFor="displayName"> Display Name:*</label>
-              <input type="text" id="displayName" value={gameInfo?.tokenName} disabled />
+              <Input
+                type="text"
+                id="displayName"
+                value={gameInfo?.tokenName}
+                disabled={disabledEditGameInfo}
+              />
             </div>
           </section>
           <section className="deposit_and_recharge">
             <h3>Deposit and recharge</h3>
             <div className="form__input">
               <label htmlFor="initialDeposit">Initial Deposit:*</label>
-              <input
+              <Input
                 type="text"
                 id="initialDeposit"
                 value="1.000.000"
-                disabled
+                disabled={disabledEditGameInfo}
               />
             </div>
 
             <div className="form__input">
               <label htmlFor="walletAddress"> Game Wallet Address:*</label>
-              <input type="text" id="walletAddress" value={gameInfo?.walletAddress} disabled />
+              <input
+                type="text"
+                id="walletAddress"
+                value={gameInfo?.walletAddress}
+                disabled={disabledEditGameInfo}
+              />
             </div>
           </section>
         </div>
+        {disabledEditGameInfo && (
+          <Button variant="contained" onClick={() => setDisabledEditGameInfo(false)} className="btn-main edit_game_info">
+            Edit
+          </Button>
+        )}
 
-        <Button variant="contained" className="btn-main edit_game_info">
-          Edit
-        </Button>
+         {!disabledEditGameInfo && (
+           <Button className="btn-main edit_game_info">
+             Save
+           </Button>
+         )}
       </form>
     </div>
   );
