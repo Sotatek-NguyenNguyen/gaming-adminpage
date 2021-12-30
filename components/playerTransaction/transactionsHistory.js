@@ -7,7 +7,7 @@ import { ADMIN_PAGE_BACKEND_URL } from "../../config";
 
 function TransactionsHistory(){
   const [transactionData, setTransactionsData] = useState([]);
-  const [endpoint, setEndpoint] = useState(['admin/users/transactions?page=1&pageSize=20']);
+  const [endpoint, setEndpoint] = useState(['users/transactions?page=1&pageSize=20']);
   const [query] = useState({
     transactionId: '',
     fromDate: new Date(new Date().getTime() - 24*60*60*1000).toISOString().split('T')[0], // from yesterday
@@ -38,7 +38,7 @@ function TransactionsHistory(){
 
   const search = (event) => {
     event.preventDefault();
-    const currentEndpoint = 'admin/users/transactions?page=1&pageSize=20';
+    const currentEndpoint = 'users/transactions?page=1&pageSize=20';
     let newEndpoint = `${currentEndpoint}&fromDate=${fromDateRef.current.value}&toDate=${toDateRef.current.value}`;
     if(transactionIdRef.current.value !== ''){
         newEndpoint += `&transactionId=${transactionIdRef.current.value}`;
