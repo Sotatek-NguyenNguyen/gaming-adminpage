@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useReducer } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import Button from "../../components/UI/Button.js";
 import Input from "../../components/UI/Input.js";
@@ -8,18 +8,42 @@ import { ADMIN_PAGE_BACKEND_URL } from "../../config";
 
 function SettingsPage() {
   const editorRef = useRef(null);
-  const inputFileRef = useRef(null);
-  const nameFile = useRef(null);
+  const nameRef = useRef(null);
+  const backgroundURLRef = useRef(null);
+  const logoURLRef = useRef(null);
+  const videoIntroURLRef = useRef(null);
+  const gameURLRef = useRef(null);
+  const tokenCodeRef = useRef(null);
+  const tokenNameRef = useRef(null);
+  const walletAddressRef = useRef(null);
+  
   const [disabledEditGameInfo, setDisabledEditGameInfo] = useState(true);
-  const [gameInfo, setGameInfo] = useState();
+  const [editorInitValue, setEditorInitValue] = useState('');
 
   const getGameInfo = async () => {
     try {
       const res = await getJSON(`${ADMIN_PAGE_BACKEND_URL}/game-info`);
-      console.log(res.data);
-      if (res.status === 200) setGameInfo(res?.data);
+      const gameInfo = res?.data;
+
+      if (res && res.status === 200) {
+        nameRef.current.value = gameInfo.name;
+        backgroundURLRef.current.value = gameInfo.backgroundURL;
+        logoURLRef.current.value = gameInfo.logoURL;
+        setEditorInitValue(gameInfo.description);
+        videoIntroURLRef.current.value  = gameInfo.videoIntroURL;
+        gameURLRef.current.value = gameInfo.gameURL;
+        tokenCodeRef.current.value = gameInfo.tokenCode;
+        tokenNameRef.current.value = gameInfo.tokenName;
+        walletAddressRef.current.value = gameInfo.walletAddress;
+      }
     } catch (err) {
       throw err;
+    }
+  };
+
+  const updateGameInfo = () => {
+    if(editorRef.current) {
+      console.log(editorRef.current.getContent())
     }
   };
 
@@ -35,8 +59,8 @@ function SettingsPage() {
             <div className="form__input">
               <label htmlFor="gameName">Game Name:*</label>
               <Input
-                value={gameInfo?.name}
                 type="text"
+                ref={nameRef}
                 id="gameName"
                 disabled={disabledEditGameInfo}
               />
@@ -44,8 +68,8 @@ function SettingsPage() {
             <div className="form__input">
               <label htmlFor="gameBackground">Game Background:*</label>
               <Input
-                value={gameInfo?.backgroundURL}
                 type="text"
+                ref={backgroundURLRef}
                 disabled={disabledEditGameInfo}
                 id="gameBackground"
               />
@@ -58,7 +82,7 @@ function SettingsPage() {
               <Input
                 type="text"
                 id="gameLogo"
-                value={gameInfo?.logoURL}
+                ref={logoURLRef}
                 disabled={disabledEditGameInfo}
               />
             </div>
@@ -67,7 +91,7 @@ function SettingsPage() {
               <Input
                 type="text"
                 id="gameIntro"
-                value={gameInfo?.videoIntroURL}
+                ref={videoIntroURLRef}
                 disabled={disabledEditGameInfo}
               />
             </div>
@@ -77,7 +101,7 @@ function SettingsPage() {
                 type="text"
                 id="gameUrl"
                 disabled={disabledEditGameInfo}
-                value={gameInfo?.gameURL}
+                ref={gameURLRef}
               />
             </div>
           </section>
@@ -85,8 +109,8 @@ function SettingsPage() {
           <section className="info__description">
             <label htmlFor="gameDescription">Description:*</label>
             <Editor
+              initialValue={editorInitValue}
               onInit={(evt, editor) => (editorRef.current = editor)}
-              value={gameInfo?.description}
               disabled={disabledEditGameInfo}
               init={{
                 height: 200,
@@ -114,7 +138,7 @@ function SettingsPage() {
               <Input
                 type="text"
                 id="currentCode"
-                value={gameInfo?.tokenCode}
+                ref={tokenCodeRef}
                 disabled={disabledEditGameInfo}
               />
             </div>
@@ -124,7 +148,7 @@ function SettingsPage() {
               <Input
                 type="text"
                 id="displayName"
-                value={gameInfo?.tokenName}
+                ref={tokenNameRef}
                 disabled={disabledEditGameInfo}
               />
             </div>
@@ -146,7 +170,7 @@ function SettingsPage() {
               <input
                 type="text"
                 id="walletAddress"
-                value={gameInfo?.walletAddress}
+                ref={walletAddressRef}
                 disabled={disabledEditGameInfo}
               />
             </div>
@@ -159,7 +183,7 @@ function SettingsPage() {
         )}
 
          {!disabledEditGameInfo && (
-           <Button className="btn-main edit_game_info">
+           <Button onClick={updateGameInfo} className="btn-main edit_game_info">
              Save
            </Button>
          )}
