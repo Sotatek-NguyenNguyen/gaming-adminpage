@@ -107,7 +107,7 @@ function CatalogPage() {
           userAddress: 'DBRxc9dpWEisSppdeFfFdjiXUso4XF4qhfRQ3Lq73wy7',
           amount
         }
-      );
+      ); 
       if (res.status === 201) console.log(res)
       setShowWithdrawModal(false)
     } catch (error) {

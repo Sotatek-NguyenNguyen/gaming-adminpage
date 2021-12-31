@@ -11,7 +11,6 @@ import {
 import { useAuth } from '../hooks';
 
 function HomePage() {
-  const [showWalletList, setShowWalletList] = useState(false);
   const router = useRouter();
   const { login } = useAuth();
   const { connected, wallet, publicKey, signMessage, adapter, connecting } = useWallet();
@@ -30,7 +29,7 @@ function HomePage() {
       setLoading(true);
       try {
         await login(publicKey, signMessage, adapter);
-        router.push('/overview');
+        router.replace('/overview');
       } catch (error) {
         setLoading(false);
       }

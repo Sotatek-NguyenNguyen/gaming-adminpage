@@ -75,7 +75,7 @@ function OverviewPage() {
   const getTransactionData = useCallback(async () => {
     try {
       const res = await getJSON(
-        `${ADMIN_PAGE_BACKEND_URL}/admin/users/transactions?page=1&pageSize=20`
+        `${ADMIN_PAGE_BACKEND_URL}/users/transactions?page=1&pageSize=20`
       );
 
       if (res.status === 200) setTransactionData(res.data.data);
@@ -87,7 +87,7 @@ function OverviewPage() {
   const getListUser = useCallback(async () => {
     try {
       const res = await getJSON(
-        `${ADMIN_PAGE_BACKEND_URL}/admin/users?page=1&pageSize=20`
+        `${ADMIN_PAGE_BACKEND_URL}/users?page=1&pageSize=20`
       );
 
       if (res.status === 200) setUserList(res.data.data);
@@ -97,12 +97,12 @@ function OverviewPage() {
   }, []);
 
   useEffect(() => {
-    getTransactionData().catch((err) => console.error(err.message));
-    getListUser().catch((err) => console.error(err.message));
+    // getTransactionData().catch((err) => console.error(err.message));
+    // getListUser().catch((err) => console.error(err.message));
   }, [getTransactionData]);
 
   useEffect(() => {
-    filterDataByDateRange(transactionData, filterValue)
+    // filterDataByDateRange(transactionData, filterValue)
   }, [filterValue, transactionData]);
 
   return (
