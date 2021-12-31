@@ -63,6 +63,7 @@ function SettingsPage() {
     try {
       const res = await updateJSON(`${ADMIN_PAGE_BACKEND_URL}/game-info`, updatedGameInfoData);
       if (res.status === 200) console.log('Game info updated successfully!')
+      setDisabledEditGameInfo(true)
     } catch (err) {
       console.error(err.message)
     }
