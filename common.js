@@ -1,11 +1,8 @@
-import axios from "axios";
-import { JWT_TOKEN_DUMMY } from "./config";
+import axios from "./api/axios-adapter";
 
-export const getJSON = async (url) => {
+export const getJSON = async (path) => {
   try {
-    const data = await axios.get(url, {
-      headers: { Authorization: `Bearer ${JWT_TOKEN_DUMMY}` },
-    });
+    const data = await axios.get(path);
 
     return data;
   } catch (error) {
@@ -13,14 +10,9 @@ export const getJSON = async (url) => {
   }
 };
 
-export const sendJSON = async (url, data) => {
+export const sendJSON = async (path, data) => {
   try {
-    const response = await axios.post(url, data, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${JWT_TOKEN_DUMMY}`,
-      },
-    });
+    const response = await axios.post(path, data);
 
     return response;
   } catch (error) {
@@ -28,14 +20,9 @@ export const sendJSON = async (url, data) => {
   }
 };
 
-export const updateJSON = async (url, updateData) => {
+export const updateJSON = async (path, updateData) => {
   try {
-    const res = await axios.put(url, updateData, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${JWT_TOKEN_DUMMY}`,
-      },
-    });
+    const res = await axios.put(path, updateData);
 
     return res;
   } catch (error) {

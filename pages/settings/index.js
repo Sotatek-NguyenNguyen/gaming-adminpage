@@ -4,7 +4,6 @@ import Button from "../../components/UI/Button.js";
 import Input from "../../components/UI/Input.js";
 import Layout from "../../components/Layouts/Layout";
 import { getJSON, updateJSON } from "../../common.js";
-import { ADMIN_PAGE_BACKEND_URL } from "../../config";
 import { useAuth } from "../../hooks";
 import { useRouter } from "next/router";
 
@@ -29,10 +28,9 @@ function SettingsPage() {
 
   const getGameInfo = async () => {
     try {
-      const res = await getJSON(`${ADMIN_PAGE_BACKEND_URL}/game-info`);
-      const gameInfo = res?.data;
+      const gameInfo = await getJSON(`/admin/game-info`);
 
-      if (res && res.status === 200) {
+      if (gameInfo) {
         nameRef.current.value = gameInfo?.name;
         backgroundURLRef.current.value = gameInfo?.backgroundURL;
         logoURLRef.current.value = gameInfo?.logoURL;
@@ -66,8 +64,8 @@ function SettingsPage() {
     }
     
     try {
-      const res = await updateJSON(`${ADMIN_PAGE_BACKEND_URL}/game-info`, updatedGameInfoData);
-      if (res.status === 200) console.log('Game info updated successfully!')
+      const res = await updateJSON(`/admin/game-info`, updatedGameInfoData);
+      console.log('Game info updated successfully!')
       setDisabledEditGameInfo(true)
     } catch (err) {
       console.error(err.message)

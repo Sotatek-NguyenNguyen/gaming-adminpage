@@ -2,18 +2,17 @@ import React, {useState, useEffect, useRef, useCallback} from 'react'
 import Button from "../../components/UI/Button.js";
 import DataTable from '../UI/Table/DataTable';
 import {  getJSON } from "../../common.js";
-import { ADMIN_PAGE_BACKEND_URL } from "../../config";
 
 function Inventory(){
   const [inventory, setInventory] = useState([]);
-  const [endpoint, setEndpoint] = useState(['users/nft?page=1&pageSize=20']);
+  const [endpoint, setEndpoint] = useState(['admin/users/nft?page=1&pageSize=20']);
   const [isQuery, setIsQuery] = useState(false);
 
   const getInventory = useCallback(()=>{
-    getJSON(`${ADMIN_PAGE_BACKEND_URL}/${endpoint}`)
+    getJSON(`${endpoint}`)
     .then(res => {
       // fake field status, item name
-      const inventoryCustom = res.data.data.map(inventory => {
+      const inventoryCustom = res.data.map(inventory => {
         inventory.status = "Active";
         inventory.name = "NFT";
 

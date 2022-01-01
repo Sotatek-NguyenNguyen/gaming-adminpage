@@ -9,7 +9,6 @@ import Modal from "../../components/UI/Modal.js";
 import Inventory from "../../components/playerTransaction/inventory";
 import TransactionsHistory from "../../components/playerTransaction/transactionsHistory";
 import { getJSON, sendJSON } from "../../common";
-import { ADMIN_PAGE_BACKEND_URL } from "../../config";
 import { useAuth } from "../../hooks";
 
 function CatalogPage() {
@@ -21,7 +20,7 @@ function CatalogPage() {
   const [actualGameBalance, setActualGameBalance] = useState("");
   const [inGameBalance, setInGameBalance] = useState("");
   const [tokenData, setTokenData] = useState({});
-  const {isAuthenticated} = useAuth();
+  const { isAuthenticated } = useAuth();
   const router = useRouter();
 
   const changeTab = (tab) => () => {
@@ -106,14 +105,12 @@ function CatalogPage() {
 
   const withDrawFromActualGameBalance = async (amount) => {
     try {
-      const res = await sendJSON(
-        `${ADMIN_PAGE_BACKEND_URL}/game-balance/withdrawals`, {
-          userAddress: 'DBRxc9dpWEisSppdeFfFdjiXUso4XF4qhfRQ3Lq73wy7',
-          amount
-        }
-      ); 
-      if (res.status === 201) console.log(res)
-      setShowWithdrawModal(false)
+      const res = await sendJSON(`/admin/game-balance/withdrawals`, {
+        userAddress: "DBRxc9dpWEisSppdeFfFdjiXUso4XF4qhfRQ3Lq73wy7",
+        amount,
+      });
+      console.log("withdraw", res);
+      setShowWithdrawModal(false);
     } catch (error) {
       console.error(err.message);
     }
@@ -130,9 +127,9 @@ function CatalogPage() {
   };
 
   const sendingToken = () => {
-    sendJSON(`${ADMIN_PAGE_BACKEND_URL}/users/grant-token`, tokenData)
+    sendJSON(`/admin/users/grant-token`, tokenData)
       .then((res) => {
-        if (res.status === 201) console.log(res);
+        console.log("sending token", res);
         // need to show success, error message for user
       })
       .finally(() => {
@@ -143,9 +140,9 @@ function CatalogPage() {
   };
 
   const deductToken = () => {
-    sendJSON(`${ADMIN_PAGE_BACKEND_URL}/users/deduct-token`, tokenData)
+    sendJSON(`/admin/users/deduct-token`, tokenData)
       .then((res) => {
-        if (res.status === 201) console.log(res);
+        console.log("deduct token", res);
         // need to show success, error message for user
       })
       .finally(() => {
@@ -157,19 +154,17 @@ function CatalogPage() {
 
   const getGameBalance = async () => {
     try {
-      const res = await getJSON(`${ADMIN_PAGE_BACKEND_URL}/game-balance`);
-      if (res.status === 200) {
-        setActualGameBalance(res?.data.actualGameBalance);
-        setInGameBalance(res?.data.inGameBalance);
-      }
+      const res = await getJSON(`/admin/game-balance`);
+      setActualGameBalance(res?.actualGameBalance);
+      setInGameBalance(res?.inGameBalance);
     } catch (error) {
       throw error;
     }
   };
 
   useEffect(() => {
-    if (!isAuthenticated) router.replace('/')
-  }, []); 
+    if (!isAuthenticated) router.replace("/");
+  }, []);
 
   useEffect(() => {
     getGameBalance().catch((err) => console.error(err.message));

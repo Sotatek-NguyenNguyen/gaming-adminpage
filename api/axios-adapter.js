@@ -4,13 +4,13 @@ import { envConfig } from '../configs';
 const { API_URL_BACKEND } = envConfig;
 
 const instance = axios.create({ baseURL: API_URL_BACKEND });
-instance.interceptors.request.use((config) => {
+instance.interceptors.request.use((req) => {
   const accessToken = localStorage.getItem('access_token');
   if (accessToken && JSON.parse(accessToken)) {
-    config.headers.authorization = `Bearer ${JSON.parse(accessToken)}`;
+    req.headers.authorization = `Bearer ${JSON.parse(accessToken)}`;
   }
 
-  return config;
+  return req;
 });
 
 instance.interceptors.response.use(

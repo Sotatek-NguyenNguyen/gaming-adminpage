@@ -3,11 +3,10 @@ import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import DataTable from '../UI/Table/DataTable';
 import {  getJSON } from "../../common.js";
-import { ADMIN_PAGE_BACKEND_URL } from "../../config";
 
 function TransactionsHistory(){
   const [transactionData, setTransactionsData] = useState([]);
-  const [endpoint, setEndpoint] = useState(['users/transactions?page=1&pageSize=20']);
+  const [endpoint, setEndpoint] = useState(['/admin/users/transactions?page=1&pageSize=20']);
   const [query] = useState({
     transactionId: '',
     fromDate: new Date(new Date().getTime() - 24*60*60*1000).toISOString().split('T')[0], // from yesterday
@@ -22,14 +21,14 @@ function TransactionsHistory(){
   ];
 
   const getTransactionHistory = useCallback(()=>{
-      getJSON(`${ADMIN_PAGE_BACKEND_URL}/${endpoint}`)
+      getJSON(`${endpoint}`)
       .then(res => {
-        setTransactionsData(res.data.data);
+        setTransactionsData(res.data);
       })
       .catch (err => {throw err})
   },[endpoint]);
   useEffect(()=>{
-    getTransactionHistory();
+    getTransactionHistory()
   },[getTransactionHistory]);
 
   const transactionIdRef = useRef(null);
