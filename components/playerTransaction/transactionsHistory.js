@@ -16,8 +16,8 @@ function TransactionsHistory(){
 
   const tableColumns = [
     { title: 'Status', field: 'type'},
-    { title: 'Deposit Address', field: 'userAddress' },
-    { title: 'Deposit Amount', field: 'amount' },
+    { title: 'Wallet Address', field: 'userAddress' },
+    { title: 'Amount', field: 'amount' },
     { title: 'TimeStamp', field: 'createdAt'},
   ];
 

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react'
-import { Button } from '@mui/material';
+import Button from "../../components/UI/Button.js";
 import DataTable from '../UI/Table/DataTable';
 import {  getJSON } from "../../common.js";
 import { ADMIN_PAGE_BACKEND_URL } from "../../config";
@@ -81,8 +81,8 @@ function Inventory(){
             <input type='text' id='itemID' ref={itemIdRef}/>
           </div>
           <div className='card__interactive'>
-            <Button variant="outlined" className='btn-main--outline' onClick={clearQuery}>Clear</Button>
-            <Button variant="contained" className='btn-main' onClick={search}>Search</Button>
+            <Button className='btn-main--outline' onClick={clearQuery}>Clear</Button>
+            <Button className='btn-main' onClick={search}>Search</Button>
           </div>
         </div>
       </section>
