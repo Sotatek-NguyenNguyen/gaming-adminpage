@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Layout from "../../components/Layouts/Layout";
 import Input from "../../components/UI/Input.js";
 import Button from "../../components/UI/Button.js";
@@ -9,6 +10,7 @@ import Inventory from "../../components/playerTransaction/inventory";
 import TransactionsHistory from "../../components/playerTransaction/transactionsHistory";
 import { getJSON, sendJSON } from "../../common";
 import { ADMIN_PAGE_BACKEND_URL } from "../../config";
+import { useAuth } from "../../hooks";
 
 function CatalogPage() {
   const [showDepositModal, setShowDepositModal] = useState(false);
@@ -19,6 +21,8 @@ function CatalogPage() {
   const [actualGameBalance, setActualGameBalance] = useState("");
   const [inGameBalance, setInGameBalance] = useState("");
   const [tokenData, setTokenData] = useState({});
+  const {isAuthenticated} = useAuth();
+  const router = useRouter();
 
   const changeTab = (tab) => () => {
     setTab(tab);
@@ -162,6 +166,10 @@ function CatalogPage() {
       throw error;
     }
   };
+
+  useEffect(() => {
+    if (!isAuthenticated) router.replace('/')
+  }, []); 
 
   useEffect(() => {
     getGameBalance().catch((err) => console.error(err.message));

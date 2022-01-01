@@ -5,6 +5,8 @@ import Input from "../../components/UI/Input.js";
 import Layout from "../../components/Layouts/Layout";
 import { getJSON, updateJSON } from "../../common.js";
 import { ADMIN_PAGE_BACKEND_URL } from "../../config";
+import { useAuth } from "../../hooks";
+import { useRouter } from "next/router";
 
 function SettingsPage() {
   const editorRef = useRef(null);
@@ -18,6 +20,9 @@ function SettingsPage() {
   const walletAddressRef = useRef(null);
   const webhookRef = useRef(null);
   const itemInfoRef = useRef(null);
+  
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
 
   const [disabledEditGameInfo, setDisabledEditGameInfo] = useState(true);
   const [editorInitValue, setEditorInitValue] = useState("");
@@ -68,6 +73,10 @@ function SettingsPage() {
       console.error(err.message)
     }
   };
+
+  useEffect(() => {
+    if (!isAuthenticated) router.replace('/');
+  }, []);
 
   useEffect(() => {
     getGameInfo().catch((err) => console.error(err.message));

@@ -2,8 +2,9 @@ import React, { useCallback, useEffect, useState, useMemo } from "react";
 import Layout from "../../components/Layouts/Layout";
 import Dropdown from "../../components/UI/Dropdown";
 import Card from "../../components/UI/Card.js";
-import { getDateBefore, getJSON } from "../../common.js";
-import { ADMIN_PAGE_BACKEND_URL } from "../../config";
+import { getDateBefore } from "../../common.js";
+import { useAuth } from "../../hooks";
+import { useRouter } from "next/router";
 
 function getAllDeposit(transactionData) {
   return transactionData.filter((trans) => trans.type === "deposit");
@@ -48,9 +49,9 @@ const cardData = [
 ];
 
 function OverviewPage() {
-  const [transactionData, setTransactionData] = useState([]);
-  const [userList, setUserList] = useState([]);
   const [filterValue, setFiterValue] = useState(1);
+  const {isAuthenticated} = useAuth();
+  const router = useRouter();
 
   const dropdownOptions = useMemo(() => [
     { title: "Last 24 hours", value: 1 },
@@ -72,38 +73,9 @@ function OverviewPage() {
     })
   };
 
-  const getTransactionData = useCallback(async () => {
-    try {
-      const res = await getJSON(
-        `${ADMIN_PAGE_BACKEND_URL}/users/transactions?page=1&pageSize=20`
-      );
-
-      if (res.status === 200) setTransactionData(res.data.data);
-    } catch (error) {
-      throw error;
-    }
-  }, []);
-
-  const getListUser = useCallback(async () => {
-    try {
-      const res = await getJSON(
-        `${ADMIN_PAGE_BACKEND_URL}/users?page=1&pageSize=20`
-      );
-
-      if (res.status === 200) setUserList(res.data.data);
-    } catch (error) {
-      throw error;
-    }
-  }, []);
-
   useEffect(() => {
-    // getTransactionData().catch((err) => console.error(err.message));
-    // getListUser().catch((err) => console.error(err.message));
-  }, [getTransactionData]);
-
-  useEffect(() => {
-    // filterDataByDateRange(transactionData, filterValue)
-  }, [filterValue, transactionData]);
+    if (!isAuthenticated) router.replace('/');
+  }, []);
 
   return (
     <React.Fragment>
