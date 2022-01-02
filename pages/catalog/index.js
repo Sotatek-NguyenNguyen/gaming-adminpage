@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Layout from "../../components/Layouts/Layout";
 import Input from "../../components/UI/Input.js";
+import Tooltip from "../../components/UI/Tooltip";
 import Button from "../../components/UI/Button.js";
 import SimpleAccordion from "../../components/UI/Accordion";
 import Modal from "../../components/UI/Modal.js";
@@ -184,8 +185,9 @@ function CatalogPage() {
 
         <div className="form-container__content">
           <form onSubmit={(e) => e.preventDefault()}>
-            <label htmlFor="actual-game">
+            <label htmlFor="actual-game" className="game-label">
               <h5>Actual game balance</h5>
+              <Tooltip info="Actual amount of Token in Smart Contract"/>
             </label>
             <Input
               disabled
@@ -194,8 +196,9 @@ function CatalogPage() {
               value={actualGameBalance}
             />
 
-            <label htmlFor="in-game">
+            <label htmlFor="in-game" className="game-label">
               <h5>In-game balance</h5>
+              <Tooltip info="Actual total tokens of all Players"/>
             </label>
             <Input disabled type="number" id="in-game" value={inGameBalance} />
 
