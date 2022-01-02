@@ -38,7 +38,7 @@ function TransactionsHistory(){
 
   const search = (event) => {
     event.preventDefault();
-    const currentEndpoint = 'users/transactions?page=1&pageSize=20';
+    const currentEndpoint = '/admin/users/transactions?page=1&pageSize=20';
     let newEndpoint = `${currentEndpoint}&fromDate=${fromDateRef.current.value}&toDate=${toDateRef.current.value}`;
     if(transactionIdRef.current.value !== ''){
         newEndpoint += `&transactionId=${transactionIdRef.current.value}`;
@@ -51,6 +51,9 @@ function TransactionsHistory(){
     transactionIdRef.current.value = query.transactionId;
     fromDateRef.current.value = query.fromDate;
     toDateRef.current.value = query.toDate;
+
+    const endpointDefault = '/admin/users/transactions?page=1&pageSize=20';
+    setEndpoint(endpointDefault);
   }
 
   return(

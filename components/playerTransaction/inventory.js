@@ -5,8 +5,7 @@ import {  getJSON } from "../../common.js";
 
 function Inventory(){
   const [inventory, setInventory] = useState([]);
-  const [endpoint, setEndpoint] = useState(['admin/users/nft?page=1&pageSize=30']);
-  const [isQuery, setIsQuery] = useState(false);
+  const [endpoint, setEndpoint] = useState(['/admin/users/nft?page=1&pageSize=20']);
 
   const getInventory = useCallback(()=>{
     getJSON(`${endpoint}`)
@@ -30,17 +29,14 @@ function Inventory(){
   const itemIdRef = useRef(null);
   const search = () => {
     if(itemIdRef.current.value.trim() === '') return;
-    const currentEndpoint = 'users/nft?page=1&pageSize=20';
-    const newEndpoint = `${currentEndpoint}&address=${itemIdRef.current.value}`;
+    const currentEndpoint = '/admin/users/nft?page=1&pageSize=20';
+    const newEndpoint = `${currentEndpoint}&gameItemId=${itemIdRef.current.value}`;
     setEndpoint(newEndpoint);
-    setIsQuery(true);
   };
   const clearQuery = () => {
     itemIdRef.current.value = '';
-    if(inventory.length === 0 && isQuery){
-      const oldEndpoint = 'users/nft?page=1&pageSize=20';
-      setEndpoint(oldEndpoint);
-    }
+    const endpointDefault = '/admin/users/nft?page=1&pageSize=20';
+    setEndpoint(endpointDefault);
   };
 
   const styleStatusTable = {
