@@ -17,6 +17,7 @@ function TransactionsHistory(){
     { title: 'Status', field: 'type'},
     { title: 'Wallet Address', field: 'userAddress' },
     { title: 'Amount', field: 'amount' },
+    { title: 'Transaction ID', field: 'transactionId'},
     { title: 'TimeStamp', field: 'createdAt'},
   ];
 
@@ -58,7 +59,7 @@ function TransactionsHistory(){
         <h5 className='card__title'>Transaction search</h5>
         <form className='card__body' onSubmit={search}>
           <div>
-            <label htmlFor='transactionID'>Enter transaction ID:</label>
+            <label htmlFor='transactionID'>Enter transaction ID <span className="label-required">*</span></label>
             <input type='text' id='transactionID' ref={transactionIdRef}/>
           </div>
           
@@ -93,7 +94,7 @@ function TransactionsHistory(){
       </section>
 
       <div style={{marginTop: 8}}>
-        <DataTable columns={tableColumns} data={transactionData} tableMaxHeight={300} message="No transaction available"/>
+        <DataTable columns={tableColumns} data={transactionData} message="No transaction available"/>
       </div>
     </>
   )

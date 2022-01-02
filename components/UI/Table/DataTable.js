@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,12 +7,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-function DataTable({ columns, data, tableMaxHeight, message}) {
+function DataTable({ columns, data, tableMaxRows, message}) {
   const styleTable = {
     boxShadow: "0px 2px 2px rgba(0, 0, 0, 0.4)",
   }
   const setMaxHeightBodyTable = {
-    maxHeight: tableMaxHeight,
+    maxHeight: `calc(80px * ${tableMaxRows})`,
   }
   const styleRowNoItem ={
     height: "80px",
@@ -51,15 +51,40 @@ function DataTable({ columns, data, tableMaxHeight, message}) {
       </TableRow>
     );
   }
+
+  const checkNotEmptyArr = (array) => Array.isArray(array) && array.length > 0;
+  const renderData = useCallback((fieldCustom, value)=>{
+    if(fieldCustom && checkNotEmptyArr(fieldCustom)){
+      return fieldCustom.map((item, index) => {
+        return(
+          <React.Fragment key={`${value[item]}-${index}`}>
+            {value[item]} <br />
+          </React.Fragment>
+        );
+      })
+    }else{
+      return(<React.Fragment>{value}</React.Fragment>);
+    }
+  }, []);
+
   return (
     <>
       <TableContainer style={styleTable} component={Paper}>
         <Table className="table--custom" aria-label="simple table">
           <TableHead sx={{background: '#F9FAFB'}}>
-            <TableRow sx={{fontWeight: 'bold'}}>
+            <TableRow sx={{fontWeight: 'bold'}} style={{height: 64}}>
               {
                 columns.map( col => {
-                  return (<TableCell key={col.title} sx={{fontWeight: 'bold'}} align="center">{col.title}</TableCell>)
+                  return (
+                    <TableCell 
+                      key={col.title} 
+                      sx={{fontWeight: 'bold'}} 
+                      style={{height: 'auto !important'}} 
+                      align="center"
+                    >
+                      {col.title}
+                    </TableCell>
+                  )
                 })
               }
             </TableRow>
@@ -72,21 +97,23 @@ function DataTable({ columns, data, tableMaxHeight, message}) {
               <TableRow
                 key={`${item[columns[0].field]}-${index}`}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                style={{height: 80}}
               >
                 {
                   columns.map( col => {
                     return (
-                      <TableCell key={col.field} align='center'>
+                      <TableCell key={col.field} align='center' style={{height: 'auto !important'}}>
                         {
                           col.prefixLink 
                           ? <a style={styleLabel(col.style, col.highlightLabel, item[col.field])} 
                                href={`${col.prefixLink}/${item[col.field]}`}
                             >
-                               {item[col.field]}
+                              {renderData(col.fieldChildWillGet, item[col.field])}
                             </a>
                           : <span 
-                               style={styleLabel(col.style, col.highlightLabel, item[col.field])}>
-                               {item[col.field]}
+                               style={styleLabel(col.style, col.highlightLabel, item[col.field])}
+                            >
+                               {renderData(col.fieldChildWillGet, item[col.field])}
                             </span>
                         }
                       </TableCell>
@@ -105,7 +132,7 @@ function DataTable({ columns, data, tableMaxHeight, message}) {
 DataTable.defaultProps = {
   columns: [],
   data: [],
-  tableMaxHeight: 500,
+  tableMaxRows: 10,
   message: 'No item available',
 };
 

@@ -5,7 +5,7 @@ import {  getJSON } from "../../common.js";
 
 function Inventory(){
   const [inventory, setInventory] = useState([]);
-  const [endpoint, setEndpoint] = useState(['admin/users/nft?page=1&pageSize=20']);
+  const [endpoint, setEndpoint] = useState(['admin/users/nft?page=1&pageSize=30']);
   const [isQuery, setIsQuery] = useState(false);
 
   const getInventory = useCallback(()=>{
@@ -62,10 +62,16 @@ function Inventory(){
   const styleLinkTable = {
     color: "#1A85D8"
   }
+  const styleFieldName = {
+    textAlign: 'left',
+    display: 'inline-block',
+    width: 'auto',
+    marginLeft: '8px'
+  }
   const tableColumns = [
     { title: 'Status', field: 'status', style: styleStatusTable, highlightLabel: highlightLabel },
     { title: 'Item ID', field: 'id' },
-    { title: 'Item Name', field: 'name' },
+    { title: 'Item Name', field: 'name', fieldChildWillGet: ['type', 'name'], style: styleFieldName},
     { title: 'Create On', field: 'createdAt'},
     { title: 'Owning Player address', field: 'userAddress', style: styleLinkTable}
   ];
@@ -76,7 +82,7 @@ function Inventory(){
         <h5 className='card__title'>Item search</h5>
         <div className='card__body'>
           <div>
-            <label htmlFor='itemID'>Enter item ID:</label>
+            <label htmlFor='itemID'>Enter item ID <span className="label-required">*</span> </label>
             <input type='text' id='itemID' ref={itemIdRef}/>
           </div>
           <div className='card__interactive'>
@@ -87,7 +93,7 @@ function Inventory(){
       </section>
       
       <div style={{marginTop: 8}}>
-        <DataTable columns={tableColumns} data={inventory} tableMaxHeight={300} message="No item available"/>
+        <DataTable columns={tableColumns} data={inventory} message="No item available"/>
       </div>
     </>
   )
