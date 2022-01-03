@@ -12,7 +12,7 @@ function CurrentAccountBadge({children}) {
   const content = useMemo(() => {
     if (children) return children;
     if (!wallet || !base58) return null;
-    return base58.slice(0, 4) + ".." + base58.slice(-4);
+    return base58.slice(0, 4) + "..." + base58.slice(-3);
   }, [children, wallet, base58]);
 
   const handleDisconnectWallet = async () => {
@@ -24,9 +24,8 @@ function CurrentAccountBadge({children}) {
   return (
     <div className="account-badge">
       <CancelIcon onClick={handleDisconnectWallet} />
-      <div className="account-badge__title">
-        xxxxx Token <span className="token-id">{content}</span>
-      </div>
+      <p className="account-badge__amount-token">xxxxx Token</p>
+      <p className="account-badge__token-id">{content}</p>  
     </div>
   );
 }

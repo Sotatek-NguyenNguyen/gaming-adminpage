@@ -1,19 +1,41 @@
 .account-badge {
-  position: absolute;
-  top: 2%;
-  right: 3%;
-  width: 226px;
-  height: 40px;
-  background: $color--white;
-  border: 1px solid $color-primary;
-  border-radius: 24px;
+  width: 280px;
+  height: 45px;
+
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  background: $color--white;
+
+  border: 1px solid $color-primary;
+  border-radius: 24px;
+  padding: 6px;
   cursor: pointer;
 
+  &__amount-token{
+    color: $color-primary;
+    line-height: 26px;
+    font-size: 16px;
+    font-weight: 600;
+    text-indent: -15px;
+  }
+
+  &__token-id {
+    display: inline-block;
+    width: 94px;
+    height: 33px;
+
+    background: $color-primary;
+    border-radius: 24px;
+    
+    text-align: center;
+    color: $color--white;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 33px;
+  }
+
   svg {
-    margin-right: 8px;
     color: $color--red;
   }
 

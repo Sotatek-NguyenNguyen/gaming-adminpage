@@ -10,9 +10,6 @@
     transform: scale(0.46);
   }
 
-  .menu-items {
-  }
-
   .menu-item {
     position: relative;
     height: 2.938rem;
@@ -24,7 +21,7 @@
     letter-spacing: 0.135em;
     cursor: pointer;
     padding: 0 14px;
-    margin: 0 12px;
+    margin: 11px 12px;
 
     svg {
       margin-right: 26px;
@@ -32,8 +29,8 @@
 
     &.active {
       background: $color--white;
-      color: $color-black;
-      border-radius: 4px;
+      color: $color-primary;
+      border-radius: 32px;
       margin: 0 12px;
     }
   }

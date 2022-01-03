@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import React from "react";
 import CurrentAccountBadge from "./CurrentAccountBadge ";
-import { Button } from '@mui/material';
 
 function Topbar() {
   const router = useRouter();
@@ -11,7 +10,11 @@ function Topbar() {
   const renderPageTitle = (pathName) => {
     switch(pathName) {
       case 'player/[playerId]':
-        return 'Player';
+        return (
+          <React.Fragment>
+            Player: <span>ID#{router.query.playerId}</span>
+          </React.Fragment>
+        );
 
       case 'settings':
         return 'Game Details';
@@ -25,20 +28,14 @@ function Topbar() {
   }
 
   return (
-    <div className="topbar container--custom">
-      <div className="topbar__title">
-        { renderPageTitle(pathName) }
-      </div>
-      {
-        pathName === 'player' 
-        ? <div className='players'>
-            <p className='players__total'>Total players: 0</p> 
-            <Button variant="contained" className='btn-main'>Export Player</Button>
-          </div>
-        : ''
-      }
+    <div className="topbar">
+      <div className="topbar__contain container--custom">
+        <div className="topbar__title">
+          { renderPageTitle(pathName) }
+        </div>
 
-      <CurrentAccountBadge />
+        <CurrentAccountBadge />
+      </div>
     </div>
   );
 }
