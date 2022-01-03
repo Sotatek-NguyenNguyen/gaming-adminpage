@@ -73,7 +73,7 @@
   &.error{
     border: 1.5px solid #FF6060;
   }
-
+  
   &.large{
     height: 45px;
     line-height: 45px;
@@ -81,6 +81,14 @@
   &.small{
     height: 35px;
     line-height: 35px;
+  }
+  &.disable{
+    border-color: #9F99B3;
+    color: #9F99B3;
+
+    &:focus{
+      @extend .disable;
+    }
   }
 }
 
