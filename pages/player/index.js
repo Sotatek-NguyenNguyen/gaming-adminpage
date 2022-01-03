@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Layout from "../../components/Layouts/Layout";
 import Dropdown from "../../components/UI/Dropdown";
-import { Button } from "@mui/material";
+import Button from "../../components/UI/Button.js";
 import DataTable from "../../components/UI/Table/DataTable";
 import { useRouter } from "next/router";
 import { useAuth } from "../../hooks/useAuth";
