@@ -1,44 +1,50 @@
 .dropdown {
-  width: 162px;
   font-size: 14px;
   position: relative;
   cursor: pointer;
 
   &__btn {
-    height: 37px;
-    border: 1px solid #101112;
-    color: #525252;
+    border: 1px solid #9F99B3;
+    border-radius: 32px;
     box-sizing: border-box;
-    border-radius: 4px;
+    padding: 7px 20px;
+
     display: flex;
     align-items: center;
-    padding: 0 7px;
     justify-content: space-between;
-    font-size: 13px;
+
+    font-size: 16px;
+    color: #120037;
+    line-height: 24px;
   }
 
   &__content {
+    $range: 12px;
+
     position: absolute;
-    top: 103%;
+    top: calc(100% + $range);
+
+    width: 100%;
     background: $color--white;
     border: 1px solid #dfdfdf;
+    border-radius: 16px;
+    padding: 10px 20px;
+
     font-size: 14px;
     line-height: 16px;
     letter-spacing: 0.15008px;
-    width: 100%;
 
     &-item {
-      width: 162px;
-      height: 40px;
-      border: 1px solid #DFDFDF;
-      display: flex;
-      align-items: center;
-      padding-left: 11px;
+      font-size: 16px;
+      line-height: 24px;
+      color: #9F99B3;
+      padding: 7px 0;
       cursor: pointer;
       transition: all 0.2s;
 
       &:hover {
-          background: #f4f4f4;
+        font-weight: 600;
+        color: #120037;
       }
     }
   }
