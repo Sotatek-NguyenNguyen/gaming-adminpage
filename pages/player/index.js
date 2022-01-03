@@ -5,6 +5,7 @@ import Button from "../../components/UI/Button.js";
 import DataTable from "../../components/UI/Table/DataTable";
 import { useRouter } from "next/router";
 import { useAuth } from "../../hooks/useAuth";
+import SearchIcon from '@mui/icons-material/Search';
 
 function PlayerPage() {
   const { isAuthenticated } = useAuth();
@@ -15,12 +16,26 @@ function PlayerPage() {
     { title: "Highest value to date", value: 1 },
   ];
   const styleLinkTable = {
-    color: "#1A85D8",
+    color: "#00C48C",
   };
   const styleStatusTable = {
-    color: "#008A25",
+    color: "white",
     textTransform: "uppercase",
-  };
+    border: "1px solid transparent",
+    borderRadius: "32px",
+    width: "80px",
+    height: "40px",
+    lineHeight: "31px",
+    padding: "5px 7px"
+  }
+  const highlightLabel = {
+    Active: {
+      backgroundColor: "#00C48C"
+    },
+    Minted: {
+      backgroundColor: "#FFA803"
+    }
+  }
   const tableColumns = [
     {
       title: "Player ID",
@@ -30,7 +45,7 @@ function PlayerPage() {
     },
     { title: "Wallet Address", field: "wallet" },
     { title: "Create On", field: "createOn" },
-    { title: "Status", field: "status", style: styleStatusTable },
+    { title: "Status", field: "status", style: styleStatusTable, highlightLabel: highlightLabel },
   ];
   const tablesData = [
     {
@@ -96,23 +111,30 @@ function PlayerPage() {
 
   return (
     <div className="container--custom players-contain">
+      <section className="interactive-list-player">
+        <p>Total player: 16</p>
+        <Button  className="btn-main">
+          Export Player
+        </Button>
+      </section>
+
       <section className="card-custom">
         <h5 className="card__title">Query</h5>
         <div className="card__body card__query">
-          <Dropdown options={dropdownOptions} className="query__dropdown" />
+          <Dropdown options={dropdownOptions} className='card__query--dropdown'/>
           <input type="text" className="input-main large" placeholder="Search players" />
           <div className="card__interactive">
-            <Button variant="outlined" className="btn-main--outline">
-              Clear
+            <Button  className="btn-main">
+              <SearchIcon /> <span>Search</span>
             </Button>
-            <Button variant="contained" className="btn-main">
-              Search
+            <Button className="btn-main--clear">
+              Clear
             </Button>
           </div>
         </div>
       </section>
 
-      <div style={{ marginTop: 8 }}>
+      <div style={{ marginTop: 20 }}>
         <DataTable
           columns={tableColumns}
           data={tablesData}

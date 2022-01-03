@@ -43,16 +43,18 @@ function Inventory(){
     color: "white",
     textTransform: "uppercase",
     border: "1px solid transparent",
+    borderRadius: "32px",
     width: "80px",
-    height: "30px",
+    height: "40px",
+    lineHeight: "31px",
     padding: "5px 7px"
   }
   const highlightLabel = {
     Active: {
-      backgroundColor: "#008A25"
+      backgroundColor: "#00C48C"
     },
     Minted: {
-      backgroundColor: "#F4BF2A"
+      backgroundColor: "#FFA803"
     }
   }
   const styleLinkTable = {

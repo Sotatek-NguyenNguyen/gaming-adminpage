@@ -40,6 +40,16 @@
       background-color: $color-grey-dark;
     }
   }
+  &--clear{
+    padding: 4px 12px; 
+    border: 1px solid transparent;
+    background-color: $color--white;
+    cursor: pointer;
+
+    color: #9F99B3;
+    font-size: 14px;
+    font-weight: 600;
+  }
 }
 // input custom
 .input-main{

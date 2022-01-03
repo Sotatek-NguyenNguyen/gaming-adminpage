@@ -24,7 +24,7 @@ const useClickOutSide = (handler) => {
   return domNode;
 };
 
-function Dropdown({ options, onChange }) {
+function Dropdown({ options, onChange, className }) {
   const [isActive, setIsActive] = useState(false);
   const firstOption = options[0].title;
   const [selected, setSelected] = useState(firstOption);
@@ -35,10 +35,15 @@ function Dropdown({ options, onChange }) {
     onChange(+e.target.getAttribute('value'))
   };
 
+  const SetClassName = ()=>{
+    if(className.trim() === '') return 'dropdown';
+    return `dropdown ${className}`
+  }
+
   const domNode = useClickOutSide(() => setIsActive(false));
 
   return (
-    <div className="dropdown">
+    <div className={SetClassName()}>
       <div className="dropdown__btn" onClick={() => setIsActive(true)}>
         {selected}
         {isActive ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -60,5 +65,11 @@ function Dropdown({ options, onChange }) {
     </div>
   );
 }
+
+Dropdown.defaultProps = {
+  options: [],
+  onChange: () => {},
+  className: '',
+};
 
 export default Dropdown;
