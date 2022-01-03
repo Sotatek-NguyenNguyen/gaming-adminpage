@@ -17,6 +17,7 @@ function TransactionsHistory(){
     { title: 'Status', field: 'type'},
     { title: 'Wallet Address', field: 'userAddress' },
     { title: 'Amount', field: 'amount' },
+    { title: 'Transaction ID', field: 'transactionId'},
     { title: 'TimeStamp', field: 'createdAt'},
   ];
 
@@ -37,7 +38,7 @@ function TransactionsHistory(){
 
   const search = (event) => {
     event.preventDefault();
-    const currentEndpoint = 'users/transactions?page=1&pageSize=20';
+    const currentEndpoint = '/admin/users/transactions?page=1&pageSize=20';
     let newEndpoint = `${currentEndpoint}&fromDate=${fromDateRef.current.value}&toDate=${toDateRef.current.value}`;
     if(transactionIdRef.current.value !== ''){
         newEndpoint += `&transactionId=${transactionIdRef.current.value}`;
@@ -50,6 +51,9 @@ function TransactionsHistory(){
     transactionIdRef.current.value = query.transactionId;
     fromDateRef.current.value = query.fromDate;
     toDateRef.current.value = query.toDate;
+
+    const endpointDefault = '/admin/users/transactions?page=1&pageSize=20';
+    setEndpoint(endpointDefault);
   }
 
   return(
@@ -58,7 +62,7 @@ function TransactionsHistory(){
         <h5 className='card__title'>Transaction search</h5>
         <form className='card__body' onSubmit={search}>
           <div>
-            <label htmlFor='transactionID'>Enter transaction ID:</label>
+            <label htmlFor='transactionID'>Enter transaction ID <span className="label-required">*</span></label>
             <input type='text' id='transactionID' ref={transactionIdRef}/>
           </div>
           
@@ -93,7 +97,7 @@ function TransactionsHistory(){
       </section>
 
       <div style={{marginTop: 8}}>
-        <DataTable columns={tableColumns} data={transactionData} tableMaxHeight={300} message="No transaction available"/>
+        <DataTable columns={tableColumns} data={transactionData} message="No transaction available"/>
       </div>
     </>
   )

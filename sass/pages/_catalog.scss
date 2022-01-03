@@ -67,3 +67,22 @@
     }
   }
 }
+
+#actual-game{
+  margin-bottom: 15px;
+}
+
+.game-label{
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 11px;
+
+  h5{
+    margin-right: 8px;
+
+    font-size: 14px;
+    font-weight: 400;
+    color: #9F99B3;
+  }
+}
