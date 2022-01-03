@@ -100,7 +100,7 @@ function PlayerPage() {
         <h5 className="card__title">Query</h5>
         <div className="card__body card__query">
           <Dropdown options={dropdownOptions} className="query__dropdown" />
-          <input type="text" placeholder="Search players" />
+          <input type="text" className="input-main large" placeholder="Search players" />
           <div className="card__interactive">
             <Button variant="outlined" className="btn-main--outline">
               Clear
