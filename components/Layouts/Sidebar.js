@@ -2,8 +2,8 @@ import React from "react";
 import Link from "next/link";
 import gamifyLogo from "../../public/icons/gamify-text.svg";
 import HomeIcon from "@mui/icons-material/Home";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import GroupsIcon from "@mui/icons-material/Groups";
+import CategoryIcon from '@mui/icons-material/Category';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useRouter } from "next/router";
 
@@ -36,7 +36,7 @@ const Sidebar = () => {
                 router.pathname === "/catalog" ? "active" : ""
               }`}
             >
-              <EmojiEventsIcon /> Catalog
+              <CategoryIcon /> Catalog
             </li>
           </Link>
 
@@ -46,7 +46,7 @@ const Sidebar = () => {
                 router.pathname === "/player" ? "active" : ""
               }`}
             >
-              <GroupsIcon /> Player
+              <PeopleAltIcon /> Player
             </li>
           </Link>
 

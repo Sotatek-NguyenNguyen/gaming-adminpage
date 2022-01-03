@@ -1,24 +1,20 @@
 .topbar {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
-    padding: 15px;
-    padding-top: 0px;
-
-    &__title { 
-        font-size: 1.5rem;
-        line-height: 30px;
-        margin-top: 57px;
+    border-bottom: 0.3px solid #EBEAF7;
+    height: 85px;
+    &__contain{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 100%;
     }
-}
+    &__title { 
+        font-size: 28px;
+        line-height: 36.4px;
+        font-weight: 700;
+        color: $background-primary;
 
-.players{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-
-    &__total{
-        font-size: 1rem;
-        line-height: 30px;
-        color: #525252;
+        span{
+           font-weight: 400;  
+        }
     }
 }
