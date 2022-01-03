@@ -12,18 +12,18 @@
 
         &::-webkit-scrollbar-track{
             border-radius: 3px;
-            background-color: #CFCDCD;
+            background-color: transparent;
         }
 
         &::-webkit-scrollbar{
             width: 10px;
             height: 98%;
-            background-color: #F5F5F5;
+            background-color: transparent;
         }
 
         &::-webkit-scrollbar-thumb{
-            border-radius: 3px;
-            background-color: #969598;
+            border-radius: 6px;
+            background-color: #E8E8E8;
         }
     }
 }

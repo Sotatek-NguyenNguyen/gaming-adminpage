@@ -1,36 +1,23 @@
 .card-custom{
-   margin-bottom: 12px;
-}
-.card__monetization{
    margin-bottom: 38px;
 }
 
-.card__display,
-.card__monetization{
+.card__display{
 
     .card__body > div{
-        margin-bottom: 7px;
+        margin-bottom: 20px;
     }
     .card__body > div > label{
-        text-indent: 7px;
-        font-size: 13px;
-        line-height: 30px;
-        font-weight: 700;
-    }
-
-    input{
+        font-size: 14px;
+        color: #9F99B3;
+        line-height: 150%;
+        
         display: block;
-        width: 100%;
-        height: 37px;
-        border-radius: 4px;
-        outline: none;
-        text-indent: 7px;
+        margin-bottom: 12px;
     }
-}
 
-.card__monetization{
     input{
-        width: 50%;
+        width: 100%;
     }
 }
 

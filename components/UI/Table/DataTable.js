@@ -9,7 +9,7 @@ import Paper from "@mui/material/Paper";
 
 function DataTable({ columns, data, tableMaxRows, message}) {
   const styleTable = {
-    boxShadow: "0px 2px 2px rgba(0, 0, 0, 0.4)",
+    borderRadius: '16px'
   }
   const setMaxHeightBodyTable = {
     maxHeight: `calc(80px * ${tableMaxRows})`,
@@ -71,7 +71,7 @@ function DataTable({ columns, data, tableMaxRows, message}) {
     <>
       <TableContainer style={styleTable} component={Paper}>
         <Table className="table--custom" aria-label="simple table">
-          <TableHead sx={{background: '#F9FAFB'}}>
+          <TableHead sx={{background: 'white'}}>
             <TableRow sx={{fontWeight: 'bold'}} style={{height: 64}}>
               {
                 columns.map( col => {

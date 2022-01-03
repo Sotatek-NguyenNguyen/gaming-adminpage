@@ -2,22 +2,62 @@
     margin-top: 23px;
 }
 
+.interactive-list-player{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 25px;
+
+    p{
+        font-size: 14px;
+        line-height: 22px;
+        color: #9F99B3;
+    }
+
+    button{
+        width: 165px;
+        height: 40px;
+
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 33px;
+        letter-spacing: 0.8;
+    }
+}
+
 .card__query{
     display: flex;
     justify-content: space-between;
     align-items: center;
 
-    .query__dropdown{
-        width: 30%;
+    &--dropdown{
+        width: 25%;
     }
 
     input{
-        width: 55%;
+        width: 50%;
     }
 
-    .card__interactive > button{
-        width: 80px;
-        height: 37px;
-        margin-left: 8px;
+    .card__interactive{
+        width: 20%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+
+        button.btn-main{
+            width: 120px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 14px;
+            line-height: 40px;
+
+            svg{
+                margin: 3px 7px 0 0;
+            }
+        }
     }
 }

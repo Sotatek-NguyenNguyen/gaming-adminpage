@@ -15,14 +15,11 @@ function PlayerDetail() {
     setTab(tab);
   };
 
-  const dropdownOptions = [
-    { title: "Most recent logins", value: 0 },
-    { title: "Highest value to date", value: 1 },
-  ];
-
   useEffect(() => {
     if (!isAuthenticated) router.replace("/");
   }, []);
+
+  const playerId = `ID#${router.query.playerId}`;
 
   return (
     <div className="container--custom players-contain">
@@ -30,8 +27,14 @@ function PlayerDetail() {
         <h5 className="card__title">Display</h5>
         <div className="card__body">
           <div>
-            <label htmlFor="playerID">Player ID:</label>
-            <input type="text" id="playerID" value="ID#1351352652" disabled />
+            <label htmlFor="playerID">Player ID: <span className="label-required">*</span> </label>
+            <input 
+              type="text" 
+              id="playerID" 
+              className="input-main large disable" 
+              value={playerId}
+              disabled 
+            />
           </div>
 
           <div>
@@ -39,19 +42,10 @@ function PlayerDetail() {
             <input
               type="text"
               id="walletAddress"
+              className="input-main large disable"
               value="321asdf15asdf2as1d3fa54s2adf"
               disabled
             />
-          </div>
-        </div>
-      </section>
-
-      <section className="card-custom card__monetization">
-        <h5 className="card__title">Monetization</h5>
-        <div className="card__body">
-          <div>
-            <label htmlFor="currentBalance">Current Balance:</label>
-            <input type="text" id="currentBalance" value="10.000" disabled />
           </div>
         </div>
       </section>
