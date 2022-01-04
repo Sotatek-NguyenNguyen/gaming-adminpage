@@ -19,7 +19,8 @@ function CatalogPage() {
   const [showDeductTokenModal, setShowDeductTokenModal] = useState(false);
   const [tab, setTab] = useState("inventory");
   const [actualGameBalance, setActualGameBalance] = useState("");
-  const [inGameBalance, setInGameBalance] = useState("");
+  const [allocatedInGameBalance, setAllocatedInGameBalance] = useState("");
+  const [unallocatedInGameBalance, setUnallocatedInGameBalance] = useState("");
   const [tokenData, setTokenData] = useState({});
   const { isAuthenticated } = useAuth();
   const router = useRouter();
@@ -157,7 +158,8 @@ function CatalogPage() {
     try {
       const res = await getJSON(`/admin/game-balance`);
       setActualGameBalance(res?.actualGameBalance);
-      setInGameBalance(res?.inGameBalance);
+      setUnallocatedInGameBalance(res?.unallocatedInGameBalance);
+      setAllocatedInGameBalance(res?.allocatedInGameBalance);
     } catch (error) {
       throw error;
     }
@@ -196,11 +198,17 @@ function CatalogPage() {
               value={actualGameBalance}
             />
 
-            <label htmlFor="in-game" className="game-label">
-              <h5>In-game balance</h5>
-              <Tooltip info="Actual total tokens of all Players"/>
+            <label htmlFor="unallocated" className="game-label">
+              <h5>Unallocated in-game balance</h5>
+              <Tooltip info="Balance deposited by Admin and has not been granted to any players"/>
             </label>
-            <Input disabled type="number" id="in-game" value={inGameBalance} />
+            <Input disabled type="number" id="unallocated" value={unallocatedInGameBalance} />
+
+            <label htmlFor="allocated" className="game-label">
+              <h5>Allocated in-game balance</h5>
+              <Tooltip info="Balance owned by All Players"/>
+            </label>
+            <Input disabled type="number" id="allocated" value={allocatedInGameBalance} />
 
             <div className="form-actions">
               <Button
