@@ -6,6 +6,7 @@ import Layout from "../../components/Layouts/Layout";
 import { getJSON, updateJSON } from "../../common.js";
 import { useAuth } from "../../hooks";
 import { useRouter } from "next/router";
+import {useAlert} from "../../hooks/useAlert";
 
 function SettingsPage() {
   const editorRef = useRef(null);
@@ -20,11 +21,13 @@ function SettingsPage() {
   const webhookRef = useRef(null);
   const itemInfoRef = useRef(null);
   
-  const { isAuthenticated } = useAuth();
+  const { isLoggined } = useAuth();
   const router = useRouter();
 
   const [disabledEditGameInfo, setDisabledEditGameInfo] = useState(true);
   const [editorInitValue, setEditorInitValue] = useState("");
+
+  const {alertSuccess, alertError} = useAlert();
 
   const getGameInfo = async () => {
     try {
@@ -65,19 +68,20 @@ function SettingsPage() {
     
     try {
       const res = await updateJSON(`/admin/game-info`, updatedGameInfoData);
-      console.log('Game info updated successfully!')
+      alertSuccess('Game info updated successfully!')
       setDisabledEditGameInfo(true)
     } catch (err) {
-      console.error(err.message)
+      alertError(err.message)
     }
   };
 
   useEffect(() => {
-    if (!isAuthenticated) router.replace('/');
+    const loginStatus = isLoggined();
+    if (!loginStatus) router.replace("/")
   }, []);
 
   useEffect(() => {
-    getGameInfo().catch((err) => console.error(err.message));
+    getGameInfo().catch((err) => alertError(err.message));
   }, []);
 
   return (

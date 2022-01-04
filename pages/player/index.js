@@ -8,7 +8,7 @@ import { useAuth } from "../../hooks/useAuth";
 import SearchIcon from '@mui/icons-material/Search';
 
 function PlayerPage() {
-  const { isAuthenticated } = useAuth();
+  const { isLoggined } = useAuth();
   const router = useRouter();
 
   const dropdownOptions = [
@@ -106,7 +106,8 @@ function PlayerPage() {
   ];
 
   useEffect(() => {
-    if (!isAuthenticated) router.replace("/");
+    const loginStatus = isLoggined();
+    if (!loginStatus) router.replace("/")
   }, []);
 
   return (

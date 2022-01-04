@@ -22,7 +22,7 @@ function CatalogPage() {
   const [allocatedInGameBalance, setAllocatedInGameBalance] = useState("");
   const [unallocatedInGameBalance, setUnallocatedInGameBalance] = useState("");
   const [tokenData, setTokenData] = useState({});
-  const { isAuthenticated } = useAuth();
+  const { isLoggined } = useAuth();
   const router = useRouter();
 
   const changeTab = (tab) => () => {
@@ -166,7 +166,8 @@ function CatalogPage() {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) router.replace("/");
+    const loginStatus = isLoggined();
+    if (!loginStatus) router.replace("/")
   }, []);
 
   useEffect(() => {

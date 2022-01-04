@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from "../../hooks";
 import Layout from "../../components/Layouts/Layout";
 
 import Inventory from "../../components/playerTransaction/inventory";
@@ -9,11 +10,18 @@ function PlayerDetail() {
   const [tab, setTab] = useState("inventory");
   const router = useRouter();
 
+  const {isLoggined} = useAuth();
+
   const changeTab = (tab) => () => {
     setTab(tab);
   };
 
   const playerId = `ID#${router.query.playerId}`;
+
+  useEffect(() => {
+    const loginStatus = isLoggined();
+    if (!loginStatus) router.replace("/")
+  }, []);
 
   return (
     <div className="container--custom players-contain">

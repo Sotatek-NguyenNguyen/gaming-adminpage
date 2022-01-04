@@ -6,7 +6,8 @@ import { signatureMsgAuth, loginAuth } from "../api/auth"
 const defaultState = {
   isAuthenticated: false,
   login: async () => { },
-  logout: () => { },
+  logout: async () => { },
+  isLoggined: () => {}
 }
 
 const AuthContext = createContext(defaultState);
@@ -76,12 +77,18 @@ export const AuthProvider = ({ children }) => {
     setAccessToken(null);
   };
 
+  const isLoggined = () => {
+    const loginStatus = accessToken ? true : false;
+    return loginStatus
+  }
+
   return (
     <AuthContext.Provider
       value={{
         isAuthenticated,
         login,
         logout,
+        isLoggined
       }}
     >
       {children}

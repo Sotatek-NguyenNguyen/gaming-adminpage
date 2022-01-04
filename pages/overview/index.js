@@ -1,10 +1,8 @@
 import React, { useCallback, useEffect, useState, useMemo } from "react";
 import Layout from "../../components/Layouts/Layout";
-import Dropdown from "../../components/UI/Dropdown";
 import Card from "../../components/UI/Card.js";
-import { getDateBefore } from "../../common.js";
-import { useAuth } from "../../hooks";
 import { useRouter } from "next/router";
+import { useAuth } from "../../hooks";
 
 function getAllDeposit(transactionData) {
   return transactionData.filter((trans) => trans.type === "deposit");
@@ -49,44 +47,16 @@ const cardData = [
 ];
 
 function OverviewPage() {
-  const [filterValue, setFiterValue] = useState(1);
-  const {isAuthenticated} = useAuth();
   const router = useRouter();
-
-  const dropdownOptions = useMemo(() => [
-    { title: "Last 24 hours", value: 1 },
-    { title: "Last 7 days", value: 7 },
-    { title: "Last 30 days", value: 30 },
-  ], []);
-
-  const handleDropdownChange = (value) => {
-    setFiterValue(value);
-  };
-
-  const filterDataByDateRange = (data, filteredDate) => {
-    const startDate = getDateBefore(filteredDate);
-    const endDate = new Date();
-
-    data.filter(el => {
-      const date = new Date(el.createdAt);
-      if (date >= startDate) return (date >= startDate && date <= endDate)
-    })
-  };
+  const {isLoggined} = useAuth();
 
   useEffect(() => {
-    if (!isAuthenticated) router.replace('/');
+    const loginStatus = isLoggined();
+    if (!loginStatus) router.replace("/")
   }, []);
 
   return (
     <React.Fragment>
-      <div className="time-period">
-        <span>Time period:</span>
-        <Dropdown
-          onChange={handleDropdownChange}
-          options={dropdownOptions}
-        />
-      </div>
-
       <div className="card-list">
         {cardData.map((card) => (
           <Card key={card.id} title={card.title} rows={card.rows} />
