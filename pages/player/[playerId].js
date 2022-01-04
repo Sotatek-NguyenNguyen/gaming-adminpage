@@ -3,21 +3,15 @@ import Layout from "../../components/Layouts/Layout";
 
 import Inventory from "../../components/playerTransaction/inventory";
 import TransactionsHistory from "../../components/playerTransaction/transactionsHistory";
-import { useAuth } from "../../hooks";
 import { useRouter } from "next/router";
 
 function PlayerDetail() {
   const [tab, setTab] = useState("inventory");
-  const { isAuthenticated } = useAuth();
   const router = useRouter();
 
   const changeTab = (tab) => () => {
     setTab(tab);
   };
-
-  useEffect(() => {
-    if (!isAuthenticated) router.replace("/");
-  }, []);
 
   const playerId = `ID#${router.query.playerId}`;
 

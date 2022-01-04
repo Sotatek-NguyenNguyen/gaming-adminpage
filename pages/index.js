@@ -83,21 +83,6 @@ function HomePage() {
     );
   };
 
-  const WalletList = () => {
-    return (
-      <div className="wallet-list">
-        <div className="wallet-list--heading">Connect Your Wallet</div>
-
-        <div className="wallet-list--main">
-          <WalletMultiButton />
-          {wallets.map((w) => (
-            <WalletItem onClick={() => router.push('/overview')} key={w.id} name={w.name} imgSrc={w.data} />
-          ))}
-        </div>
-      </div>
-    );
-  };
-
   return (
     <React.Fragment>
       <Header />

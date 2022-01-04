@@ -1,10 +1,13 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useRouter } from "next/router";
 import { useAuth } from "../../hooks";
+import {useAlert} from "../../hooks"
 
 function CurrentAccountBadge({children}) {
+  const [copied, setCopied] = useState(false);
+  const {alertInfo}  = useAlert();
   const router = useRouter();
   const {logout} = useAuth();
   const { publicKey, wallet, disconnect } = useWallet();
@@ -21,11 +24,28 @@ function CurrentAccountBadge({children}) {
     router.replace('/')
   };
 
+  const copyAddress = useCallback(async () => {
+    if (base58) {
+      await navigator.clipboard.writeText(base58);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 400);
+    }
+  }, [base58]);
+
+  useEffect(() => {
+    if (copied) {
+      alertInfo('Copied');
+      setTimeout(() => {
+        setCopied(false);
+      }, 1000);
+    }
+  }, [copied]);
+
   return (
     <div className="account-badge">
       <CancelIcon onClick={handleDisconnectWallet} />
       <p className="account-badge__amount-token">xxxxx Token</p>
-      <p className="account-badge__token-id">{content}</p>  
+      <p className="account-badge__token-id" onClick={copyAddress}>{content}</p>  
     </div>
   );
 }
