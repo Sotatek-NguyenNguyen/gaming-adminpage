@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useAlert } from "../hooks";
 import {
-  WalletMultiButton,
   useWalletModal,
 } from '@solana/wallet-adapter-react-ui';
 import { useAuth } from '../hooks';
