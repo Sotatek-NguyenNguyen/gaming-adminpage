@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from "react";
 import Header from "../components/Layouts/Header.js";
 import Button from "../components/UI/Button.js";
-import { wallets } from "../wallets.js";
 import { useRouter } from "next/router";
 import { useWallet } from '@solana/wallet-adapter-react';
+import { useAlert } from "../hooks";
 import {
   WalletMultiButton,
   useWalletModal,
@@ -16,6 +16,7 @@ function HomePage() {
   const { connected, wallet, publicKey, signMessage, adapter, connecting } = useWallet();
   const { setVisible } = useWalletModal();
   const [loading, setLoading] = useState(false);
+  const {alertError} = useAlert();
 
   const buttonText = useMemo(() => {
     if (connecting) return 'Connecting ...';
@@ -34,7 +35,7 @@ function HomePage() {
         setLoading(false);
       }
     } else {
-      console.error('Wallet is not connected');
+      alertError('Wallet is not connected');
     }
   }
 
