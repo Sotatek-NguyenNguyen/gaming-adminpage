@@ -84,153 +84,190 @@ function SettingsPage() {
     getGameInfo().catch((err) => alertError(err.message));
   }, []);
 
+  const styleTextDisable = {
+    color: disabledEditGameInfo ? '#9F99B3' : 'black'
+  }
+  const styleTextEditorDisable = disabledEditGameInfo ? '#9F99B3' : 'black';
+
   return (
     <div className="container--custom">
       <form className="container--main" onSubmit={(e) => e.preventDefault()}>
-        <h3>Game information</h3>
-        <div className="game__info">
-          <section className="info--left">
-            <div className="form__input">
-              <label htmlFor="gameName">Game Name:*</label>
-              <Input
-                type="text"
-                ref={nameRef}
-                id="gameName"
-                disabled={disabledEditGameInfo}
-              />
-            </div>
-            <div className="form__input">
-              <label htmlFor="gameBackground">Game Background:*</label>
-              <Input
-                type="text"
-                ref={backgroundURLRef}
-                disabled={disabledEditGameInfo}
-                id="gameBackground"
-              />
-            </div>
-          </section>
+        <div className="card-custom">
+          <h3 className="card__title">Game information</h3>
+          <div className="game__info card__body">
+            <section className="info--left">
+              <div className="form__input">
+                <label htmlFor="gameName">Game Name: <span className="label-required">*</span></label>
+                <Input
+                  type="text"
+                  ref={nameRef}
+                  className="input-main large"
+                  id="gameName"
+                  style={styleTextDisable}
+                  disabled={disabledEditGameInfo}
+                />
+              </div>
+              <div className="form__input">
+                <label htmlFor="gameBackground">Game Background: <span className="label-required">*</span></label>
+                <Input
+                  type="text"
+                  ref={backgroundURLRef}
+                  className="input-main large"
+                  style={styleTextDisable}
+                  disabled={disabledEditGameInfo}
+                  id="gameBackground"
+                />
+              </div>
+            </section>
 
-          <section className="info--right">
-            <div className="form__input">
-              <label htmlFor="gameLogo">Game Logo Url:*</label>
-              <Input
-                type="text"
-                id="gameLogo"
-                ref={logoURLRef}
-                disabled={disabledEditGameInfo}
-              />
-            </div>
-            <div className="form__input">
-              <label htmlFor="gameIntro">Game Intro Video Url:*</label>
-              <Input
-                type="text"
-                id="gameIntro"
-                ref={videoIntroURLRef}
-                disabled={disabledEditGameInfo}
-              />
-            </div>
-            <div className="form__input">
-              <label htmlFor="gameUrl">Game Url:*</label>
-              <Input
-                type="text"
-                id="gameUrl"
-                disabled={disabledEditGameInfo}
-                ref={gameURLRef}
-              />
-            </div>
-          </section>
+            <section className="info--right">
+              <div className="form__input">
+                <label htmlFor="gameLogo">Game Logo Url: <span className="label-required">*</span></label>
+                <Input
+                  type="text"
+                  id="gameLogo"
+                  ref={logoURLRef}
+                  className="input-main large"
+                  style={styleTextDisable}
+                  disabled={disabledEditGameInfo}
+                />
+              </div>
+              <div className="form__input">
+                <label htmlFor="gameIntro">Game Intro Video Url: <span className="label-required">*</span></label>
+                <Input
+                  type="text"
+                  id="gameIntro"
+                  ref={videoIntroURLRef}
+                  className="input-main large"
+                  style={styleTextDisable}
+                  disabled={disabledEditGameInfo}
+                />
+              </div>
+              <div className="form__input">
+                <label htmlFor="gameUrl">Game Url: <span className="label-required">*</span></label>
+                <Input
+                  type="text"
+                  id="gameUrl"
+                  style={styleTextDisable}
+                  disabled={disabledEditGameInfo}
+                  className="input-main large"
+                  ref={gameURLRef}
+                />
+              </div>
+            </section>
 
-          <section className="info__description">
-            <label htmlFor="gameDescription">Description:*</label>
-            <Editor
-              initialValue={editorInitValue}
-              onInit={(evt, editor) => (editorRef.current = editor)}
-              disabled={disabledEditGameInfo}
-              init={{
-                height: 200,
-                menubar: false,
-                statusbar: false,
-                plugins: [
-                  "advlist autolink lists link image charmap print preview anchor",
-                  "searchreplace visualblocks code fullscreen",
-                  "insertdatetime media table paste code help wordcount",
-                ],
-                toolbar:
-                  "formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify",
-                content_style:
-                  "body { font-family:Helvetica,Arial,sans-serif; font-size:14px; border-radius: 4px; }",
-              }}
-            />
-          </section>
-        </div>
-
-        <div className="game__data">
-          <div className="form__input">
-            <label htmlFor="webhook">Webhook Endpoint (URL - POST)</label>
-            <Input
-              id="webhook"
-              type="text"
-              placeholder="api-webhook"
-              ref={webhookRef}
-              disabled={disabledEditGameInfo}
-            />
+            <section className="info__description">
+              <label htmlFor="gameDescription">Description: <span className="label-required">*</span></label>
+              <Editor
+                initialValue={editorInitValue}
+                onInit={(evt, editor) => (editorRef.current = editor)}
+                disabled={disabledEditGameInfo}
+                init={{
+                  height: 200,
+                  menubar: false,
+                  statusbar: false,
+                  plugins: [
+                    "advlist autolink lists link image charmap print preview anchor",
+                    "searchreplace visualblocks code fullscreen",
+                    "insertdatetime media table paste code help wordcount",
+                  ],
+                  toolbar:
+                    "formatselect | bold italic | alignleft aligncenter alignright alignjustify",
+                  content_style:
+                    `body { font-size: 14pt; font-family: Arial; color: ${styleTextEditorDisable} !important}`,
+                }}
+              />
+            </section>
           </div>
+        </div>
+        
+        <div className="card-custom">
+          <h3 className="card__title">DATA</h3>
+          <div className="game__data card__body">
+            <div className="form__input">
+              <label htmlFor="webhook">Webhook Endpoint (URL - POST)</label>
+              <Input
+                id="webhook"
+                type="text"
+                placeholder="api-webhook"
+                ref={webhookRef}
+                className="input-main large"
+                style={styleTextDisable}
+                disabled={disabledEditGameInfo}
+              />
+            </div>
 
-          <div className="form__input">
-            <label htmlFor="item-info">Item Info API (URL - POST)</label>
-            <Input
-              id="item-info"
-              placeholder="api-get-sth"
-              type="text"
-              ref={itemInfoRef}
-              disabled={disabledEditGameInfo}
-            />
+            <div className="form__input">
+              <label htmlFor="item-info">Item Info API (URL - POST)</label>
+              <Input
+                id="item-info"
+                placeholder="api-get-sth"
+                type="text"
+                ref={itemInfoRef}
+                className="input-main large"
+                style={styleTextDisable}
+                disabled={disabledEditGameInfo}
+              />
+            </div>
           </div>
         </div>
 
         <div className="game__detail">
-          <section className="currentCode_and_name">
-            <h3>Current code and display name</h3>
-            <div className="form__input">
-              <label htmlFor="currentCode">Current Code:*</label>
-              <Input
-                type="text"
-                id="currentCode"
-                ref={tokenCodeRef}
-                disabled={disabledEditGameInfo}
-              />
-            </div>
+          <section className="card-custom currentCode_and_name">
+            <h3 className="card__title">Current code and display name</h3>
+            <div className="card__body">
+              <div className="form__input">
+                <label htmlFor="currentCode">Current Code: <span className="label-required">*</span></label>
+                <Input
+                  type="text"
+                  id="currentCode"
+                  ref={tokenCodeRef}
+                  className="input-main large"
+                  style={styleTextDisable}
+                  disabled={disabledEditGameInfo}
+                />
+              </div>
 
-            <div className="form__input">
-              <label htmlFor="displayName"> Display Name:*</label>
-              <Input
-                type="text"
-                id="displayName"
-                ref={tokenNameRef}
-                disabled={disabledEditGameInfo}
-              />
+              <div className="form__input">
+                <label htmlFor="displayName"> Display Name: <span className="label-required">*</span></label>
+                <Input
+                  type="text"
+                  id="displayName"
+                  ref={tokenNameRef}
+                  className="input-main large"
+                  style={styleTextDisable}
+                  disabled={disabledEditGameInfo}
+                />
+              </div>
             </div>
+              
           </section>
-          <section className="deposit_and_recharge">
-            <h3>Deposit and recharge</h3>
-            <div className="form__input">
-              <label htmlFor="initialDeposit">Initial Deposit:*</label>
-              <Input
-                type="text"
-                id="initialDeposit"
-                value="1.000.000"
-                disabled={disabledEditGameInfo}
-              />
-            </div>
+          <section className="card-custom deposit_and_recharge">
+            <h3 className="card__title">Deposit and recharge</h3>
+            <div className="card__body">
+              <div className="form__input">
+                <label htmlFor="initialDeposit">Initial Deposit: <span className="label-required">*</span></label>
+                <Input
+                  type="text"
+                  id="initialDeposit"
+                  value="1.000.000"
+                  className="input-main large"
+                  style={styleTextDisable}
+                  disabled={disabledEditGameInfo}
+                />
+              </div>
 
-            <div className="form__input">
-              <label htmlFor="walletAddress"> Game Wallet Address:*</label>
-              <input
-                type="text"
-                id="walletAddress"
-                ref={walletAddressRef}
-                disabled={disabledEditGameInfo}
-              />
+              <div className="form__input">
+                <label htmlFor="walletAddress"> Game Wallet Address:<span className="label-required">*</span></label>
+                <Input
+                  type="text"
+                  id="walletAddress"
+                  ref={walletAddressRef}
+                  className="input-main large"
+                  style={styleTextDisable}
+                  disabled={disabledEditGameInfo}
+                />
+              </div>
             </div>
           </section>
         </div>
