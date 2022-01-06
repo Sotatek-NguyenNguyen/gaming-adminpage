@@ -29,6 +29,12 @@ const isSmallNumber = (val) => {
   return val < 0.001 && val > 0;
 };
 
+const numberFormatter = new Intl.NumberFormat('en-US', {
+  style: 'decimal',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
 export const formatNumber = {
   format: (val, useSmall) => {
     if (!val && val !== 0) {

@@ -2,14 +2,16 @@ import React, { useMemo, useState, useCallback, useEffect } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useRouter } from "next/router";
-import { useAlert, useAuth } from "../../hooks";
+import { useAlert, useAuth, useSmartContract } from "../../hooks";
 
 function CurrentAccountBadge({ children }) {
   const [copied, setCopied] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { alertInfo } = useAlert();
+  const { refreshWalletBalance } = useSmartContract();
   const router = useRouter();
-  const { logout, balance } = useAuth();
-  const { publicKey, wallet, disconnect } = useWallet();
+  const { logout, balance, isAuthenticated, setAccountBalance } = useAuth();
+  const { publicKey, wallet, disconnect, connected } = useWallet();
   const base58 = useMemo(() => publicKey?.toBase58(), [publicKey]);
   const content = useMemo(() => {
     if (children) return children;
@@ -40,10 +42,38 @@ function CurrentAccountBadge({ children }) {
     }
   }, [copied]);
 
+  useEffect(() => {
+    const initBalance = async () => {
+      try {
+        setLoading(true);
+        if (!isAuthenticated) {
+          await login(publicKey, signMessage, adapter);
+        }
+        await refreshWalletBalance();
+        setLoading(false);
+      } catch (err) {
+        setLoading(false);
+        setAccountBalance(null);
+      }
+    };
+
+    if (connected) {
+      initBalance();
+    } else {
+      setAccountBalance(null);
+    }
+  }, [connected, isAuthenticated]);
+
   return (
     <div className="account-badge">
       <CancelIcon onClick={handleDisconnectWallet} />
-      <p className="account-badge__amount-token">{balance?.formatted} SOL</p>
+      <p className="account-badge__amount-token">
+        {loading ? (
+          <span>Loading...</span> 
+        ) : (
+          <span>{balance?.formatted} SOL</span>
+        )}  
+      </p>
       <p className="account-badge__token-id" onClick={copyAddress}>
         {content}
       </p>
