@@ -1,0 +1,81 @@
+.card__inventory > .card__body,
+.card__transactions > .card__body{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    
+    .search-by-id{
+        width: 80%;
+
+        label{
+            font-size: 13px;
+            line-height: 30px;
+            color: #9F99B3;
+            margin-bottom: 12px;
+            display: block;
+        }
+        input{
+            display: block;
+            height: 40px;
+            width: 100%;
+        }
+    }
+
+    .card__interactive{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 17%;
+    }
+
+    .card__interactive > button{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        height: 40px;
+        font-size: 13px;
+        span{
+            margin-left: 8px;
+        }
+    }
+}
+
+.card__transactions > .card__body{
+    .search-by-id{
+        width: 28%;
+    }
+    .card__interactive{
+        width: 17%;
+    }
+
+    .filter-by-date{
+        width: 50%;
+    }
+}
+
+
+.filter-by-date{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+
+    .MuiFormControl-root.MuiTextField-root{
+        width: 48% !important;
+        height: 40px !important;
+
+        .MuiOutlinedInput-root.MuiInputBase-root{
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+
+
+// style date picker MUI
+
+.MuiOutlinedInput-root{
+    border-radius: 32px !important;
+    border-color: #9F99B3;
+}

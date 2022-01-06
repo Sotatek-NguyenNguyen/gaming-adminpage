@@ -53,7 +53,7 @@ function DataTable({ columns, data, tableMaxRows, message}) {
   }
 
   const checkNotEmptyArr = (array) => Array.isArray(array) && array.length > 0;
-  const renderData = useCallback((fieldCustom, value)=>{
+  const renderData = useCallback((fieldCustom, value, isDate)=>{
     if(fieldCustom && checkNotEmptyArr(fieldCustom)){
       return fieldCustom.map((item, index) => {
         return(
@@ -62,6 +62,8 @@ function DataTable({ columns, data, tableMaxRows, message}) {
           </React.Fragment>
         );
       })
+    }else if(isDate){
+      return(<React.Fragment>{value.split('T')[0]}</React.Fragment>);
     }else{
       return(<React.Fragment>{value}</React.Fragment>);
     }
@@ -113,7 +115,7 @@ function DataTable({ columns, data, tableMaxRows, message}) {
                           : <span 
                                style={styleLabel(col.style, col.highlightLabel, item[col.field])}
                             >
-                               {renderData(col.fieldChildWillGet, item[col.field])}
+                               {renderData(col.fieldChildWillGet, item[col.field], col.isDate)}
                             </span>
                         }
                       </TableCell>

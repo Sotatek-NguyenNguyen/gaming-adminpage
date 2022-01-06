@@ -45,7 +45,7 @@ export default function SimpleAccordion(props) {
   };
 
   return (
-    <div className="accordion-list">
+    <div className="accordion-list container--custom">
       <Accordion>
         <AccordionSummary
           sx={{ background: "#EBEAF7", color: "#6823BF" }}
@@ -57,33 +57,47 @@ export default function SimpleAccordion(props) {
         </AccordionSummary>
 
         <AccordionDetails>
-          <form onSubmit={grantTokenSubmitHandler}>
-            <label htmlFor="token-amount">
-              <h5>Enter Token amount: * </h5>
-            </label>
-            <Input
-              required
-              ref={amountGrantToken}
-              placeholder="Token Amount"
-              type="number"
-              id="token-amount"
-            />
+          <form onSubmit={grantTokenSubmitHandler} className="accordion-form">
+            <div>
+              <label htmlFor="token-amount">
+                <h5>Enter Token amount: <span className="label-required">*</span> </h5>
+              </label>
+              <Input
+                required
+                ref={amountGrantToken}
+                placeholder="Token Amount"
+                className="input-main large"
+                type="number"
+                id="token-amount"
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="wallet-address">
+                <h5>Destination Wallet address: <span className="label-required">*</span></h5>
+              </label>
+              <Input
+                placeholder="Player’s wallet address"
+                type="text"
+                id="wallet-address"
+                className="input-main large"
+                ref={grantWalletAddress}
+                required
+              />
+            </div>
 
-            <label htmlFor="wallet-address">
-              <h5>Destination Wallet address: *</h5>
-            </label>
-            <Input
-              placeholder="Player’s wallet address"
-              type="text"
-              id="wallet-address"
-              ref={grantWalletAddress}
-              required
-            />
-
-            <label htmlFor="transition-note">
-              <h5>Transation Note: *</h5>
-            </label>
-            <Input required type="text" id="wallet-address" ref={grantNote} />
+            <div>
+              <label htmlFor="transition-note">
+                <h5>Transaction Note: <span className="label-required">*</span></h5>
+              </label>
+              <Input
+                required 
+                type="text" 
+                id="wallet-address" 
+                className="input-main large" 
+                ref={grantNote} 
+              />
+            </div>
 
             <div className="form-actions">
               <Button className="btn-main">Grant</Button>
@@ -102,33 +116,47 @@ export default function SimpleAccordion(props) {
           <Typography variant="h7">Deduct tokens</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <form onSubmit={deductTokenSubmitHandler}>
-            <label htmlFor="token-amount">
-              <h5>Enter Token amount: * </h5>
-            </label>
-            <Input
-              required
-              ref={amountDeductToken}
-              placeholder="Token Amount"
-              type="text"
-              id="token-amount"
-            />
+          <form onSubmit={deductTokenSubmitHandler} className="accordion-form">
+            <div>
+              <label htmlFor="token-amount">
+                <h5>Enter Token amount: <span className="label-required">*</span> </h5>
+              </label>
+              <Input
+                required
+                ref={amountDeductToken}
+                className="input-main large"
+                placeholder="Token Amount"
+                type="text"
+                id="token-amount"
+              />
+            </div>
+              
+            <div>
+              <label htmlFor="wallet-address">
+                <h5>Originate Player’s wallet address: <span className="label-required">*</span></h5>
+              </label>
+              <Input
+                placeholder="Player’s wallet address"
+                type="text"
+                id="wallet-address"
+                className="input-main large"
+                ref={deductWalletAddress}
+                required
+              />
+            </div>
 
-            <label htmlFor="wallet-address">
-              <h5>Originate Player’s wallet address: *</h5>
-            </label>
-            <Input
-              placeholder="Player’s wallet address"
-              type="text"
-              id="wallet-address"
-              ref={deductWalletAddress}
-              required
-            />
-
-            <label htmlFor="transition-note">
-              <h5>Transation Note: *</h5>
-            </label>
-            <Input required ref={deductNote} type="text" id="wallet-address" />
+            <div>
+              <label htmlFor="transition-note">
+                <h5>Transaction Note: <span className="label-required">*</span></h5>
+              </label>
+              <Input 
+                required 
+                ref={deductNote} 
+                type="text" 
+                id="wallet-address" 
+                className="input-main large"  
+              />
+            </div>
 
             <div className="form-actions">
               <Button className="btn-main">Deduct</Button>

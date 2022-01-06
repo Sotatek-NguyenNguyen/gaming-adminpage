@@ -9,6 +9,8 @@ import Modal from "../../components/UI/Modal.js";
 
 import Inventory from "../../components/playerTransaction/inventory";
 import TransactionsHistory from "../../components/playerTransaction/transactionsHistory";
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { getJSON, sendJSON } from "../../common";
 import { useAuth } from "../../hooks";
 
@@ -181,35 +183,52 @@ function CatalogPage() {
       {showGrantTokenModal && <GrantTokenModal />}
       {showDeductTokenModal && <DeductTokenModal />}
 
-      <div className="form-container">
-        <div className="form-container__header">
-          <h4>Game Balance</h4>
-        </div>
+      <div className="card-custom container--custom">
+        <h5 className="card__title">Game Balance</h5>
 
-        <div className="form-container__content">
-          <form onSubmit={(e) => e.preventDefault()}>
-            <label htmlFor="actual-game" className="game-label">
-              <h5>Actual game balance</h5>
-              <Tooltip info="Actual amount of Token in Smart Contract"/>
-            </label>
-            <Input
-              disabled
-              type="number"
-              id="actual-game"
-              value={actualGameBalance}
-            />
-
-            <label htmlFor="unallocated" className="game-label">
-              <h5>Unallocated in-game balance</h5>
-              <Tooltip info="Balance deposited by Admin and has not been granted to any players"/>
-            </label>
-            <Input disabled type="number" id="unallocated" value={unallocatedInGameBalance} />
-
-            <label htmlFor="allocated" className="game-label">
-              <h5>Allocated in-game balance</h5>
-              <Tooltip info="Balance owned by All Players"/>
-            </label>
-            <Input disabled type="number" id="allocated" value={allocatedInGameBalance} />
+        <div className="card__body">
+          <form className="form-content" onSubmit={(e) => e.preventDefault()}>
+            <div>
+              <label htmlFor="actual-game" className="game-label">
+                <h5>Actual game balance</h5>
+                <Tooltip info="Actual amount of Token in Smart Contract"/>
+              </label>
+              <Input
+                disabled
+                type="number"
+                id="actual-game"
+                className="input-main large disable"
+                value={actualGameBalance}
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="unallocated" className="game-label">
+                <h5>Unallocated in-game balance</h5>
+                <Tooltip info="Balance deposited by Admin and has not been granted to any players"/>
+              </label>
+              <Input 
+                disabled 
+                type="number" 
+                id="unallocated" 
+                className="input-main large disable"
+                value={unallocatedInGameBalance} 
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="allocated" className="game-label">
+                <h5>Allocated in-game balance</h5>
+                <Tooltip info="Balance owned by All Players"/>
+              </label>
+              <Input 
+                disabled 
+                type="number" 
+                id="allocated" 
+                className="input-main large disable"
+                value={allocatedInGameBalance} 
+              />
+            </div>
 
             <div className="form-actions">
               <Button
@@ -228,6 +247,7 @@ function CatalogPage() {
           </form>
         </div>
       </div>
+      
       <SimpleAccordion
         onGrantToKenSubmit={grantTokenHandler}
         onDeductTokenSubmit={deductTokenHandler}
@@ -237,19 +257,31 @@ function CatalogPage() {
         <div className="info__tabs">
           <p
             onClick={changeTab("inventory")}
-            style={{ fontWeight: tab === "inventory" ? 700 : 400 }}
+            style={{ 
+              fontWeight: tab === "inventory" ? 700 : 400, 
+              color: tab === "inventory" ? '#6823BF' : '#9F99B3'
+            }}
           >
             Inventory
           </p>
           <p
             onClick={changeTab("transactionHistory")}
-            style={{ fontWeight: tab === "transactionHistory" ? 700 : 400 }}
+            style={{ 
+              fontWeight: tab === "transactionHistory" ? 700 : 400, 
+              color: tab === "transactionHistory" ? '#6823BF' : '#9F99B3'
+            }}
           >
             Transaction History
           </p>
         </div>
         <div>
-          {tab === "inventory" ? <Inventory /> : <TransactionsHistory />}
+          {
+            tab === "inventory" ? 
+            <Inventory /> : 
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <TransactionsHistory />
+            </LocalizationProvider>
+          }
         </div>
       </section>
     </div>
