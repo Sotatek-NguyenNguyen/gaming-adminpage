@@ -1,24 +1,30 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react'
-import TextField from '@mui/material/TextField';
 import Button from "../../components/UI/Button.js";
 import DataTable from '../UI/Table/DataTable';
 import {  getJSON } from "../../common.js";
+import SearchIcon from '@mui/icons-material/Search';
+
+import TextField from '@mui/material/TextField';
+import DatePicker from '@mui/lab/DatePicker';
+import { createTheme, ThemeProvider} from '@mui/material/styles';
+
 
 function TransactionsHistory(){
   const [transactionData, setTransactionsData] = useState([]);
   const [endpoint, setEndpoint] = useState(['/admin/users/transactions?page=1&pageSize=20']);
-  const [query] = useState({
-    transactionId: '',
-    fromDate: new Date(new Date().getTime() - 24*60*60*1000).toISOString().split('T')[0], // from yesterday
-    toDate: new Date(new Date().getTime() + 24*60*60*1000).toISOString().split('T')[0] // from tomorrow
-  })
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(new Date());
+  
+  const styleWalletAddress = {
+    color: '#00C48C'
+  }
 
   const tableColumns = [
     { title: 'Status', field: 'type'},
-    { title: 'Wallet Address', field: 'userAddress' },
+    { title: 'Wallet Address', field: 'userAddress', style: styleWalletAddress},
     { title: 'Amount', field: 'amount' },
     { title: 'Transaction ID', field: 'transactionId'},
-    { title: 'TimeStamp', field: 'createdAt'},
+    { title: 'TimeStamp', field: 'createdAt', isDate: true},
   ];
 
   const getTransactionHistory = useCallback(()=>{
@@ -33,65 +39,134 @@ function TransactionsHistory(){
   },[getTransactionHistory]);
 
   const transactionIdRef = useRef(null);
-  const fromDateRef = useRef(null);
-  const toDateRef = useRef(null);
+
+  const checkSameDay = (day1, day2) => day1.setHours(0,0,0,0) == day2.setHours(0,0,0,0);
 
   const search = (event) => {
     event.preventDefault();
     const currentEndpoint = '/admin/users/transactions?page=1&pageSize=20';
-    let newEndpoint = `${currentEndpoint}&fromDate=${fromDateRef.current.value}&toDate=${toDateRef.current.value}`;
+    
+    if(fromDate !== null){
+      const fromDateFormat = fromDate?.toISOString().split('T')[0];
+      const toDateFormat = toDate?.toISOString().split('T')[0];
+      
+      currentEndpoint += `&fromDate=${fromDateFormat}&toDate=${toDateFormat}`;
+    }
     if(transactionIdRef.current.value !== ''){
-        newEndpoint += `&transactionId=${transactionIdRef.current.value}`;
+      currentEndpoint += `&transactionId=${transactionIdRef.current.value}`;
     }
     
-    setEndpoint(newEndpoint);
+    setEndpoint(currentEndpoint);
   }
 
   const clearQuery = () => {
-    transactionIdRef.current.value = query.transactionId;
-    fromDateRef.current.value = query.fromDate;
-    toDateRef.current.value = query.toDate;
+    transactionIdRef.current.value = '';
+    setFromDate(null);
+    setToDate(new Date());
 
     const endpointDefault = '/admin/users/transactions?page=1&pageSize=20';
     setEndpoint(endpointDefault);
   }
+
+  const materialTheme = createTheme({
+    overrides: {
+      MuiPickersToolbar: {
+        toolbar: {
+          backgroundColor: '#9F99B3',
+        },
+      },
+      MuiPickersBasePicker:{
+        pickerView:{
+          justifyContent: 'flex-start'
+        }
+      },
+      MuiPickersCalendarHeader: {
+        switchHeader: {
+          backgroundColor: '#9F99B3',
+          color: "white",
+          marginBottom: '0px',
+          marginTop: '0px',
+          height: '41px',
+          padding: '0px 25px',
+        },
+        iconButton:{
+          width: '24px',
+          height: '24px',
+          borderRadius: '6px',
+          color: 'white',
+          backgroundColor: '#200064'
+        },
+        daysHeader: {
+          backgroundColor: '#9F99B3',
+          maxHeight: '25px',
+          height: '25px',
+        },
+        dayLabel: {
+          color: 'white',
+          lineHeight: '21px',
+        }
+      },
+      MuiPickersDay: {
+        day: {
+          color: '#120037',
+        },
+        daySelected: {
+          color: 'white',
+          backgroundColor: '#200064',
+        },
+        dayDisabled: {
+          color: '#9F99B3',
+        },
+        current: {
+          color: '#120037',
+          backgroundColor: '#EEDFF2',
+        },
+      }
+    },
+  });
 
   return(
     <>
       <section className='card-custom card__transactions'>
         <h5 className='card__title'>Transaction search</h5>
         <form className='card__body' onSubmit={search}>
-          <div>
+          <div className='search-by-id'>
             <label htmlFor='transactionID'>Enter transaction ID <span className="label-required">*</span></label>
-            <input type='text' id='transactionID' ref={transactionIdRef}/>
+            <input type='text' id='transactionID' className='input-main large' ref={transactionIdRef}/>
           </div>
           
           <div className='filter-by-date'>
-            <TextField
-              id="date"
-              label="From"
-              type="date"
-              defaultValue={query.fromDate}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              inputRef={fromDateRef}
-            />
-            <TextField
-              id="date"
-              label="To"
-              type="date"
-              defaultValue={query.toDate}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              inputRef={toDateRef}
-            />
+            <ThemeProvider theme={materialTheme}>
+              <DatePicker
+                placeholder='dd/mm/yyyy'
+                value={fromDate}
+                onChange={setFromDate}
+                disableFuture={true}
+                format="dd/MM/yyyy"
+                InputProps={{ readOnly: true }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </ThemeProvider>
+
+            <ThemeProvider theme={materialTheme}>
+              <DatePicker
+                placeholder='dd/mm/yyyy'
+                value={toDate}
+                onChange={setToDate}
+                disableFuture={true}
+                format="dd/MM/yyyy"
+                InputProps={{ readOnly: true }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </ThemeProvider>
           </div>
 
           <div className='card__interactive'>
-            <Button variant="outlined" className='btn-main--outline' onClick={clearQuery}>Clear</Button>
-            <Button variant="contained" type="submit" className='btn-main'>Search</Button>
+            <Button className='btn-main' type="submit">
+              <SearchIcon /> <span>Search</span>
+            </Button>
+
+            <Button className='btn-main--clear' onClick={clearQuery}>Clear</Button>
           </div>
         </form>
       </section>

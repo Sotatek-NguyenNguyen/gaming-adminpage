@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef, useCallback} from 'react'
 import Button from "../../components/UI/Button.js";
 import DataTable from '../UI/Table/DataTable';
 import {  getJSON } from "../../common.js";
+import SearchIcon from '@mui/icons-material/Search';
 
 function Inventory(){
   const [inventory, setInventory] = useState([]);
@@ -68,9 +69,9 @@ function Inventory(){
   }
   const tableColumns = [
     { title: 'Status', field: 'status', style: styleStatusTable, highlightLabel: highlightLabel },
-    { title: 'Item ID', field: 'id' },
+    { title: 'Item ID', field: 'gameItemId' },
     { title: 'Item Name', field: 'name', fieldChildWillGet: ['type', 'name'], style: styleFieldName},
-    { title: 'Create On', field: 'createdAt'},
+    { title: 'Create On', field: 'createdAt', isDate: true},
     { title: 'Owning Player address', field: 'userAddress', style: styleLinkTable}
   ];
 
@@ -79,13 +80,15 @@ function Inventory(){
       <section className='card-custom card__inventory'>
         <h5 className='card__title'>Item search</h5>
         <div className='card__body'>
-          <div>
+          <div className='search-by-id'>
             <label htmlFor='itemID'>Enter item ID <span className="label-required">*</span> </label>
-            <input type='text' id='itemID' ref={itemIdRef}/>
+            <input type='text' id='itemID' className="input-main large" ref={itemIdRef}/>
           </div>
           <div className='card__interactive'>
-            <Button className='btn-main--outline' onClick={clearQuery}>Clear</Button>
-            <Button className='btn-main' onClick={search}>Search</Button>
+            <Button className='btn-main' onClick={search}>
+              <SearchIcon /> <span>Search</span>
+            </Button>
+            <Button className='btn-main--clear' onClick={clearQuery}>Clear</Button>
           </div>
         </div>
       </section>
