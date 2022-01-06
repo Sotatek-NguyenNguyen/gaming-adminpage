@@ -4,14 +4,6 @@ import Card from "../../components/UI/Card.js";
 import { useRouter } from "next/router";
 import { useAuth } from "../../hooks";
 
-function getAllDeposit(transactionData) {
-  return transactionData.filter((trans) => trans.type === "deposit");
-}
-
-const getAllWithDraw = (transactionData) => {
-  return transactionData.filter((trans) => trans.type === "withdrawn");
-};
-
 function createData(name, amount, change) {
   return { name, amount, change };
 }
@@ -28,7 +20,7 @@ const cardData = [
   },
   {
     id: 2,
-    title: "New Users",
+    title: "New User",
     rows: [
       createData("Last 24 hours", 1, 0.5),
       createData("7 days ago", 3, "NA"),
@@ -37,11 +29,11 @@ const cardData = [
   },
   {
     id: 3,
-    title: "Reports",
+    title: "Withdraw",
     rows: [
-      createData("New Users", 0, "NA"),
-      createData("Deposits", 5, 1),
-      createData("Withdraws", 3, "NA"),
+      createData("Last 24 hours", 1, 0.5),
+      createData("7 days ago", 3, "NA"),
+      createData("30 days ago", 5, 1),
     ],
   },
 ];
@@ -59,7 +51,7 @@ function OverviewPage() {
     <React.Fragment>
       <div className="card-list">
         {cardData.map((card) => (
-          <Card key={card.id} title={card.title} rows={card.rows} />
+          <Card key={card.id} id={card.id} title={card.title} rows={card.rows} />
         ))}
       </div>
     </React.Fragment>

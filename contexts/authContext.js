@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const isLoggined = () => {
-    const loginStatus = accessToken ? true : false;
+    const loginStatus = (accessToken && publicKey) ? true : false;
     return loginStatus
   }
 

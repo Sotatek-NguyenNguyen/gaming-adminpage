@@ -29,6 +29,19 @@ function Card(props) {
           />
         ))}
       </div>
+
+      {
+        props.id === 2 && <div className="user-overview">
+           <div className="30days-overview">
+              <div className="number">0</div>
+              <div className="title">Last 30 days</div>
+           </div>
+           <div className="24hrs-overview">
+              <div className="number">0</div>
+              <div className="title">Last 24 hours</div>
+           </div>
+        </div>
+      }
     </div>
   );
 }
