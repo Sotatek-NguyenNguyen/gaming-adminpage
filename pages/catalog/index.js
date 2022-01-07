@@ -12,7 +12,7 @@ import TransactionsHistory from "../../components/catalogTransaction/transaction
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { getJSON, sendJSON } from "../../common";
-import { useAuth, useGlobal } from "../../hooks";
+import { useAlert, useAuth, useGlobal } from "../../hooks";
 
 function CatalogPage() {
   const [showDepositModal, setShowDepositModal] = useState(false);
@@ -24,6 +24,7 @@ function CatalogPage() {
   const [allocatedInGameBalance, setAllocatedInGameBalance] = useState("");
   const [unallocatedInGameBalance, setUnallocatedInGameBalance] = useState("");
   const [tokenData, setTokenData] = useState({});
+  const {alertError, alertSuccess} = useAlert();
   const { isLoggined } = useAuth();
   const {gameData} = useGlobal();
   const router = useRouter();
@@ -81,7 +82,7 @@ function CatalogPage() {
         address={
           <>
             Destination Address <br />
-            4zj7KF13agrr3VYEt3RxxhDtzHGQmL7KdhzGZ9nzp1xD
+            {tokenData?.userAddress}
           </>
         }
         onCloseModal={handleCloseModal}
@@ -99,7 +100,7 @@ function CatalogPage() {
         address={
           <>
             Originate Wallet Address <br />
-            4zj7KF13agrr3VYEt3RxxhDtzHGQmL7KdhzGZ9nzp1xD
+            {tokenData?.userAddress}
           </>
         }
         onCloseModal={handleCloseModal}
@@ -134,10 +135,11 @@ function CatalogPage() {
   const sendingToken = () => {
     sendJSON(`/admin/users/grant-token`, tokenData)
       .then((res) => {
-        console.log("sending token", res);
-        // need to show success, error message for user
+        if (res.success) alertSuccess('Sendind token successfully!');
+        if (res.statusCode === 404) alertError('User not found!');
       })
       .finally(() => {
+        getGameBalance();
         setTokenData({});
         setShowGrantTokenModal(false);
       })
@@ -147,10 +149,11 @@ function CatalogPage() {
   const deductToken = () => {
     sendJSON(`/admin/users/deduct-token`, tokenData)
       .then((res) => {
-        console.log("deduct token", res);
-        // need to show success, error message for user
+        if (res.success) alertSuccess('Deduct token successfully!');
+        if (res.statusCode === 404) alertError('User not found!');
       })
       .finally(() => {
+        getGameBalance();
         setTokenData({});
         setShowDeductTokenModal(false);
       })

@@ -10,10 +10,12 @@ const BackDrops = (props) => {
 const ModalOverlay = (props) => {
   const { onCloseModal, title, address, tokenAmount, inputDisabled } = props;
   const amountRef = useRef();
+
   const handleClick = () => {
     if (inputDisabled) props.onClick();
     else props.onClick(amountRef?.current?.value)
   };
+  
   return (
     <div className="modal">
       <div className="modal__title">{title}</div>
