@@ -2,7 +2,7 @@ import React, { useMemo, useState, useCallback, useEffect } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useRouter } from "next/router";
-import { useAlert, useAuth, useSmartContract } from "../../hooks";
+import { useAlert, useAuth, useSmartContract, useGlobal } from "../../hooks";
 
 function CurrentAccountBadge({ children }) {
   const [copied, setCopied] = useState(false);
@@ -11,6 +11,7 @@ function CurrentAccountBadge({ children }) {
   const { refreshWalletBalance } = useSmartContract();
   const router = useRouter();
   const { logout, balance, isAuthenticated, setAccountBalance } = useAuth();
+  const {gameData} = useGlobal();
   const { publicKey, wallet, disconnect, connected } = useWallet();
   const base58 = useMemo(() => publicKey?.toBase58(), [publicKey]);
   const content = useMemo(() => {
@@ -71,7 +72,7 @@ function CurrentAccountBadge({ children }) {
         {loading ? (
           <span>Loading...</span> 
         ) : (
-          <span>{balance?.formatted} SOL</span>
+          <span>{balance?.formatted} {gameData?.tokenCode}</span>
         )}  
       </p>
       <p className="account-badge__token-id" onClick={copyAddress}>
