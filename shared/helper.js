@@ -50,7 +50,7 @@ export const formatNumber = {
 
 export const isValidURL = (url) => {
   try {
-    new URL();     
+    new URL(url);     
   } catch(e) {
     console.error(e);
     return false;

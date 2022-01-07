@@ -6,7 +6,7 @@ import Layout from "../../components/Layouts/Layout";
 import { getJSON, updateJSON } from "../../common.js";
 import { useAuth } from "../../hooks";
 import { useRouter } from "next/router";
-import {useAlert} from "../../hooks/useAlert";
+import { useAlert } from "../../hooks/useAlert";
 
 function SettingsPage() {
   const editorRef = useRef(null);
@@ -20,14 +20,14 @@ function SettingsPage() {
   const walletAddressRef = useRef(null);
   const webhookRef = useRef(null);
   const itemInfoRef = useRef(null);
-  
+
   const { isLoggined } = useAuth();
   const router = useRouter();
 
   const [disabledEditGameInfo, setDisabledEditGameInfo] = useState(true);
   const [editorInitValue, setEditorInitValue] = useState("");
 
-  const {alertSuccess, alertError} = useAlert();
+  const { alertSuccess, alertError } = useAlert();
 
   const getGameInfo = async () => {
     try {
@@ -57,27 +57,31 @@ function SettingsPage() {
       videoIntroURL: videoIntroURLRef.current.value,
       logoURL: logoURLRef.current.value,
       backgroundURL: backgroundURLRef.current.value,
-      description: (editorRef.current && editorRef.current.getContent()),
+      description: editorRef.current && editorRef.current.getContent(),
       gameURL: gameURLRef.current.value,
       webhookUrl: webhookRef.current.value,
       getItemUrl: itemInfoRef.current.value,
       tokenCode: tokenCodeRef.current.value,
       tokenNameRef: tokenNameRef.current.value,
-      walletAddressRef: walletAddressRef.current.value
-    }
-    
+      walletAddressRef: walletAddressRef.current.value,
+    };
+
     try {
       const res = await updateJSON(`/admin/game-info`, updatedGameInfoData);
-      alertSuccess('Game info updated successfully!')
-      setDisabledEditGameInfo(true)
+
+      if (res.statusCode === 400 && !res.success)
+        return alertError(res.message[0]);
+
+      alertSuccess("Game info updated successfully!");
+      setDisabledEditGameInfo(true);
     } catch (err) {
-      alertError(err.message)
+      alertError(err.message);
     }
   };
 
   useEffect(() => {
     const loginStatus = isLoggined();
-    if (!loginStatus) router.replace("/")
+    if (!loginStatus) router.replace("/");
   }, []);
 
   useEffect(() => {
@@ -85,9 +89,9 @@ function SettingsPage() {
   }, []);
 
   const styleTextDisable = {
-    color: disabledEditGameInfo ? '#9F99B3' : 'black'
-  }
-  const styleTextEditorDisable = disabledEditGameInfo ? '#9F99B3' : 'black';
+    color: disabledEditGameInfo ? "#9F99B3" : "black",
+  };
+  const styleTextEditorDisable = disabledEditGameInfo ? "#9F99B3" : "black";
 
   return (
     <div className="container--custom">
@@ -97,7 +101,9 @@ function SettingsPage() {
           <div className="game__info card__body">
             <section className="info--left">
               <div className="form__input">
-                <label htmlFor="gameName">Game Name: <span className="label-required">*</span></label>
+                <label htmlFor="gameName">
+                  Game Name: <span className="label-required">*</span>
+                </label>
                 <Input
                   type="text"
                   ref={nameRef}
@@ -108,7 +114,9 @@ function SettingsPage() {
                 />
               </div>
               <div className="form__input">
-                <label htmlFor="gameBackground">Game Background: <span className="label-required">*</span></label>
+                <label htmlFor="gameBackground">
+                  Game Background: <span className="label-required">*</span>
+                </label>
                 <Input
                   type="text"
                   ref={backgroundURLRef}
@@ -122,7 +130,9 @@ function SettingsPage() {
 
             <section className="info--right">
               <div className="form__input">
-                <label htmlFor="gameLogo">Game Logo URL: <span className="label-required">*</span></label>
+                <label htmlFor="gameLogo">
+                  Game Logo URL: <span className="label-required">*</span>
+                </label>
                 <Input
                   type="text"
                   id="gameLogo"
@@ -133,7 +143,10 @@ function SettingsPage() {
                 />
               </div>
               <div className="form__input">
-                <label htmlFor="gameIntro">Game Intro Video URL: <span className="label-required">*</span></label>
+                <label htmlFor="gameIntro">
+                  Game Intro Video URL:{" "}
+                  <span className="label-required">*</span>
+                </label>
                 <Input
                   type="text"
                   id="gameIntro"
@@ -144,7 +157,9 @@ function SettingsPage() {
                 />
               </div>
               <div className="form__input">
-                <label htmlFor="gameUrl">Game URL: <span className="label-required">*</span></label>
+                <label htmlFor="gameUrl">
+                  Game URL: <span className="label-required">*</span>
+                </label>
                 <Input
                   type="text"
                   id="gameUrl"
@@ -157,7 +172,9 @@ function SettingsPage() {
             </section>
 
             <section className="info__description">
-              <label htmlFor="gameDescription">Description: <span className="label-required">*</span></label>
+              <label htmlFor="gameDescription">
+                Description: <span className="label-required">*</span>
+              </label>
               <Editor
                 initialValue={editorInitValue}
                 onInit={(evt, editor) => (editorRef.current = editor)}
@@ -173,14 +190,13 @@ function SettingsPage() {
                   ],
                   toolbar:
                     "formatselect | bold italic | alignleft aligncenter alignright alignjustify",
-                  content_style:
-                    `body { font-size: 14pt; font-family: Arial; color: ${styleTextEditorDisable} !important}`,
+                  content_style: `body { font-size: 14pt; font-family: Arial; color: ${styleTextEditorDisable} !important}`,
                 }}
               />
             </section>
           </div>
         </div>
-        
+
         <div className="card-custom">
           <h3 className="card__title">DATA</h3>
           <div className="game__data card__body">
@@ -217,7 +233,9 @@ function SettingsPage() {
             <h3 className="card__title">Current code and display name</h3>
             <div className="card__body">
               <div className="form__input">
-                <label htmlFor="currentCode">Current Code: <span className="label-required">*</span></label>
+                <label htmlFor="currentCode">
+                  Current Code: <span className="label-required">*</span>
+                </label>
                 <Input
                   type="text"
                   id="currentCode"
@@ -229,7 +247,10 @@ function SettingsPage() {
               </div>
 
               <div className="form__input">
-                <label htmlFor="displayName"> Display Name: <span className="label-required">*</span></label>
+                <label htmlFor="displayName">
+                  {" "}
+                  Display Name: <span className="label-required">*</span>
+                </label>
                 <Input
                   type="text"
                   id="displayName"
@@ -240,13 +261,14 @@ function SettingsPage() {
                 />
               </div>
             </div>
-              
           </section>
           <section className="card-custom deposit_and_recharge">
             <h3 className="card__title">Deposit and recharge</h3>
             <div className="card__body">
               <div className="form__input">
-                <label htmlFor="initialDeposit">Initial Deposit: <span className="label-required">*</span></label>
+                <label htmlFor="initialDeposit">
+                  Initial Deposit: <span className="label-required">*</span>
+                </label>
                 <Input
                   type="text"
                   id="initialDeposit"
@@ -258,7 +280,10 @@ function SettingsPage() {
               </div>
 
               <div className="form__input">
-                <label htmlFor="walletAddress"> Game Wallet Address:<span className="label-required">*</span></label>
+                <label htmlFor="walletAddress">
+                  {" "}
+                  Game Wallet Address:<span className="label-required">*</span>
+                </label>
                 <Input
                   type="text"
                   id="walletAddress"
