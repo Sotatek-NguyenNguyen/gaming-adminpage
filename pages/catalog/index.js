@@ -7,8 +7,8 @@ import Button from "../../components/UI/Button.js";
 import SimpleAccordion from "../../components/UI/Accordion";
 import Modal from "../../components/UI/Modal.js";
 
-import Inventory from "../../components/playerTransaction/inventory";
-import TransactionsHistory from "../../components/playerTransaction/transactionsHistory";
+import Inventory from "../../components/catalogTransaction/inventory";
+import TransactionsHistory from "../../components/catalogTransaction/transactionsHistory";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { getJSON, sendJSON } from "../../common";

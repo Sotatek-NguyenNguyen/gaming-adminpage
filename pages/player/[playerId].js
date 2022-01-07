@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../hooks";
 import Layout from "../../components/Layouts/Layout";
-
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import Inventory from "../../components/playerTransaction/inventory";
 import TransactionsHistory from "../../components/playerTransaction/transactionsHistory";
 import { useRouter } from "next/router";
@@ -56,21 +57,33 @@ function PlayerDetail() {
         <div className="info__tabs">
           <p
             onClick={changeTab("inventory")}
-            style={{ fontWeight: tab === "inventory" ? 700 : 400 }}
+            style={{ 
+              fontWeight: tab === "inventory" ? 700 : 400, 
+              color: tab === "inventory" ? '#6823BF' : '#9F99B3'
+            }}
           >
             {" "}
             Inventory{" "}
           </p>
           <p
             onClick={changeTab("transactionHistory")}
-            style={{ fontWeight: tab === "transactionHistory" ? 700 : 400 }}
+            style={{ 
+              fontWeight: tab === "transactionHistory" ? 700 : 400, 
+              color: tab === "transactionHistory" ? '#6823BF' : '#9F99B3'
+            }}
           >
             {" "}
             Transaction History{" "}
           </p>
         </div>
         <div>
-          {tab === "inventory" ? <Inventory /> : <TransactionsHistory />}
+        {
+            tab === "inventory" ? 
+            <Inventory /> : 
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <TransactionsHistory />
+            </LocalizationProvider>
+          }
         </div>
       </section>
     </div>

@@ -3,12 +3,10 @@ import Button from "../../components/UI/Button.js";
 import DataTable from '../UI/Table/DataTable';
 import {  getJSON } from "../../common.js";
 import SearchIcon from '@mui/icons-material/Search';
-import { useRouter } from "next/router";
 
 function Inventory(){
   const [inventory, setInventory] = useState([]);
-  const router = useRouter();
-  const [endpoint, setEndpoint] = useState([`/admin/users/nft?page=1&pageSize=20&userAddress=${router.query.playerId}`]);
+  const [endpoint, setEndpoint] = useState(['/admin/users/nft?page=1&pageSize=20']);
 
   const getInventory = useCallback(()=>{
     getJSON(`${endpoint}`)
@@ -36,13 +34,13 @@ function Inventory(){
   const itemIdRef = useRef(null);
   const search = () => {
     if(itemIdRef.current.value.trim() === '') return;
-    const currentEndpoint = `/admin/users/nft?page=1&pageSize=20&userAddress=${router.query.playerId}`;
+    const currentEndpoint = '/admin/users/nft?page=1&pageSize=20';
     const newEndpoint = `${currentEndpoint}&gameItemId=${itemIdRef.current.value}`;
     setEndpoint(newEndpoint);
   };
   const clearQuery = () => {
     itemIdRef.current.value = '';
-    const endpointDefault = `/admin/users/nft?page=1&pageSize=20&userAddress=${router.query.playerId}`;
+    const endpointDefault = '/admin/users/nft?page=1&pageSize=20';
     setEndpoint(endpointDefault);
   };
 
@@ -77,7 +75,8 @@ function Inventory(){
     { title: 'Status', field: 'status', style: styleStatusTable, highlightLabel: highlightLabel },
     { title: 'Item ID', field: 'gameItemId' },
     { title: 'Item Name', field: 'name', fieldChildWillGet: ['type', 'name'], style: styleFieldName},
-    { title: 'Create On', field: 'createdAt', isDate: true}
+    { title: 'Create On', field: 'createdAt', isDate: true},
+    { title: 'Owning Player address', field: 'userAddress', style: styleLinkTable}
   ];
 
   return(

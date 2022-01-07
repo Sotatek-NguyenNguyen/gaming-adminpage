@@ -7,12 +7,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
 import DatePicker from '@mui/lab/DatePicker';
 import { createTheme, ThemeProvider} from '@mui/material/styles';
-import { useRouter } from "next/router";
+
 
 function TransactionsHistory(){
-  const router = useRouter();
   const [transactionData, setTransactionsData] = useState([]);
-  const [endpoint, setEndpoint] = useState([`/admin/users/transactions?page=1&pageSize=20&userAddress=${router.query.playerId}`]);
+  const [endpoint, setEndpoint] = useState(['/admin/users/transactions?page=1&pageSize=20']);
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(new Date());
   
@@ -46,10 +45,9 @@ function TransactionsHistory(){
   }
   const tableColumns = [
     { title: 'Status', field: 'type', style: styleStatusTable, highlightLabel: highlightLabel},
-    { title: 'Address', field: 'userAddress', style: styleWalletAddress},
+    { title: 'Wallet Address', field: 'userAddress', style: styleWalletAddress},
     { title: 'Amount', field: 'amount' },
     { title: 'Transaction ID', field: 'transactionId'},
-    { title: 'Transaction Note', field: 'note'},
     { title: 'TimeStamp', field: 'createdAt', isDate: true},
   ];
 
@@ -80,7 +78,7 @@ function TransactionsHistory(){
 
   const search = (event) => {
     event.preventDefault();
-    const currentEndpoint = `/admin/users/transactions?page=1&pageSize=20&userAddress=${router.query.playerId}`;
+    const currentEndpoint = '/admin/users/transactions?page=1&pageSize=20';
     
     if(fromDate !== null){
       const fromDateFormat = fromDate?.toISOString().split('T')[0];
@@ -100,7 +98,7 @@ function TransactionsHistory(){
     setFromDate(null);
     setToDate(new Date());
 
-    const endpointDefault = `/admin/users/transactions?page=1&pageSize=20&userAddress=${router.query.playerId}`;
+    const endpointDefault = '/admin/users/transactions?page=1&pageSize=20';
     setEndpoint(endpointDefault);
   }
 
