@@ -122,7 +122,7 @@ function SettingsPage() {
 
             <section className="info--right">
               <div className="form__input">
-                <label htmlFor="gameLogo">Game Logo Url: <span className="label-required">*</span></label>
+                <label htmlFor="gameLogo">Game Logo URL: <span className="label-required">*</span></label>
                 <Input
                   type="text"
                   id="gameLogo"
@@ -133,7 +133,7 @@ function SettingsPage() {
                 />
               </div>
               <div className="form__input">
-                <label htmlFor="gameIntro">Game Intro Video Url: <span className="label-required">*</span></label>
+                <label htmlFor="gameIntro">Game Intro Video URL: <span className="label-required">*</span></label>
                 <Input
                   type="text"
                   id="gameIntro"
@@ -144,7 +144,7 @@ function SettingsPage() {
                 />
               </div>
               <div className="form__input">
-                <label htmlFor="gameUrl">Game Url: <span className="label-required">*</span></label>
+                <label htmlFor="gameUrl">Game URL: <span className="label-required">*</span></label>
                 <Input
                   type="text"
                   id="gameUrl"
