@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { AuthProvider } from "../contexts/authContext";
+import { GlobalProvider } from "../contexts/globalContext";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, Zoom } from "react-toastify";
 
@@ -24,18 +25,20 @@ function AdminApp({ Component, pageProps }) {
   return (
     <WalletConnectionProvider>
       <WalletModalProvider>
-        <AuthProvider>
-          {getLayout(<Component {...pageProps} />)}
-          <ToastContainer
-            hideProgressBar
-            position="bottom-left"
-            limit={2}
-            newestOnTop
-            closeButton={false}
-            autoClose={2000}
-            transition={Zoom}
-          />
-        </AuthProvider>
+        <GlobalProvider>
+          <AuthProvider>
+            {getLayout(<Component {...pageProps} />)}
+            <ToastContainer
+              hideProgressBar
+              position="bottom-left"
+              limit={2}
+              newestOnTop
+              closeButton={false}
+              autoClose={2000}
+              transition={Zoom}
+            />
+          </AuthProvider>
+        </GlobalProvider>
       </WalletModalProvider>
     </WalletConnectionProvider>
   );
