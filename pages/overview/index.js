@@ -2,21 +2,30 @@ import React, { useEffect, useState, useMemo } from "react";
 import Layout from "../../components/Layouts/Layout";
 import Card from "../../components/UI/Card.js";
 import { useRouter } from "next/router";
-import { useAlert, useAuth } from "../../hooks";
+import { useAlert, useAuth, useGlobal } from "../../hooks";
 import { getJSON } from "../../common.js";
-
-function createData(name, amount, change) {
-  return { name, amount, change };
-}
 
 function OverviewPage() {
   const router = useRouter();
   const { isLoggined } = useAuth();
   const { alertError } = useAlert();
+  const { gameData } = useGlobal();
+  const tokenDecimals = gameData?.tokenDecimals;
 
   const [depositStatistic, setDepositStatistic] = useState({});
   const [withdrawStatistic, setWithdrawStatistic] = useState({});
   const [newUserStatistic, setNewUserStatistic] = useState({});
+
+  function createData(name, amount, change) {
+    return {
+      name,
+      amount:
+        amount?.toString().length > 7
+          ? Math.trunc(amount / (10 ^ tokenDecimals))
+          : amount,
+      change,
+    };
+  }
 
   const getOverviewStatistic = async () => {
     try {
@@ -52,71 +61,74 @@ function OverviewPage() {
     }
   };
 
-  const cardData = useMemo(() => [
-    {
-      id: 1,
-      title: "Deposits",
-      rows: [
-        createData(
-          "Last 24 hours",
-          depositStatistic?.depositLast24Hours?.amount,
-          depositStatistic?.depositLast24Hours?.change
-        ),
-        createData(
-          "7 days ago",
-          depositStatistic?.depositSevenDaysAgo?.amount,
-          depositStatistic?.depositSevenDaysAgo?.change
-        ),
-        createData(
-          "30 days ago",
-          depositStatistic?.depositLast30Days?.amount,
-          depositStatistic?.depositLast30Days?.change
-        ),
-      ],
-    },
-    {
-      id: 2,
-      title: "New User",
-      rows: [
-        createData(
-          "Last 24 hours",
-          newUserStatistic?.newUserLast24Hours?.amount,
-          newUserStatistic?.newUserLast24Hours?.change
-        ),
-        createData(
-          "7 days ago",
-          newUserStatistic?.newUserSevenDaysAgo?.amount,
-          newUserStatistic?.newUserSevenDaysAgo?.change
-        ),
-        createData(
-          "30 days ago",
-          newUserStatistic?.newUserLast30Days?.amount,
-          newUserStatistic?.newUserLast30Days?.change
-        ),
-      ],
-    },
-    {
-      id: 3,
-      title: "Withdraw",
-      rows: [
-        createData(
-          "Last 24 hours",
-          withdrawStatistic?.withdrawnLast24Hours?.amount,
-          withdrawStatistic?.withdrawnLast24Hours?.change
-        ),
-        createData(
-          "7 days ago",
-          withdrawStatistic?.withdrawnSevenDaysAgo?.amount,
-          withdrawStatistic?.withdrawnSevenDaysAgo?.change
-        ),
-        createData(
-          "30 days ago",
-          withdrawStatistic?.withdrawnLast30Days?.amount,
-          withdrawStatistic?.withdrawnLast30Days?.change
-        ),
-      ],
-    },
-  ], [depositStatistic, withdrawStatistic, newUserStatistic]);
+  const cardData = useMemo(
+    () => [
+      {
+        id: 1,
+        title: "Deposits",
+        rows: [
+          createData(
+            "Last 24 hours",
+            depositStatistic?.depositLast24Hours?.amount,
+            depositStatistic?.depositLast24Hours?.change
+          ),
+          createData(
+            "7 days ago",
+            depositStatistic?.depositSevenDaysAgo?.amount,
+            depositStatistic?.depositSevenDaysAgo?.change
+          ),
+          createData(
+            "30 days ago",
+            depositStatistic?.depositLast30Days?.amount,
+            depositStatistic?.depositLast30Days?.change
+          ),
+        ],
+      },
+      {
+        id: 2,
+        title: "New User",
+        rows: [
+          createData(
+            "Last 24 hours",
+            newUserStatistic?.newUserLast24Hours?.amount,
+            newUserStatistic?.newUserLast24Hours?.change
+          ),
+          createData(
+            "7 days ago",
+            newUserStatistic?.newUserSevenDaysAgo?.amount,
+            newUserStatistic?.newUserSevenDaysAgo?.change
+          ),
+          createData(
+            "30 days ago",
+            newUserStatistic?.newUserLast30Days?.amount,
+            newUserStatistic?.newUserLast30Days?.change
+          ),
+        ],
+      },
+      {
+        id: 3,
+        title: "Withdraw",
+        rows: [
+          createData(
+            "Last 24 hours",
+            withdrawStatistic?.withdrawnLast24Hours?.amount,
+            withdrawStatistic?.withdrawnLast24Hours?.change
+          ),
+          createData(
+            "7 days ago",
+            withdrawStatistic?.withdrawnSevenDaysAgo?.amount,
+            withdrawStatistic?.withdrawnSevenDaysAgo?.change
+          ),
+          createData(
+            "30 days ago",
+            withdrawStatistic?.withdrawnLast30Days?.amount,
+            withdrawStatistic?.withdrawnLast30Days?.change
+          ),
+        ],
+      },
+    ],
+    [depositStatistic, withdrawStatistic, newUserStatistic]
+  );
 
   useEffect(() => {
     const loginStatus = isLoggined();
@@ -137,7 +149,11 @@ function OverviewPage() {
             title={card.title}
             rows={card.rows}
             amountLast24hr={newUserStatistic?.newUserLast24Hours?.amount}
-            amountLast30days={498}
+            amountLast30days={
+              (newUserStatistic?.newUserLast30Days?.amount.toString().length > 7) 
+              ? Math.trunc((newUserStatistic?.newUserLast30Days?.amount) / (10 ^ tokenDecimals))
+              : newUserStatistic?.newUserLast30Days?.amount
+            }
           />
         ))}
       </div>
