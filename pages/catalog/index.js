@@ -12,7 +12,7 @@ import TransactionsHistory from "../../components/catalogTransaction/transaction
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { getJSON, sendJSON } from "../../common";
-import { useAuth } from "../../hooks";
+import { useAuth, useGlobal } from "../../hooks";
 
 function CatalogPage() {
   const [showDepositModal, setShowDepositModal] = useState(false);
@@ -25,6 +25,7 @@ function CatalogPage() {
   const [unallocatedInGameBalance, setUnallocatedInGameBalance] = useState("");
   const [tokenData, setTokenData] = useState({});
   const { isLoggined } = useAuth();
+  const {gameData} = useGlobal();
   const router = useRouter();
 
   const changeTab = (tab) => () => {
@@ -45,7 +46,7 @@ function CatalogPage() {
         address={
           <>
             Destination Address <br />
-            4zj7KF13agrr3VYEt3RxxhDtzHGQmL7KdhzGZ9nzp1xD
+            {gameData?.walletAddress}
           </>
         }
         onCloseModal={handleCloseModal}

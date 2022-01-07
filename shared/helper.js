@@ -47,3 +47,14 @@ export const formatNumber = {
     return numberFormatter.format(val);
   },
 };
+
+export const isValidURL = (url) => {
+  try {
+    new URL();     
+  } catch(e) {
+    console.error(e);
+    return false;
+  }
+
+  return true;
+}
