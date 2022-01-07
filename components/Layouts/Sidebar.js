@@ -43,7 +43,7 @@ const Sidebar = () => {
           <Link href="/player">
             <li
               className={`menu-item ${
-                router.pathname === "/player" ? "active" : ""
+                (router.pathname === "/player" || router.pathname === "/player/[playerId]") ? "active" : ""
               }`}
             >
               <PeopleAltIcon /> Player
