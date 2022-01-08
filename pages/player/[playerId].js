@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../../hooks";
 import Layout from "../../components/Layouts/Layout";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -6,9 +6,11 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import Inventory from "../../components/playerTransaction/inventory";
 import TransactionsHistory from "../../components/playerTransaction/transactionsHistory";
 import { useRouter } from "next/router";
+import { getJSON } from "../../common";
 
 function PlayerDetail() {
   const [tab, setTab] = useState("inventory");
+  const [balance, setBalance] = useState('');
   const router = useRouter();
 
   const {isLoggined} = useAuth();
@@ -19,6 +21,18 @@ function PlayerDetail() {
 
   const playerId = `ID#${router.query.playerId}`;
 
+  const getWalletAddress = useCallback(() => {
+    getJSON(`/admin/users?page=1&pageSize=20&address=${router.query.playerId}`)
+    .then( res => {
+      setBalance(res.data[0].balance);
+    })
+    .catch(err => {throw err});
+  }, [])
+
+  useEffect(() => {
+    getWalletAddress();
+  }, [getWalletAddress])
+
   useEffect(() => {
     const loginStatus = isLoggined();
     if (!loginStatus) router.replace("/")
@@ -27,7 +41,7 @@ function PlayerDetail() {
   return (
     <div className="container--custom players-contain">
       <section className="card-custom card__display">
-        <h5 className="card__title">Display</h5>
+        <h5 className="card__title">Player Info</h5>
         <div className="card__body">
           <div>
             <label htmlFor="playerID">Player ID: <span className="label-required">*</span> </label>
@@ -41,12 +55,12 @@ function PlayerDetail() {
           </div>
 
           <div>
-            <label htmlFor="walletAddress"> Wallet Address:</label>
+            <label htmlFor="walletAddress">Current Balance:</label>
             <input
               type="text"
               id="walletAddress"
+              value={balance}
               className="input-main large disable"
-              value="321asdf15asdf2as1d3fa54s2adf"
               disabled
             />
           </div>
