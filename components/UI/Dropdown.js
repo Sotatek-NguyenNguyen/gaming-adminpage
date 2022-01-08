@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useImperativeHandle } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
@@ -24,20 +24,28 @@ const useClickOutSide = (handler) => {
   return domNode;
 };
 
-function Dropdown({ options, onChange, className }) {
+function Dropdown(props, ref) {
+  const { options, onChange, className} = props;
+
   const [isActive, setIsActive] = useState(false);
   const firstOption = options[0].title;
   const [selected, setSelected] = useState(firstOption);
 
   const handleClick = (e) => {
     setSelected(e.target.textContent);
-    setIsActive(false);
     onChange(+e.target.getAttribute('value'))
   };
 
+  useImperativeHandle(ref, () => ({
+    // function will call in component parent to reset selected dropdown
+    setSelectedToFirstValue() {
+      setSelected(firstOption);
+    }
+  }));
+
   const SetClassName = ()=>{
     if(className.trim() === '') return 'dropdown';
-    return `dropdown ${className}`
+    return `dropdown ${className}`;
   }
 
   const domNode = useClickOutSide(() => setIsActive(false));
@@ -66,10 +74,5 @@ function Dropdown({ options, onChange, className }) {
   );
 }
 
-Dropdown.defaultProps = {
-  options: [],
-  onChange: () => {},
-  className: '',
-};
-
-export default Dropdown;
+const forwardedDropdown = React.forwardRef(Dropdown)
+export default forwardedDropdown;

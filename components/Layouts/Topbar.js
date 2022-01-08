@@ -11,9 +11,9 @@ function Topbar() {
     switch(pathName) {
       case 'player/[playerId]':
         return (
-          <React.Fragment>
-            Player: <span>ID#{router.query.playerId}</span>
-          </React.Fragment>
+          <div className="topbar__player-detail">
+            <span>Player: </span> <span className="topbar__playerID"> ID#{router.query.playerId}</span>
+          </div>
         );
 
       case 'settings':
