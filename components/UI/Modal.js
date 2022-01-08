@@ -2,26 +2,48 @@ import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import Button from "../UI/Button.js";
 import Input from "../../components/UI/Input.js";
+import { useAlert } from "../../hooks/useAlert.js";
 
 const BackDrops = (props) => {
   return <div className="backdrop" onClick={props.onCloseModal}></div>;
 };
 
 const ModalOverlay = (props) => {
-  const { onCloseModal, title, address, tokenAmount, inputDisabled } = props;
+  const {
+    onCloseModal,
+    title,
+    address,
+    tokenAmount,
+    inputDisabled,
+    editableAddress,
+  } = props;
   const amountRef = useRef();
+  const addressRef = useRef();
 
   const handleClick = () => {
     if (inputDisabled) props.onClick();
-    else props.onClick(amountRef?.current?.value)
+    if (!inputDisabled && editableAddress)
+      props.onClick(addressRef?.current.value, amountRef?.current.value);
+    if (!inputDisabled && !editableAddress)
+      props.onClick(amountRef?.current?.value);
   };
-  
+
   return (
     <div className="modal">
       <div className="modal__title">{title}</div>
 
       <div className="modal__content">
-        <div className="address">{address}</div>
+        {!editableAddress ? (
+          <div className="address">{address}</div>
+        ) : (
+          <Input
+            placeholder="Destination Address: "
+            type="string"
+            style={{ marginBottom: 10 }}
+            required={true}
+            ref={addressRef}
+          />
+        )}
         <Input
           placeholder={`Token Amount*: ${tokenAmount ? tokenAmount : ""}`}
           min="0"
@@ -29,6 +51,7 @@ const ModalOverlay = (props) => {
           id="token-amount"
           disabled={inputDisabled}
           ref={amountRef}
+          required={true}
         />
       </div>
 
@@ -36,10 +59,7 @@ const ModalOverlay = (props) => {
         <Button className="btn-main--outline" onClick={onCloseModal}>
           Cancel
         </Button>
-        <Button
-          onClick={handleClick}
-          className="btn-main"
-        >
+        <Button onClick={handleClick} className="btn-main">
           Confirm
         </Button>
       </div>

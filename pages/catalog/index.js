@@ -9,8 +9,8 @@ import Modal from "../../components/UI/Modal.js";
 
 import Inventory from "../../components/catalogTransaction/inventory";
 import TransactionsHistory from "../../components/catalogTransaction/transactionsHistory";
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { getJSON, sendJSON } from "../../common";
 import { useAlert, useAuth, useGlobal } from "../../hooks";
 
@@ -19,18 +19,29 @@ function CatalogPage() {
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showGrantTokenModal, setShowGrantTokenModal] = useState(false);
   const [showDeductTokenModal, setShowDeductTokenModal] = useState(false);
+  const [amountValidated, setAmountValidated] = useState(false);
   const [tab, setTab] = useState("inventory");
   const [actualGameBalance, setActualGameBalance] = useState("");
   const [allocatedInGameBalance, setAllocatedInGameBalance] = useState("");
   const [unallocatedInGameBalance, setUnallocatedInGameBalance] = useState("");
   const [tokenData, setTokenData] = useState({});
-  const {alertError, alertSuccess} = useAlert();
+  const { alertError, alertSuccess, alertWarning } = useAlert();
   const { isLoggined } = useAuth();
-  const {gameData} = useGlobal();
+  const { gameData } = useGlobal();
   const router = useRouter();
 
   const changeTab = (tab) => () => {
     setTab(tab);
+  };
+
+  const validateAmount = (amount) => {
+    if (amount == 0 || amount < 0) {
+      setAmountValidated(false);
+      return alertWarning("Please enter greater tokens");
+    } else if (amount > unallocatedInGameBalance) {
+      setAmountValidated(false);
+      return alertWarning("Please enter smaller tokens");
+    } else setAmountValidated(true);
   };
 
   const handleCloseModal = () => {
@@ -60,12 +71,7 @@ function CatalogPage() {
     return (
       <Modal
         title="Confirm Withdraw Token?"
-        address={
-          <>
-            Destination Address <br />
-            4zj7KF13agrr3VYEt3RxxhDtzHGQmL7KdhzGZ9nzp1xD
-          </>
-        }
+        editableAddress={true}
         onCloseModal={handleCloseModal}
         inputDisabled={false}
         onClick={withDrawFromActualGameBalance}
@@ -109,25 +115,32 @@ function CatalogPage() {
     );
   };
 
-  const withDrawFromActualGameBalance = async (amount) => {
-    try {
-      const res = await sendJSON(`/admin/game-balance/withdrawals`, {
-        userAddress: "DBRxc9dpWEisSppdeFfFdjiXUso4XF4qhfRQ3Lq73wy7",
-        amount,
-      });
-      console.log("withdraw", res);
-      setShowWithdrawModal(false);
-    } catch (error) {
-      console.error(err.message);
-    }
+  const withDrawFromActualGameBalance = async (userAddress, amount) => {
+    if (userAddress === "")
+      return alertWarning("Destination address cannot be empty!");
+    validateAmount(+amount);
+    if (!amountValidated) return;
+    // try {
+    //   const res = await sendJSON(`/admin/game-balance/withdrawals`, {
+    //     userAddress,
+    //     amount,
+    //   });
+    //   setShowWithdrawModal(false);
+    // } catch (error) {
+    //   console.error(err.message);
+    // }
   };
 
   const grantTokenHandler = (amount, userAddress, note) => {
+    validateAmount(+amount);
+    if (!amountValidated) return;
     setShowGrantTokenModal(true);
     setTokenData({ amount, userAddress, note });
   };
 
   const deductTokenHandler = (amount, userAddress, note) => {
+    validateAmount(+amount);
+    if (!amountValidated) return;
     setShowDeductTokenModal(true);
     setTokenData({ amount, userAddress, note });
   };
@@ -135,8 +148,8 @@ function CatalogPage() {
   const sendingToken = () => {
     sendJSON(`/admin/users/grant-token`, tokenData)
       .then((res) => {
-        if (res.success) alertSuccess('Sendind token successfully!');
-        if (res.statusCode === 404) alertError('User not found!');
+        if (res.success) alertSuccess("Sendind token successfully!");
+        if (res.statusCode === 404) alertError("User not found!");
       })
       .finally(() => {
         getGameBalance();
@@ -149,8 +162,8 @@ function CatalogPage() {
   const deductToken = () => {
     sendJSON(`/admin/users/deduct-token`, tokenData)
       .then((res) => {
-        if (res.success) alertSuccess('Deduct token successfully!');
-        if (res.statusCode === 404) alertError('User not found!');
+        if (res.success) alertSuccess("Deduct token successfully!");
+        if (res.statusCode === 404) alertError("User not found!");
       })
       .finally(() => {
         getGameBalance();
@@ -173,7 +186,7 @@ function CatalogPage() {
 
   useEffect(() => {
     const loginStatus = isLoggined();
-    if (!loginStatus) router.replace("/")
+    if (!loginStatus) router.replace("/");
   }, []);
 
   useEffect(() => {
@@ -195,7 +208,7 @@ function CatalogPage() {
             <div>
               <label htmlFor="actual-game" className="game-label">
                 <h5>Actual game balance</h5>
-                <Tooltip info="Actual amount of Token in Smart Contract"/>
+                <Tooltip info="Actual amount of Token in Smart Contract" />
               </label>
               <Input
                 disabled
@@ -205,32 +218,32 @@ function CatalogPage() {
                 value={actualGameBalance}
               />
             </div>
-            
+
             <div>
               <label htmlFor="unallocated" className="game-label">
                 <h5>Unallocated in-game balance</h5>
-                <Tooltip info="Balance deposited by Admin and has not been granted to any players"/>
+                <Tooltip info="Balance deposited by Admin and has not been granted to any players" />
               </label>
-              <Input 
-                disabled 
-                type="number" 
-                id="unallocated" 
+              <Input
+                disabled
+                type="number"
+                id="unallocated"
                 className="input-main large disable"
-                value={unallocatedInGameBalance} 
+                value={unallocatedInGameBalance}
               />
             </div>
-            
+
             <div>
               <label htmlFor="allocated" className="game-label">
                 <h5>Allocated in-game balance</h5>
-                <Tooltip info="Balance owned by All Players"/>
+                <Tooltip info="Balance owned by All Players" />
               </label>
-              <Input 
-                disabled 
-                type="number" 
-                id="allocated" 
+              <Input
+                disabled
+                type="number"
+                id="allocated"
                 className="input-main large disable"
-                value={allocatedInGameBalance} 
+                value={allocatedInGameBalance}
               />
             </div>
 
@@ -251,7 +264,7 @@ function CatalogPage() {
           </form>
         </div>
       </div>
-      
+
       <SimpleAccordion
         onGrantToKenSubmit={grantTokenHandler}
         onDeductTokenSubmit={deductTokenHandler}
@@ -261,31 +274,31 @@ function CatalogPage() {
         <div className="info__tabs">
           <p
             onClick={changeTab("inventory")}
-            style={{ 
-              fontWeight: tab === "inventory" ? 700 : 400, 
-              color: tab === "inventory" ? '#6823BF' : '#9F99B3'
+            style={{
+              fontWeight: tab === "inventory" ? 700 : 400,
+              color: tab === "inventory" ? "#6823BF" : "#9F99B3",
             }}
           >
             Inventory
           </p>
           <p
             onClick={changeTab("transactionHistory")}
-            style={{ 
-              fontWeight: tab === "transactionHistory" ? 700 : 400, 
-              color: tab === "transactionHistory" ? '#6823BF' : '#9F99B3'
+            style={{
+              fontWeight: tab === "transactionHistory" ? 700 : 400,
+              color: tab === "transactionHistory" ? "#6823BF" : "#9F99B3",
             }}
           >
             Transaction History
           </p>
         </div>
         <div>
-          {
-            tab === "inventory" ? 
-            <Inventory /> : 
+          {tab === "inventory" ? (
+            <Inventory />
+          ) : (
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <TransactionsHistory />
             </LocalizationProvider>
-          }
+          )}
         </div>
       </section>
     </div>
