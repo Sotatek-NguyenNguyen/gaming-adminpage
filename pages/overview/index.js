@@ -21,7 +21,7 @@ function OverviewPage() {
       name,
       amount:
         amount?.toString().length > 7
-          ? Math.trunc(amount / (10 ^ tokenDecimals))
+          ? Math.trunc(amount / (Math.pow(10, tokenDecimals)))
           : amount,
       change,
     };
@@ -151,7 +151,7 @@ function OverviewPage() {
             amountLast24hr={newUserStatistic?.newUserLast24Hours?.amount}
             amountLast30days={
               (newUserStatistic?.newUserLast30Days?.amount.toString().length > 7) 
-              ? Math.trunc((newUserStatistic?.newUserLast30Days?.amount) / (10 ^ tokenDecimals))
+              ? Math.trunc((newUserStatistic?.newUserLast30Days?.amount) / Math.pow(10, tokenDecimals))
               : newUserStatistic?.newUserLast30Days?.amount
             }
           />

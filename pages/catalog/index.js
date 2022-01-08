@@ -1,4 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { useWallet } from "@solana/wallet-adapter-react";
+import {
+  Connection,
+  clusterApiUrl,
+  PublicKey,
+  Commitment,
+  ConfirmOptions,
+  Transaction,
+} from "@solana/web3.js";
+import { Program, Provider, BN, web3 } from "@project-serum/anchor";
+import * as spl from '@solana/spl-token';
 import { useRouter } from "next/router";
 import Layout from "../../components/Layouts/Layout";
 import Input from "../../components/UI/Input.js";
@@ -12,7 +23,10 @@ import TransactionsHistory from "../../components/catalogTransaction/transaction
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { getJSON, sendJSON } from "../../common";
+import { IDL } from "../../treasury.js";
 import { useAlert, useAuth, useGlobal } from "../../hooks";
+
+const treasuryPDASeed = Buffer.from("treasury");
 
 function CatalogPage() {
   const [showDepositModal, setShowDepositModal] = useState(false);
@@ -26,9 +40,22 @@ function CatalogPage() {
   const [unallocatedInGameBalance, setUnallocatedInGameBalance] = useState("");
   const [tokenData, setTokenData] = useState({});
   const { alertError, alertSuccess, alertWarning } = useAlert();
+  const { publicKey, signTransaction } = useWallet();
   const { isLoggined } = useAuth();
   const { gameData } = useGlobal();
   const router = useRouter();
+
+  const opts = {
+    preflightCommitment: "processed",
+    commitment: "processed",
+  };
+
+  const { SystemProgram } = web3;
+  const wallet = window.solana;
+
+  const network = clusterApiUrl("devnet");
+  const connection = new Connection(network, opts.preflightCommitment);
+  const provider = new Provider(connection, wallet, opts);
 
   const changeTab = (tab) => () => {
     setTab(tab);
@@ -38,9 +65,9 @@ function CatalogPage() {
     if (amount == 0 || amount < 0) {
       setAmountValidated(false);
       return alertWarning("Please enter greater tokens");
-    } else if (amount > unallocatedInGameBalance) {
-      setAmountValidated(false);
-      return alertWarning("Please enter smaller tokens");
+    // } else if (amount > unallocatedInGameBalance) {
+    //   setAmountValidated(false);
+    //   return alertWarning("Please enter smaller tokens");
     } else setAmountValidated(true);
   };
 
@@ -63,6 +90,7 @@ function CatalogPage() {
         }
         onCloseModal={handleCloseModal}
         inputDisabled={false}
+        onClick={handleDeposit}
       />
     );
   };
@@ -120,15 +148,95 @@ function CatalogPage() {
       return alertWarning("Destination address cannot be empty!");
     validateAmount(+amount);
     if (!amountValidated) return;
-    // try {
-    //   const res = await sendJSON(`/admin/game-balance/withdrawals`, {
-    //     userAddress,
-    //     amount,
-    //   });
-    //   setShowWithdrawModal(false);
-    // } catch (error) {
-    //   console.error(err.message);
-    // }
+
+    if (!signTransaction) return;
+
+    try {
+      const serverTx = await sendJSON(`/admin/game-balance/withdrawals`, {
+        userAddress,
+        amount,
+      });
+      const userTx = Transaction.from(
+        Buffer.from(serverTx.serializedTx, "base64")
+      );
+      const signed = await signTransaction(userTx);
+      const signature = await connection.sendRawTransaction(signed.serialize());
+      await connection.confirmTransaction(signature);
+      alertSuccess("Withdraw successfully");
+      setShowWithdrawModal(false);
+    } catch (error) {
+      console.error(error.message);
+      setShowWithdrawModal(false);
+      alertError("Transaction Canceled");
+    }
+  };
+
+  const handleDeposit = async (depositValue) => {
+    validateAmount(+depositValue);
+    if (!amountValidated) return;
+
+    const wallet = window.solana;
+
+    if (
+      publicKey &&
+      gameData.gameId &&
+      gameData.programId &&
+      gameData.tokenAddress
+    ) {
+      const gameId = new PublicKey(gameData.gameId);
+
+      try {
+        const program = new Program(
+          IDL,
+          new PublicKey(gameData.programId),
+          provider
+        );
+
+        // token for deposit and withdraw
+        const token = new spl.Token(
+          provider.connection,
+          new PublicKey(gameData.tokenAddress),
+          spl.TOKEN_PROGRAM_ID,
+          wallet.payer
+        );
+
+        const fromTokenAccount = await token.getOrCreateAssociatedAccountInfo(
+          wallet.publicKey
+        );
+
+        const [treasuryAccount] = await PublicKey.findProgramAddress(
+          [treasuryPDASeed, gameId.toBuffer()],
+          program.programId
+        );
+
+        const [treasuryTokenAccount] = await PublicKey.findProgramAddress(
+          [treasuryPDASeed, gameId.toBuffer(), token.publicKey.toBuffer()],
+          program.programId
+        );
+
+        const signature = await program.rpc.deposit(
+          gameId,
+          new BN(depositValue * Math.pow(10, gameData.tokenDecimals)),
+          {
+            accounts: {
+              sender: program.provider.wallet.publicKey,
+              depositUser: program.provider.wallet.publicKey,
+              senderTokenAccount: fromTokenAccount.address,
+              treasuryAccount,
+              treasuryTokenAccount,
+              tokenProgram: spl.TOKEN_PROGRAM_ID,
+              systemProgram: SystemProgram.programId,
+            },
+          }
+        );
+        alertSuccess("Deposited successfully");
+      } catch (error) {
+        console.error(error);
+        setShowDepositModal(false);
+        alertError("Transaction Canceled");
+      }
+      setShowDepositModal(false);
+    }
   };
 
   const grantTokenHandler = (amount, userAddress, note) => {
