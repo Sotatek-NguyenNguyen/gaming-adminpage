@@ -14,6 +14,7 @@ function PlayerPage() {
 
   const [players, setPlayers] = useState([]);
   const [endpoint, setEndpoint] = useState('/admin/users?page=1&pageSize=20');
+  const [sortBy, setSortBy] = useState(null);
   const walletAddressRef = useRef(null);
 
   const getPlayers = useCallback(() => {
@@ -29,25 +30,50 @@ function PlayerPage() {
     .catch(err => {throw err});
   }, [endpoint]);
 
+  const playersSortBy = (value) => {
+    switch(value) {
+      case 0:
+        setSortBy('createdAt');
+        break;
+      case 1:
+        setSortBy('balance');
+        break;
+      default:
+        setSortBy(null);
+    }
+  };
+
   useEffect(() => {
     getPlayers();
   }, [getPlayers])
 
+  const dropdownRef = useRef();
+
   const dropdownOptions = [
     { title: "Order result by", value: null},
-    { title: "Most recent logins", value: 0 },
+    { title: "Newest to Oldest", value: 0 },
     { title: "Highest value to date", value: 1 },
   ];
 
   const search = () => {
-    if(walletAddressRef.current.value.trim() === '') return;
     const currentEndpoint = 'admin/users?page=1&pageSize=20';
-    const newEndpoint = `${currentEndpoint}&address=${walletAddressRef.current.value}`;
+    let newEndpoint = currentEndpoint;
+
+    if(walletAddressRef.current.value.trim() !== ''){
+      newEndpoint += `&address=${walletAddressRef.current.value}`;
+    }
+    if(sortBy !== null){
+      newEndpoint += `&sortBy=${sortBy}`;
+    };
+
     setEndpoint(newEndpoint);
   };
 
   const clear = () => {
     walletAddressRef.current.value = '';
+    setSortBy(null);
+    // call function setSelectedToFirstValue of component dropdown
+    dropdownRef.current.setSelectedToFirstValue();
     const endpointDefault = 'admin/users?page=1&pageSize=20';
     setEndpoint(endpointDefault);
   };
@@ -101,7 +127,12 @@ function PlayerPage() {
       <section className="card-custom">
         <h5 className="card__title">Query</h5>
         <div className="card__body card__query">
-          <Dropdown options={dropdownOptions} className='card__query--dropdown'/>
+          <Dropdown 
+            options={dropdownOptions} 
+            ref={dropdownRef}
+            className='card__query--dropdown'
+            onChange={playersSortBy}
+          />
           <input type="text" className="input-main large" ref={walletAddressRef} placeholder="Search players" />
           <div className="card__interactive">
             <Button  className="btn-main" onClick={search}>
