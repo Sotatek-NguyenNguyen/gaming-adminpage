@@ -33,6 +33,7 @@ function Dropdown(props, ref) {
 
   const handleClick = (e) => {
     setSelected(e.target.textContent);
+    setIsActive(false);
     onChange(+e.target.getAttribute('value'))
   };
 
