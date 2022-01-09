@@ -6,6 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Link from "next/link";
 
 function DataTable({ columns, data, tableMaxRows, message}) {
   const styleTable = {
@@ -107,11 +108,10 @@ function DataTable({ columns, data, tableMaxRows, message}) {
                       <TableCell key={col.field} align='center' style={{height: 'auto !important'}}>
                         {
                           col.prefixLink 
-                          ? <a style={styleLabel(col.style, col.highlightLabel, item[col.field])} 
-                               href={`${col.prefixLink}/${item[col.field]}`}
-                            >
-                              {renderData(col.fieldChildWillGet, item[col.field])}
-                            </a>
+                          ? <Link href={`${col.prefixLink}/${item[col.field]}`}
+                            ><a style={styleLabel(col.style, col.highlightLabel, item[col.field])}>
+                                {renderData(col.fieldChildWillGet, item[col.field])}
+                            </a></Link>
                           : <span 
                                style={styleLabel(col.style, col.highlightLabel, item[col.field])}
                             >

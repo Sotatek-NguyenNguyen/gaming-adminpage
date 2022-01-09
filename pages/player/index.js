@@ -104,6 +104,7 @@ function PlayerPage() {
       title: "Wallet Address",
       field: "address",
       style: styleLinkTable,
+      prefixLink: '/player'
     },
     { title: "Game Balance", field: "balance" },
     { title: "Create On", field: "createdAt", isDate: true },

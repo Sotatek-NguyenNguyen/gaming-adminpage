@@ -45,7 +45,7 @@ function TransactionsHistory(){
   }
   const tableColumns = [
     { title: 'Status', field: 'type', style: styleStatusTable, highlightLabel: highlightLabel},
-    { title: 'Wallet Address', field: 'userAddress', style: styleWalletAddress},
+    { title: 'Wallet Address', field: 'userAddress', style: styleWalletAddress, prefixLink: '/player'},
     { title: 'Amount', field: 'amount' },
     { title: 'Transaction ID', field: 'transactionId'},
     { title: 'TimeStamp', field: 'createdAt', isDate: true},
