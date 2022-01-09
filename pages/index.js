@@ -29,8 +29,8 @@ function HomePage() {
       setLoading(true);
       try {
         const token = await login(publicKey, signMessage, adapter);
-        if (!token) router.replace('/notadmin');
-        router.replace('/overview');
+        if (token) router.replace('/overview');
+        else router.replace('/notadmin');
       } catch (error) {
         setLoading(false);
       }
