@@ -9,7 +9,7 @@ import {
   Transaction,
 } from "@solana/web3.js";
 import { Program, Provider, BN, web3 } from "@project-serum/anchor";
-import * as spl from '@solana/spl-token';
+import * as spl from "@solana/spl-token";
 import { useRouter } from "next/router";
 import Layout from "../../components/Layouts/Layout";
 import Input from "../../components/UI/Input.js";
@@ -65,9 +65,9 @@ function CatalogPage() {
     if (amount == 0 || amount < 0) {
       setAmountValidated(false);
       return alertWarning("Please enter greater tokens");
-    // } else if (amount > unallocatedInGameBalance) {
-    //   setAmountValidated(false);
-    //   return alertWarning("Please enter smaller tokens");
+      // } else if (amount > unallocatedInGameBalance) {
+      //   setAmountValidated(false);
+      //   return alertWarning("Please enter smaller tokens");
     } else setAmountValidated(true);
   };
 

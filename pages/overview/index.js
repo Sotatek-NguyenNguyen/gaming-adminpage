@@ -21,9 +21,12 @@ function OverviewPage() {
       name,
       amount:
         amount?.toString().length > 7
-          ? Math.trunc(amount / (Math.pow(10, tokenDecimals)))
+          ? Math.trunc(amount / Math.pow(10, tokenDecimals))
           : amount,
-      change,
+      change:
+        change?.toString().length > 7
+          ? Math.trunc(change / Math.pow(10, tokenDecimals))
+          : change,
     };
   }
 
@@ -150,9 +153,12 @@ function OverviewPage() {
             rows={card.rows}
             amountLast24hr={newUserStatistic?.newUserLast24Hours?.amount}
             amountLast30days={
-              (newUserStatistic?.newUserLast30Days?.amount.toString().length > 7) 
-              ? Math.trunc((newUserStatistic?.newUserLast30Days?.amount) / Math.pow(10, tokenDecimals))
-              : newUserStatistic?.newUserLast30Days?.amount
+              newUserStatistic?.newUserLast30Days?.amount.toString().length > 7
+                ? Math.trunc(
+                    newUserStatistic?.newUserLast30Days?.amount /
+                      Math.pow(10, tokenDecimals)
+                  )
+                : newUserStatistic?.newUserLast30Days?.amount
             }
           />
         ))}
