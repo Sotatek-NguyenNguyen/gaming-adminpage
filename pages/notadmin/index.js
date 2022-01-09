@@ -11,7 +11,7 @@ function NotGamifyAdminPage() {
         fontSize: "16px",
         lineHeight: "24px",
         position: "absolute",
-        top: "12%",
+        top: "20%",
         left: "10%",
         display: "flex",
         alignItems: "center",

@@ -5,13 +5,20 @@ import Sidebar from "./Sidebar.js";
 import Topbar from "./Topbar.js";
 
 function Layout(props) {
+  let renderAccountBadge = () => {
+    return (
+      <div className="accountBadge_notAdmin container--custom">
+        <CurrentAccountBadge />
+      </div>
+    );
+  }
   const router = useRouter();
   return (
     <div className="main-layout">
       <Sidebar />
 
       <div className="container">
-        {router.pathname !== "/notadmin" ? <Topbar /> : <CurrentAccountBadge />}
+        {router.pathname !== "/notadmin" ? <Topbar /> : renderAccountBadge()}
         <main>{props.children}</main>
       </div>
     </div>
