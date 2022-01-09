@@ -6,6 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Link from "next/link";
 
 function DataTable({ columns, data, tableMaxRows, message}) {
   const styleTable = {
@@ -63,7 +64,10 @@ function DataTable({ columns, data, tableMaxRows, message}) {
         );
       })
     }else if(isDate){
-      return(<React.Fragment>{value.split('T')[0]}</React.Fragment>);
+      const date = value.split('T')[0];
+      const dateFormat = date.split('-').reverse().join('-');
+      
+      return(<React.Fragment>{dateFormat}</React.Fragment>);
     }else{
       return(<React.Fragment>{value}</React.Fragment>);
     }
@@ -107,11 +111,10 @@ function DataTable({ columns, data, tableMaxRows, message}) {
                       <TableCell key={col.field} align='center' style={{height: 'auto !important'}}>
                         {
                           col.prefixLink 
-                          ? <a style={styleLabel(col.style, col.highlightLabel, item[col.field])} 
-                               href={`${col.prefixLink}/${item[col.field]}`}
-                            >
-                              {renderData(col.fieldChildWillGet, item[col.field])}
-                            </a>
+                          ? <Link href={`${col.prefixLink}/${item[col.field]}`}
+                            ><a style={styleLabel(col.style, col.highlightLabel, item[col.field])}>
+                                {renderData(col.fieldChildWillGet, item[col.field])}
+                            </a></Link>
                           : <span 
                                style={styleLabel(col.style, col.highlightLabel, item[col.field])}
                             >
