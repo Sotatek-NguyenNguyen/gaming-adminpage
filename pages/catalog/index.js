@@ -240,7 +240,9 @@ function CatalogPage() {
   };
 
   const grantTokenHandler = (amount, userAddress, note) => {
+    console.log("adsasasad")
     validateAmount(+amount);
+    console.log(amountValidated)
     if (!amountValidated) return;
     setShowGrantTokenModal(true);
     setTokenData({ amount, userAddress, note });

@@ -95,10 +95,13 @@ export const AuthProvider = ({ children }) => {
         });
         token = tokenResponse.accessToken;
       }
+      
       if (token) {
         setIsAuthenticated(true);
         setPublicKey(walletAddress.toString());
         setAccessToken(token);
+
+        return token
       }
     } catch (e) {
       setIsAuthenticated(false);

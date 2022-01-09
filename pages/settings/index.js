@@ -242,7 +242,7 @@ function SettingsPage() {
                   ref={tokenCodeRef}
                   className="input-main large"
                   style={styleTextDisable}
-                  disabled={disabledEditGameInfo}
+                  disabled={true}
                 />
               </div>
 
@@ -257,7 +257,7 @@ function SettingsPage() {
                   ref={tokenNameRef}
                   className="input-main large"
                   style={styleTextDisable}
-                  disabled={disabledEditGameInfo}
+                  disabled={true}
                 />
               </div>
             </div>
@@ -272,10 +272,10 @@ function SettingsPage() {
                 <Input
                   type="text"
                   id="initialDeposit"
-                  value="1.000.000"
+                  value="0.000.000"
                   className="input-main large"
                   style={styleTextDisable}
-                  disabled={disabledEditGameInfo}
+                  disabled={true}
                 />
               </div>
 
@@ -290,7 +290,7 @@ function SettingsPage() {
                   ref={walletAddressRef}
                   className="input-main large"
                   style={styleTextDisable}
-                  disabled={disabledEditGameInfo}
+                  disabled={true}
                 />
               </div>
             </div>

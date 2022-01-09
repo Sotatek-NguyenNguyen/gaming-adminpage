@@ -28,7 +28,8 @@ function HomePage() {
     if (connected) {
       setLoading(true);
       try {
-        await login(publicKey, signMessage, adapter);
+        const token = await login(publicKey, signMessage, adapter);
+        if (!token) router.replace('/notadmin');
         router.replace('/overview');
       } catch (error) {
         setLoading(false);
