@@ -64,7 +64,10 @@ function DataTable({ columns, data, tableMaxRows, message}) {
         );
       })
     }else if(isDate){
-      return(<React.Fragment>{value.split('T')[0]}</React.Fragment>);
+      const date = value.split('T')[0];
+      const dateFormat = date.split('-').reverse().join('-');
+      
+      return(<React.Fragment>{dateFormat}</React.Fragment>);
     }else{
       return(<React.Fragment>{value}</React.Fragment>);
     }
