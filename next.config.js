@@ -19,6 +19,7 @@ const withTM = require('next-transpile-modules')([
   '@solana/wallet-adapter-sollet',
   '@solana/wallet-adapter-solong',
   '@solana/wallet-adapter-torus',
+  'react-toastify',
 ]);
 
 /** @type {import('next').NextConfig} */

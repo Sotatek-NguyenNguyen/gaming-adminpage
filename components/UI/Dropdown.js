@@ -25,7 +25,7 @@ const useClickOutSide = (handler) => {
 };
 
 function Dropdown(props, ref) {
-  const { options, onChange, className} = props;
+  const { options, onChange, className } = props;
 
   const [isActive, setIsActive] = useState(false);
   const firstOption = options[0].title;
@@ -41,13 +41,13 @@ function Dropdown(props, ref) {
     // function will call in component parent to reset selected dropdown
     setSelectedToFirstValue() {
       setSelected(firstOption);
-    }
+    },
   }));
 
-  const SetClassName = ()=>{
-    if(className.trim() === '') return 'dropdown';
+  const SetClassName = () => {
+    if (className.trim() === "") return "dropdown";
     return `dropdown ${className}`;
-  }
+  };
 
   const domNode = useClickOutSide(() => setIsActive(false));
 
@@ -75,5 +75,5 @@ function Dropdown(props, ref) {
   );
 }
 
-const forwardedDropdown = React.forwardRef(Dropdown)
+const forwardedDropdown = React.forwardRef(Dropdown);
 export default forwardedDropdown;
