@@ -76,7 +76,7 @@ function Inventory(){
     { title: 'Item ID', field: 'gameItemId' },
     { title: 'Item Name', field: 'name', fieldChildWillGet: ['type', 'name'], style: styleFieldName},
     { title: 'Create On', field: 'createdAt', isDate: true},
-    { title: 'Owning Player address', field: 'userAddress', style: styleLinkTable}
+    { title: 'Owning Player address', field: 'userAddress', style: styleLinkTable, prefixLink: '/player'}
   ];
 
   return(

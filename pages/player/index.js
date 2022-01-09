@@ -13,6 +13,7 @@ function PlayerPage() {
   const router = useRouter();
 
   const [players, setPlayers] = useState([]);
+  const [totalPLayers, setTotalPlayers] = useState(0);
   const [endpoint, setEndpoint] = useState('/admin/users?page=1&pageSize=20');
   const [sortBy, setSortBy] = useState(null);
   const walletAddressRef = useRef(null);
@@ -26,6 +27,7 @@ function PlayerPage() {
         return player;
       });
       setPlayers(playersCustom);
+      setTotalPlayers(res.total);
     })
     .catch(err => {throw err});
   }, [endpoint]);
@@ -104,6 +106,7 @@ function PlayerPage() {
       title: "Wallet Address",
       field: "address",
       style: styleLinkTable,
+      prefixLink: '/player'
     },
     { title: "Game Balance", field: "balance" },
     { title: "Create On", field: "createdAt", isDate: true },
@@ -118,7 +121,7 @@ function PlayerPage() {
   return (
     <div className="container--custom players-contain">
       <section className="interactive-list-player">
-        <p>Total player: 16</p>
+        <p>Total player: {totalPLayers}</p>
         <Button  className="btn-main">
           Export Player
         </Button>
