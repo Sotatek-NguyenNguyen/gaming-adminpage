@@ -18,6 +18,7 @@ const defaultState = {
     tokenAddress: "",
     tokenDecimals: 6,
   },
+  getPlayerBalanceByAddress: address => {},
 };
 
 const GlobalContext = createContext(defaultState);
@@ -39,6 +40,7 @@ export const GlobalProvider = ({ children }) => {
     tokenAddress: "",
     tokenDecimals: 6,
   });
+  const [playerList, setPlayerList] = useState([]);
 
   const getGameData = async () => {
     try {
@@ -49,14 +51,30 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
+  const getPlayerList = async () => {
+    try {
+      const playersData = await getJSON(`/admin/users?page=1&pageSize=20`);
+      setPlayerList(playersData.data);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const getPlayerBalanceByAddress = address => {
+    const player = playerList.find(player => player.address === address);
+    return player.balance;
+  };
+
   useEffect(() => {
     getGameData().catch((err) => alertError(err.message));
+    getPlayerList().catch(err => alertError(err.message));
   }, []);
 
   return (
     <GlobalContext.Provider
       value={{
         gameData,
+        getPlayerBalanceByAddress
       }}
     >
       {children}

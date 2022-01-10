@@ -41,7 +41,7 @@ function CatalogPage() {
   const { alertError, alertSuccess, alertWarning } = useAlert();
   const { publicKey, signTransaction } = useWallet();
   const { isLoggined, balance } = useAuth();
-  const { gameData } = useGlobal();
+  const { gameData, getPlayerBalanceByAddress } = useGlobal();
   const router = useRouter();
 
   const opts = {
@@ -268,6 +268,7 @@ function CatalogPage() {
   };
 
   const deductTokenHandler = (amount, userAddress, note) => {
+    console.log(getPlayerBalanceByAddress(userAddress));
     setShowDeductTokenModal(true);
     setTokenData({ amount, userAddress, note });
   };
