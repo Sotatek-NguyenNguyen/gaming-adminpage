@@ -21,6 +21,7 @@ function TransactionsHistory(){
   }
   const styleStatusTable = {
     color: "white",
+    textTransform: 'capitalize',
     border: "1px solid transparent",
     borderRadius: "32px",
     width: "120px",
@@ -37,10 +38,10 @@ function TransactionsHistory(){
     withdrawn: {
       backgroundColor: "#FFA803"
     },
-    deduct: {
+    deducted: {
       backgroundColor: "#FFA803"
     },
-    grant: {
+    granted: {
       backgroundColor: "#FFA803"
     }
   }
@@ -53,7 +54,7 @@ function TransactionsHistory(){
     { title: 'TimeStamp', field: 'createdAt', isDate: true},
   ];
 
-  const removePrefix = (transactionType) => transactionType.split("_")[1];
+  const removePrefix = (transactionType) => transactionType.split("_")[1] + 'ed';
 
   const getTransactionHistory = useCallback(()=>{
       getJSON(`${endpoint}`)
@@ -83,8 +84,13 @@ function TransactionsHistory(){
     const currentEndpoint = `/admin/users/transactions?page=1&pageSize=20&userAddress=${router.query.playerId}`;
     
     if(fromDate !== null){
-      const fromDateFormat = fromDate?.toISOString().split('T')[0];
-      const toDateFormat = toDate?.toISOString().split('T')[0];
+      let fromDateFormat = fromDate?.toISOString().split('T')[0];
+      let toDateFormat = toDate?.toISOString().split('T')[0];
+
+      if(checkSameDay(fromDate, toDate)){
+        fromDateFormat = new Date(fromDate.setHours(0, 0, 0, 0)).toISOString();
+        toDateFormat = new Date(fromDate.setHours(23, 59, 59, 999)).toISOString();
+      }
       
       currentEndpoint += `&fromDate=${fromDateFormat}&toDate=${toDateFormat}`;
     }
