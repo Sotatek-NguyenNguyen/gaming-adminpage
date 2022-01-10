@@ -132,11 +132,22 @@ function CatalogPage() {
     );
   };
 
+  const validateWithDrawAmount = amount => {
+    if (amount === 0 || amount < 0) {
+      alertWarning("Please enter greater token!");
+      return false;
+    } else if (amount > actualGameBalance) {
+      alertWarning("Please enter smaller token!")
+      return false;
+    } else return true; 
+  };
+
   const withDrawFromActualGameBalance = async (userAddress, amount) => {
     if (userAddress === "")
       return alertWarning("Destination address cannot be empty!");
-    validateAmount(+amount);
-    if (!amountValidated) return;
+  
+    const validatedAmount = validateWithDrawAmount(+amount);
+    if (!validatedAmount) return;
 
     if (!signTransaction) return;
 
@@ -241,7 +252,7 @@ function CatalogPage() {
   const grantTokenHandler = (amount, userAddress, note) => {
     const validatedAmount = validateGrantTokenAmount(+amount);
     if (!validatedAmount) return;
-    
+
     setShowGrantTokenModal(true);
     setTokenData({ amount, userAddress, note });
   };
