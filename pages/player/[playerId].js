@@ -72,7 +72,7 @@ function PlayerDetail() {
           <p
             onClick={changeTab("inventory")}
             style={{ 
-              fontWeight: tab === "inventory" ? 700 : 400, 
+              fontWeight: tab === "inventory" ? 600 : 400, 
               color: tab === "inventory" ? '#6823BF' : '#9F99B3'
             }}
           >
@@ -82,7 +82,7 @@ function PlayerDetail() {
           <p
             onClick={changeTab("transactionHistory")}
             style={{ 
-              fontWeight: tab === "transactionHistory" ? 700 : 400, 
+              fontWeight: tab === "transactionHistory" ? 600 : 400, 
               color: tab === "transactionHistory" ? '#6823BF' : '#9F99B3'
             }}
           >

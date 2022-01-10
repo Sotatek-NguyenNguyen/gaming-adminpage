@@ -26,7 +26,8 @@ function DataTable({ columns, data, tableMaxRows, message}) {
     textOverflow: "ellipsis",
     width: "100%",
     display:"block",
-    margin: "0px auto"
+    margin: "0px auto",
+    fontFamily: "'Poppins', sans-serif",
   }
   const styleLabel = (style, highlightLabel, label) => {
     let styleLabel = {...styleTextOverflow};
@@ -84,7 +85,7 @@ function DataTable({ columns, data, tableMaxRows, message}) {
                   return (
                     <TableCell 
                       key={col.title} 
-                      sx={{fontWeight: 'bold'}} 
+                      sx={{fontWeight: '600', fontFamily: '"Poppins", sans-serif'}} 
                       style={{height: 'auto !important'}} 
                       align="center"
                     >
