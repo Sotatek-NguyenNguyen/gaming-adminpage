@@ -16,11 +16,19 @@ function Inventory(){
       // fake field status, item name
       const _inventory = [...res.data];
       const inventoryCustom = _inventory.map(inventory => {
-        inventory.status = "Active";
+        const gameItemName = inventory.gameItemName ?? ' ';
+        const itemsNameToArr = gameItemName.split(' ');
+        const typeCustom = itemsNameToArr[0];
+        const nameCustom = (gameItemName.length > 1) ? itemsNameToArr.slice(1).join(' ') : ' ';
+
         inventory.name = {
-          type: 'NFT',
-          name: 'Happy Bunny'
+          type: typeCustom,
+          name: nameCustom
         };
+
+        if(inventory.status === 'MetadataUploading'){
+           inventory.status = 'Active';
+        }
 
         return inventory;
       });
