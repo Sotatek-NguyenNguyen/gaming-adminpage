@@ -65,6 +65,8 @@ export default function SimpleAccordion(props) {
               <Input
                 required
                 ref={amountGrantToken}
+                min="0"
+                pattern="[0-9]"
                 placeholder="Token Amount"
                 className="input-main large"
                 type="number"
@@ -128,6 +130,8 @@ export default function SimpleAccordion(props) {
                 placeholder="Token Amount"
                 type="number"
                 id="token-amount"
+                min="0"
+                pattern="[0-9]"
               />
             </div>
               

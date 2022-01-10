@@ -47,6 +47,7 @@ const ModalOverlay = (props) => {
         <Input
           placeholder={`Token Amount*: ${tokenAmount ? tokenAmount : ""}`}
           min="0"
+          pattern="[0-9]"
           type="number"
           id="token-amount"
           disabled={inputDisabled}
