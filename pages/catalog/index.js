@@ -40,7 +40,7 @@ function CatalogPage() {
   const [tokenData, setTokenData] = useState({});
   const { alertError, alertSuccess, alertWarning } = useAlert();
   const { publicKey, signTransaction } = useWallet();
-  const { isLoggined } = useAuth();
+  const { isLoggined, balance } = useAuth();
   const { gameData } = useGlobal();
   const router = useRouter();
 
@@ -171,9 +171,19 @@ function CatalogPage() {
     }
   };
 
+  const validateDepositAmount = amount => {
+    if (amount < 0 || amount === 0) {
+      alertWarning("Please enter greater token!");
+      return false;
+    } else if (amount > balance) {
+      alertWarning("Please enter smaller token!")
+      return false; 
+    } else return true;
+  };
+
   const handleDeposit = async (depositValue) => {
-    validateAmount(+depositValue);
-    if (!amountValidated) return;
+    const validatedAmount = validateDepositAmount(+depositValue);
+    if (!validatedAmount) return;
 
     const wallet = window.solana;
 
