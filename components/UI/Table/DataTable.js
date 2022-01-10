@@ -59,9 +59,14 @@ function DataTable({ columns, data, tableMaxRows, message}) {
     if(fieldCustom && checkNotEmptyArr(fieldCustom)){
       return fieldCustom.map((item, index) => {
         return(
-          <React.Fragment key={`${value[item]}-${index}`}>
+          <span 
+            key={`${value[item]}-${index}`}
+            style={{
+              textTransform: (index === 0) ? 'uppercase' : 'capitalize',
+            }}
+          >
             {value[item]} <br />
-          </React.Fragment>
+          </span>
         );
       })
     }else if(isDate){
