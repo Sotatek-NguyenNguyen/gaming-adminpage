@@ -33,7 +33,6 @@ function CatalogPage() {
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showGrantTokenModal, setShowGrantTokenModal] = useState(false);
   const [showDeductTokenModal, setShowDeductTokenModal] = useState(false);
-  const [amountValidated, setAmountValidated] = useState(false);
   const [tab, setTab] = useState("inventory");
   const [actualGameBalance, setActualGameBalance] = useState("");
   const [allocatedInGameBalance, setAllocatedInGameBalance] = useState("");
@@ -59,16 +58,6 @@ function CatalogPage() {
 
   const changeTab = (tab) => () => {
     setTab(tab);
-  };
-
-  const validateAmount = (amount) => {
-    if (amount == 0 || amount < 0) {
-      setAmountValidated(false);
-      return alertWarning("Please enter greater tokens");
-      // } else if (amount > unallocatedInGameBalance) {
-      //   setAmountValidated(false);
-      //   return alertWarning("Please enter smaller tokens");
-    } else setAmountValidated(true);
   };
 
   const handleCloseModal = () => {
@@ -239,18 +228,25 @@ function CatalogPage() {
     }
   };
 
+  const validateGrantTokenAmount = (amount) => {
+    if (amount === 0 || amount < 0) {
+      alertWarning("Please enter greater token!");
+      return false;
+    } else if (amount > unallocatedInGameBalance) {
+      alertWarning("Please enter smaller token!");
+      return false;
+    } else return true;
+  };
+
   const grantTokenHandler = (amount, userAddress, note) => {
-    console.log("adsasasad")
-    validateAmount(+amount);
-    console.log(amountValidated)
-    if (!amountValidated) return;
+    const validatedAmount = validateGrantTokenAmount(+amount);
+    if (!validatedAmount) return;
+    
     setShowGrantTokenModal(true);
     setTokenData({ amount, userAddress, note });
   };
 
   const deductTokenHandler = (amount, userAddress, note) => {
-    validateAmount(+amount);
-    if (!amountValidated) return;
     setShowDeductTokenModal(true);
     setTokenData({ amount, userAddress, note });
   };
