@@ -296,7 +296,7 @@ function CatalogPage() {
   const sendingToken = () => {
     sendJSON(`/admin/users/grant-token`, tokenData)
       .then((res) => {
-        if (res.success) alertSuccess("Sendind token successfully!");
+        if (res.success) alertSuccess("Successfully granted token!");
         if (res.statusCode === 404) alertError("User not found!");
       })
       .finally(() => {
