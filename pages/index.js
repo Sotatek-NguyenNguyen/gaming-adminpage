@@ -15,7 +15,7 @@ function HomePage() {
   const { connected, wallet, publicKey, signMessage, adapter, connecting } = useWallet();
   const { setVisible } = useWalletModal();
   const [loading, setLoading] = useState(false);
-  const {alertError} = useAlert();
+  const { alertError } = useAlert();
 
   const buttonText = useMemo(() => {
     if (connecting) return 'Connecting ...';
