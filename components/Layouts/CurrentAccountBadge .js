@@ -10,8 +10,8 @@ function CurrentAccountBadge({ children }) {
   const { alertInfo } = useAlert();
   const { refreshWalletBalance } = useSmartContract();
   const router = useRouter();
-  const { logout, balance, isAuthenticated, setAccountBalance } = useAuth();
-  const {gameData} = useGlobal();
+  const { logout, isAuthenticated } = useAuth();
+  const { gameData, setAccountBalance, balance } = useGlobal();
   const { publicKey, wallet, disconnect, connected } = useWallet();
   const base58 = useMemo(() => publicKey?.toBase58(), [publicKey]);
   const content = useMemo(() => {
@@ -47,9 +47,9 @@ function CurrentAccountBadge({ children }) {
     const initBalance = async () => {
       try {
         setLoading(true);
-        if (!isAuthenticated) {
-          await login(publicKey, signMessage, adapter);
-        }
+        // if (!isAuthenticated) {
+        //   await login(publicKey, signMessage, adapter);
+        // }
         await refreshWalletBalance();
         setLoading(false);
       } catch (err) {
@@ -70,10 +70,12 @@ function CurrentAccountBadge({ children }) {
       <CancelIcon onClick={handleDisconnectWallet} />
       <p className="account-badge__amount-token">
         {loading ? (
-          <span>Loading...</span> 
+          <span>Loading...</span>
         ) : (
-          <span>{balance?.formatted} {gameData?.tokenCode}</span>
-        )}  
+          <span>
+            {balance?.formatted} {gameData?.tokenCode}
+          </span>
+        )}
       </p>
       <p className="account-badge__token-id" onClick={copyAddress}>
         {content}

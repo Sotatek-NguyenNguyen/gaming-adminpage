@@ -40,7 +40,7 @@ function CatalogPage() {
   const [tokenData, setTokenData] = useState({});
   const { alertError, alertSuccess, alertWarning } = useAlert();
   const { publicKey, signTransaction } = useWallet();
-  const { isLoggined, balance } = useAuth();
+  const { isLoggined, balance, cluster } = useAuth();
   const { gameData, getPlayerBalanceByAddress } = useGlobal();
   const router = useRouter();
 
@@ -52,7 +52,7 @@ function CatalogPage() {
   const { SystemProgram } = web3;
   const wallet = window.solana;
 
-  const network = clusterApiUrl("devnet");
+  const network = clusterApiUrl(cluster);
   const connection = new Connection(network, opts.preflightCommitment);
   const provider = new Provider(connection, wallet, opts);
 
@@ -132,20 +132,20 @@ function CatalogPage() {
     );
   };
 
-  const validateWithDrawAmount = amount => {
+  const validateWithDrawAmount = (amount) => {
     if (amount === 0 || amount < 0) {
       alertWarning("Please enter greater token!");
       return false;
     } else if (amount > unallocatedInGameBalance) {
-      alertWarning("Please enter smaller token!")
+      alertWarning("Please enter smaller token!");
       return false;
-    } else return true; 
+    } else return true;
   };
 
   const handleWithDraw = async (userAddress, amount) => {
     if (userAddress === "")
       return alertWarning("Destination address cannot be empty!");
-  
+
     const validatedAmount = validateWithDrawAmount(+amount);
     if (!validatedAmount) return;
 
@@ -171,13 +171,13 @@ function CatalogPage() {
     }
   };
 
-  const validateDepositAmount = amount => {
+  const validateDepositAmount = (amount) => {
     if (amount < 0 || amount === 0) {
       alertWarning("Please enter greater token!");
       return false;
     } else if (amount > balance) {
-      alertWarning("Please enter smaller token!")
-      return false; 
+      alertWarning("Please enter smaller token!");
+      return false;
     } else return true;
   };
 
@@ -322,11 +322,19 @@ function CatalogPage() {
   };
 
   const getGameBalance = async () => {
+    const convertToExactFormat = (num) => {
+      return num / Math.pow(10, gameData?.tokenDecimals);
+    };
+
     try {
       const res = await getJSON(`/admin/game-balance`);
-      setActualGameBalance(res?.actualGameBalance);
-      setUnallocatedInGameBalance(res?.unallocatedInGameBalance);
-      setAllocatedInGameBalance(res?.allocatedInGameBalance);
+      setActualGameBalance(convertToExactFormat(res?.actualGameBalance));
+      setUnallocatedInGameBalance(
+        convertToExactFormat(res?.unallocatedInGameBalance)
+      );
+      setAllocatedInGameBalance(
+        convertToExactFormat(res?.allocatedInGameBalance)
+      );
     } catch (error) {
       throw error;
     }

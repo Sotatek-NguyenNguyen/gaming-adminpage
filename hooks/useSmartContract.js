@@ -2,13 +2,16 @@ import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { WalletNotConnectedError } from "@solana/wallet-adapter-base";
 import { useAlert } from "./useAlert";
-import { useAuth } from "./useAuth";
 import { useGlobal } from ".";
-import { transformLamportsToSOL } from "../shared/helper";
-import { Token, ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { transformLamportsToSOL, renderTokenBalance } from "../shared/helper";
+import {
+  Token,
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  TOKEN_PROGRAM_ID,
+} from "@solana/spl-token";
 
 export function useSmartContract() {
-  const { setAccountBalance } = useAuth();
+  const { setAccountBalance } = useGlobal();
   const { alertError } = useAlert();
   const { connection } = useConnection();
   const { publicKey } = useWallet();

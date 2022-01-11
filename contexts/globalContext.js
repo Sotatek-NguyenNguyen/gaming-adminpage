@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import { getJSON } from "../common.js";
 import { useAlert } from "../hooks/useAlert";
+import { formatNumber } from "../shared/helper.js";
 
 const defaultState = {
   gameData: {
@@ -20,6 +21,11 @@ const defaultState = {
   },
   playerList: [],
   getPlayerBalanceByAddress: address => {},
+  balance: {
+    value: 0,
+    formatted: "0",
+  },
+  setAccountBalance: (accBalance) => {},
 };
 
 const GlobalContext = createContext(defaultState);
@@ -42,6 +48,11 @@ export const GlobalProvider = ({ children }) => {
     tokenDecimals: 6,
   });
   const [playerList, setPlayerList] = useState([]);
+
+  const [balance, setBalance] = useState({
+    value: 0,
+    formatted: "0",
+  });
 
   const getGameData = async () => {
     try {
@@ -66,6 +77,15 @@ export const GlobalProvider = ({ children }) => {
     return player.balance;
   };
 
+  const setAccountBalance = (accBalance) => {
+    // const balanceResult = transformLamportsToSOL(accBalance || 0);
+
+    setBalance({
+      value: accBalance,
+      formatted: formatNumber.format(accBalance),
+    });
+  };
+
   useEffect(() => {
     getGameData().catch((err) => alertError(err.message));
     getPlayerList().catch(err => alertError(err.message));
@@ -76,6 +96,8 @@ export const GlobalProvider = ({ children }) => {
       value={{
         gameData,
         getPlayerBalanceByAddress,
+        balance,
+        setAccountBalance,
         playerList
       }}
     >

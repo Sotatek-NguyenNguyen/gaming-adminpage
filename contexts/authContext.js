@@ -1,20 +1,34 @@
 import { createContext, useEffect, useState } from "react";
-import { PublicKey } from "@solana/web3.js";
-import { useLocalStorageState, useConnection, useAlert } from "../hooks";
+import { PublicKey, Cluster } from "@solana/web3.js";
+import {
+  useLocalStorageState,
+  useConnection,
+  useAlert,
+  useGlobal,
+} from "../hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { signatureMsgAuth, loginAuth } from "../api/auth";
 import { transformLamportsToSOL, formatNumber } from "../shared/helper";
+import { envConfig } from "../configs";
+import {
+  Token,
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  TOKEN_PROGRAM_ID,
+} from "@solana/spl-token";
+
+const { SOLLET_ENV } = envConfig;
 
 const defaultState = {
   isAuthenticated: false,
   login: async () => {},
   logout: async () => {},
   isLoggined: () => {},
+  cluster: SOLLET_ENV,
   balance: {
     value: 0,
     formatted: "0",
   },
-  setAccountBalance: () => {},
+  changeCluster: () => {},
 };
 
 const AuthContext = createContext(defaultState);
@@ -24,13 +38,19 @@ export const AuthProvider = ({ children }) => {
   const [publicKey, setPublicKey] = useLocalStorageState("public_key");
   const [accessToken, setAccessToken] = useLocalStorageState("access_token");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const {alertError} = useAlert();
+  const { gameData } = useGlobal();
+  const [cluster, setCluster] = useState(SOLLET_ENV);
+  const { alertError } = useAlert();
   const [balance, setBalance] = useState({
     value: 0,
     formatted: "0",
   });
 
   const { connection } = useConnection();
+
+  const changeCluster = (newCluster) => {
+    setCluster(newCluster);
+  };
 
   useEffect(() => {
     const getAuthenStatus = () => {
@@ -54,11 +74,16 @@ export const AuthProvider = ({ children }) => {
           ASSOCIATED_TOKEN_PROGRAM_ID,
           TOKEN_PROGRAM_ID,
           new PublicKey(gameData.tokenAddress),
-          publicKey,
+          publicKey
         );
-        const tokenAccountBalance = await connection.getTokenAccountBalance(tokenAccount);
+        const tokenAccountBalance = await connection.getTokenAccountBalance(
+          tokenAccount
+        );
         if (tokenAccountBalance && tokenAccountBalance.value) {
-          const balanceResult = renderTokenBalance(tokenAccountBalance.value.uiAmount, 2);
+          const balanceResult = renderTokenBalance(
+            tokenAccountBalance.value.uiAmount,
+            2
+          );
 
           setBalance({
             value: balanceResult,
@@ -110,13 +135,13 @@ export const AuthProvider = ({ children }) => {
         });
         token = tokenResponse.accessToken;
       }
-      
+
       if (token) {
         setIsAuthenticated(true);
         setPublicKey(walletAddress.toString());
         setAccessToken(token);
 
-        return token
+        return token;
       }
     } catch (e) {
       setIsAuthenticated(false);
@@ -136,15 +161,6 @@ export const AuthProvider = ({ children }) => {
     return loginStatus;
   };
 
-  const setAccountBalance = (accBalance) => {
-    const balanceResult = transformLamportsToSOL(accBalance || 0);
-
-    setBalance({
-      value: balanceResult,
-      formatted: formatNumber.format(balanceResult),
-    });
-  };
-
   return (
     <AuthContext.Provider
       value={{
@@ -152,8 +168,9 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         balance,
-        setAccountBalance,
         isLoggined,
+        cluster,
+        changeCluster,
       }}
     >
       {children}

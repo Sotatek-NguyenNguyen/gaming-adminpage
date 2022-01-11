@@ -10,7 +10,7 @@ const SOLLET_ENV =
 const SOLANA_EXPLORER_URL = 'https://explorer.solana.com';
 const ISOLA_TOKEN_ADDRESS = new PublicKey(process.env.NEXT_PUBLIC_ISOLA_TOKEN_ADDRESS);
 const ISOLA_TOKEN_NAME = process.env.NEXT_PUBLIC_ISOLA_TOKEN_NAME;
-const SOLLET_ENV2 = (process.env.REACT_APP_NETWORK_CLUSTER) || 'testnest';
+const SOLLET_ENV2 = (process.env.REACT_APP_NETWORK_CLUSTER) || 'testnet';
 
 export const envConfig = {
   BASE_URL,
