@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Input from "./Input.js";
 import Button from "./Button.js";
+import { useGlobal, useAlert } from '../../hooks';
 
 export default function SimpleAccordion(props) {
   const amountGrantToken = useRef();
@@ -15,6 +16,9 @@ export default function SimpleAccordion(props) {
   const amountDeductToken = useRef();
   const deductWalletAddress = useRef();
   const deductNote = useRef();
+
+  const { playerList } = useGlobal();
+  const { alertError } = useAlert();
 
   const resetForm = () => {
     amountGrantToken.current.value = "";
@@ -26,12 +30,19 @@ export default function SimpleAccordion(props) {
     deductNote.current.value = "";
   };
 
+  const findWalletAddress = (address) => playerList.some(player => player.address === address);
+
   const grantTokenSubmitHandler = (e) => {
     e.preventDefault();
     const amount = +amountGrantToken.current.value;
     const userAddress = grantWalletAddress.current.value;
     const note = grantNote.current.value;
-    props.onGrantToKenSubmit(amount, userAddress, note);
+
+    if(findWalletAddress(userAddress)){
+      props.onGrantToKenSubmit(amount, userAddress, note);
+    }else{
+      alertError("The wallet address is not found in Gaming Service. Either the wallet is not registered with Gaming Service or has been de-registered");
+    }
     resetForm();
   };
 
@@ -40,7 +51,12 @@ export default function SimpleAccordion(props) {
     const amount = +amountDeductToken.current.value;
     const userAddress = deductWalletAddress.current.value;
     const note = deductNote.current.value;
-    props.onDeductTokenSubmit(amount, userAddress, note);
+
+    if(findWalletAddress(userAddress)){
+      props.onDeductTokenSubmit(amount, userAddress, note);
+    }else{
+      alertError("The wallet address is not found in Gaming Service. Either the wallet is not registered with Gaming Service or has been de-registered");
+    }
     resetForm();
   };
 

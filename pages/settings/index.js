@@ -72,7 +72,7 @@ function SettingsPage() {
       if (res.statusCode === 400 && !res.success)
         return alertError(res.message[0]);
 
-      alertSuccess("Game info updated successfully!");
+      alertSuccess("Changes saved");
       setDisabledEditGameInfo(true);
     } catch (err) {
       alertError(err.message);
