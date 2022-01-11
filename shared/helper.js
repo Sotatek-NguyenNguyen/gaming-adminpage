@@ -1,5 +1,6 @@
 import { envConfig, solletConfig } from "../configs";
 import {LAMPORTS_PER_SOL} from "@solana/web3.js";
+import Decimal from 'decimal.js';
 
 const { SOLLET_ENV2 } = envConfig;
 const { SOLLET_CHAINS } = solletConfig;
@@ -58,3 +59,15 @@ export const isValidURL = (url) => {
 
   return true;
 }
+
+export const renderTokenBalance = (balance, tokenDecimals) => {
+  if (balance === null || balance === undefined) {
+    return 0;
+  }
+
+  if (typeof balance === 'string') {
+    return parseFloat(parseFloat(balance).toFixed(tokenDecimals));
+  }
+
+  return new Decimal(parseFloat(balance.toString()).toFixed(tokenDecimals)).toNumber();
+};
