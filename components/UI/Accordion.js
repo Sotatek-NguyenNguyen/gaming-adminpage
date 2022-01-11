@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Input from "./Input.js";
 import Button from "./Button.js";
+import useGlobal from '../../hooks';
 
 export default function SimpleAccordion(props) {
   const amountGrantToken = useRef();
@@ -16,11 +17,11 @@ export default function SimpleAccordion(props) {
   const deductWalletAddress = useRef();
   const deductNote = useRef();
 
-  let players = useGlobal();
+  const {playerList} = useGlobal();
 
   useEffect(()=>{
-    console.log(players);
-  }, [players]);
+    console.log(playerList);
+  }, [playerList]);
 
   const resetForm = () => {
     amountGrantToken.current.value = "";
