@@ -18,6 +18,7 @@ const defaultState = {
     tokenAddress: "",
     tokenDecimals: 6,
   },
+  playerList: [],
   getPlayerBalanceByAddress: address => {},
 };
 
@@ -74,7 +75,8 @@ export const GlobalProvider = ({ children }) => {
     <GlobalContext.Provider
       value={{
         gameData,
-        getPlayerBalanceByAddress
+        getPlayerBalanceByAddress,
+        playerList
       }}
     >
       {children}

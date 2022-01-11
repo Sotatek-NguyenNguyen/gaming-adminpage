@@ -91,7 +91,7 @@ function CatalogPage() {
         editableAddress={true}
         onCloseModal={handleCloseModal}
         inputDisabled={false}
-        onClick={withDrawFromActualGameBalance}
+        onClick={handleWithDraw}
       />
     );
   };
@@ -136,13 +136,13 @@ function CatalogPage() {
     if (amount === 0 || amount < 0) {
       alertWarning("Please enter greater token!");
       return false;
-    } else if (amount > actualGameBalance) {
+    } else if (amount > unallocatedInGameBalance) {
       alertWarning("Please enter smaller token!")
       return false;
     } else return true; 
   };
 
-  const withDrawFromActualGameBalance = async (userAddress, amount) => {
+  const handleWithDraw = async (userAddress, amount) => {
     if (userAddress === "")
       return alertWarning("Destination address cannot be empty!");
   
