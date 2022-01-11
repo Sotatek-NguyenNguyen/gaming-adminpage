@@ -61,6 +61,9 @@ function CatalogPage() {
   };
 
   const handleCloseModal = () => {
+    if(showGrantTokenModal || showDeductTokenModal){
+      alertWarning('User rejected the request');
+    }
     setShowDepositModal(false);
     setShowWithdrawModal(false);
     setShowGrantTokenModal(false);

@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -15,6 +15,12 @@ export default function SimpleAccordion(props) {
   const amountDeductToken = useRef();
   const deductWalletAddress = useRef();
   const deductNote = useRef();
+
+  let players = useGlobal();
+
+  useEffect(()=>{
+    console.log(players);
+  }, [players]);
 
   const resetForm = () => {
     amountGrantToken.current.value = "";
