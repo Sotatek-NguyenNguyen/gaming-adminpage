@@ -8,8 +8,9 @@ import {
 } from "../hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { signatureMsgAuth, loginAuth } from "../api/auth";
-import { transformLamportsToSOL, formatNumber } from "../shared/helper";
+import { transformLamportsToSOL, formatNumber, renderTokenBalance } from "../shared/helper";
 import { envConfig } from "../configs";
+import * as spl from "@solana/spl-token";
 import {
   Token,
   ASSOCIATED_TOKEN_PROGRAM_ID,
@@ -70,11 +71,11 @@ export const AuthProvider = ({ children }) => {
   const getAccountTokenInfo = async () => {
     if (gameData?.tokenAddress && publicKey) {
       try {
-        const tokenAccount = await Token.getAssociatedTokenAddress(
-          ASSOCIATED_TOKEN_PROGRAM_ID,
-          TOKEN_PROGRAM_ID,
+        const tokenAccount = await spl.Token.getAssociatedTokenAddress(
+          spl.ASSOCIATED_TOKEN_PROGRAM_ID,
+          spl.TOKEN_PROGRAM_ID,
           new PublicKey(gameData.tokenAddress),
-          publicKey
+          new PublicKey(publicKey)
         );
         const tokenAccountBalance = await connection.getTokenAccountBalance(
           tokenAccount
