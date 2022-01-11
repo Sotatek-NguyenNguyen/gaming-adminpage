@@ -54,14 +54,14 @@ function CurrentAccountBadge({ children }) {
         setLoading(false);
       } catch (err) {
         setLoading(false);
-        setAccountBalance(null);
+        setAccountBalance(0);
       }
     };
 
     if (connected) {
       initBalance();
     } else {
-      setAccountBalance(null);
+      setAccountBalance(0);
     }
   }, [connected, isAuthenticated]);
 

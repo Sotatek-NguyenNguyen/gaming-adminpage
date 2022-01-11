@@ -47,18 +47,33 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(getAuthenStatus());
   }, [wallet, walletPublicKey]);
 
-  useEffect(() => {
-    if (publicKey) {
-      connection
-        .getAccountInfo(new PublicKey(publicKey))
-        .then((response) => {
-          const balanceResult = transformLamportsToSOL(response?.lamports);
+  const getAccountTokenInfo = async () => {
+    if (gameData?.tokenAddress && publicKey) {
+      try {
+        const tokenAccount = await Token.getAssociatedTokenAddress(
+          ASSOCIATED_TOKEN_PROGRAM_ID,
+          TOKEN_PROGRAM_ID,
+          new PublicKey(gameData.tokenAddress),
+          publicKey,
+        );
+        const tokenAccountBalance = await connection.getTokenAccountBalance(tokenAccount);
+        if (tokenAccountBalance && tokenAccountBalance.value) {
+          const balanceResult = renderTokenBalance(tokenAccountBalance.value.uiAmount, 2);
+
           setBalance({
             value: balanceResult,
             formatted: formatNumber.format(balanceResult),
           });
-        })
-        .catch((err) => console.error(err));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (publicKey) {
+      getAccountTokenInfo();
     }
   }, [publicKey]);
 
