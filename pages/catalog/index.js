@@ -24,7 +24,7 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { getJSON, sendJSON } from "../../common";
 import { IDL } from "../../treasury.js";
-import { useAlert, useAuth, useGlobal } from "../../hooks";
+import { useAlert, useAuth, useGlobal, useSmartContract } from "../../hooks";
 
 const treasuryPDASeed = Buffer.from("treasury");
 
@@ -41,6 +41,7 @@ function CatalogPage() {
   const { alertError, alertSuccess, alertWarning } = useAlert();
   const { publicKey, signTransaction } = useWallet();
   const { isLoggined, balance, cluster } = useAuth();
+  const { refreshWalletBalance } = useSmartContract();
   const { gameData, getPlayerBalanceByAddress } = useGlobal();
   const router = useRouter();
 
@@ -60,13 +61,16 @@ function CatalogPage() {
     setTab(tab);
   };
 
-  const convertTokenAmountBaseOnTokenDec = useMemo(() => amount => {
-    return (amount * Math.pow(10, gameData?.tokenDecimals))
-  }, [gameData])
+  const convertTokenAmountBaseOnTokenDec = useMemo(
+    () => (amount) => {
+      return amount * Math.pow(10, gameData?.tokenDecimals);
+    },
+    [gameData]
+  );
 
   const handleCloseModal = () => {
-    if(showGrantTokenModal || showDeductTokenModal){
-      alertWarning('User rejected the request');
+    if (showGrantTokenModal || showDeductTokenModal) {
+      alertWarning("User rejected the request");
     }
     setShowDepositModal(false);
     setShowWithdrawModal(false);
@@ -255,6 +259,7 @@ function CatalogPage() {
             },
           }
         );
+        await refreshWalletBalance();
         alertSuccess("Deposited successfully");
       } catch (error) {
         console.error(error);
@@ -303,8 +308,11 @@ function CatalogPage() {
   };
 
   const sendingToken = () => {
-    const exactTokenData = {...tokenData, amount: convertTokenAmountBaseOnTokenDec(tokenData.amount)};
-    
+    const exactTokenData = {
+      ...tokenData,
+      amount: convertTokenAmountBaseOnTokenDec(tokenData.amount),
+    };
+
     sendJSON(`/admin/users/grant-token`, exactTokenData)
       .then((res) => {
         if (res.success) alertSuccess("Successfully granted token!");
@@ -319,11 +327,17 @@ function CatalogPage() {
   };
 
   const deductToken = () => {
-    const exactTokenData = {...tokenData, amount: convertTokenAmountBaseOnTokenDec(tokenData.amount)};
+    const exactTokenData = {
+      ...tokenData,
+      amount: convertTokenAmountBaseOnTokenDec(tokenData.amount),
+    };
 
     sendJSON(`/admin/users/deduct-token`, exactTokenData)
       .then((res) => {
-        if (res.success) alertSuccess("Successfully deducted token from originate wallet address");
+        if (res.success)
+          alertSuccess(
+            "Successfully deducted token from originate wallet address"
+          );
         if (res.statusCode === 404) alertError("User not found!");
       })
       .finally(() => {

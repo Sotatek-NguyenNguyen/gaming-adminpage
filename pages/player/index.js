@@ -8,11 +8,13 @@ import { useRouter } from "next/router";
 import { useAuth } from "../../hooks/useAuth";
 import { getJSON } from "../../common";
 import SearchIcon from "@mui/icons-material/Search";
+import { useGlobal } from "../../hooks";
 
 function PlayerPage() {
   const { isLoggined } = useAuth();
   const router = useRouter();
-
+  const { gameData } = useGlobal();
+  const { tokenDecimals } = gameData;
   const [players, setPlayers] = useState([]);
   const [totalPLayers, setTotalPlayers] = useState(0);
   const [paginate, setPaginate] = useState({
@@ -30,6 +32,7 @@ function PlayerPage() {
       .then((res) => {
         const _players = [...res.data];
         const playersCustom = _players.map((player) => {
+          player.balance = (player.balance / Math.pow(10, tokenDecimals));
           player.status = "Active";
           return player;
         });
@@ -112,15 +115,17 @@ function PlayerPage() {
 
   const exportPlayerHandler = async () => {
     try {
-      const data = await getJSON(`/admin/users/excel`, { responseType: 'blob' });
+      const data = await getJSON(`/admin/users/excel`, {
+        responseType: "blob",
+      });
       const blob = new Blob([data], { type: "text/csv" });
 
       if (window.navigator.msSaveOrOpenBlob) {
-        window.navigator.msSaveBlob(blob, 'players.xlsx');
+        window.navigator.msSaveBlob(blob, "players.xlsx");
       } else {
         const elem = window.document.createElement("a");
         elem.href = window.URL.createObjectURL(blob);
-        elem.download = 'players.xlsx';
+        elem.download = "players.xlsx";
         document.body.appendChild(elem);
         elem.click();
         document.body.removeChild(elem);

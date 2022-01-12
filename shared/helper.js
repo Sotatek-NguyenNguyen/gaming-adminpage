@@ -1,6 +1,6 @@
 import { envConfig, solletConfig } from "../configs";
-import {LAMPORTS_PER_SOL} from "@solana/web3.js";
-import Decimal from 'decimal.js';
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import Decimal from "decimal.js";
 
 const { SOLLET_ENV2 } = envConfig;
 const { SOLLET_CHAINS } = solletConfig;
@@ -30,8 +30,8 @@ const isSmallNumber = (val) => {
   return val < 0.001 && val > 0;
 };
 
-const numberFormatter = new Intl.NumberFormat('en-US', {
-  style: 'decimal',
+const numberFormatter = new Intl.NumberFormat("en-US", {
+  style: "decimal",
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
 });
@@ -39,7 +39,7 @@ const numberFormatter = new Intl.NumberFormat('en-US', {
 export const formatNumber = {
   format: (val, useSmall) => {
     if (!val && val !== 0) {
-      return '--';
+      return "--";
     }
     if (useSmall && isSmallNumber(val)) {
       return 0.001;
@@ -51,23 +51,31 @@ export const formatNumber = {
 
 export const isValidURL = (url) => {
   try {
-    new URL(url);     
-  } catch(e) {
+    new URL(url);
+  } catch (e) {
     console.error(e);
     return false;
   }
 
   return true;
-}
+};
 
 export const renderTokenBalance = (balance, tokenDecimals) => {
   if (balance === null || balance === undefined) {
     return 0;
   }
 
-  if (typeof balance === 'string') {
+  if (typeof balance === "string") {
     return parseFloat(parseFloat(balance).toFixed(tokenDecimals));
   }
 
-  return new Decimal(parseFloat(balance.toString()).toFixed(tokenDecimals)).toNumber();
+  return new Decimal(
+    parseFloat(balance.toString()).toFixed(tokenDecimals)
+  ).toNumber();
 };
+
+export const removePrefix = (transactionType) =>
+  transactionType.split("_")[1] + "ed";
+
+export const checkSameDay = (day1, day2) =>
+  day1.setHours(0, 0, 0, 0) == day2.setHours(0, 0, 0, 0);
