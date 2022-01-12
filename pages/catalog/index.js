@@ -61,6 +61,9 @@ function CatalogPage() {
   };
 
   const handleCloseModal = () => {
+    if(showGrantTokenModal || showDeductTokenModal){
+      alertWarning('User rejected the request');
+    }
     setShowDepositModal(false);
     setShowWithdrawModal(false);
     setShowGrantTokenModal(false);
@@ -310,7 +313,7 @@ function CatalogPage() {
   const deductToken = () => {
     sendJSON(`/admin/users/deduct-token`, tokenData)
       .then((res) => {
-        if (res.success) alertSuccess("Deduct token successfully!");
+        if (res.success) alertSuccess("Successfully deducted token from originate wallet address");
         if (res.statusCode === 404) alertError("User not found!");
       })
       .finally(() => {
