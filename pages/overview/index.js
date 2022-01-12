@@ -140,7 +140,7 @@ function OverviewPage() {
 
   useEffect(() => {
     getOverviewStatistic().catch((err) => alertError(err.message));
-  }, [alertError]);
+  }, []);
 
   return (
     <React.Fragment>
