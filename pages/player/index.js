@@ -112,7 +112,7 @@ function PlayerPage() {
 
   const exportPlayerHandler = async () => {
     try {
-      const data = await getJSON(`/admin/users/excel`);
+      const data = await getJSON(`/admin/users/excel`, { responseType: 'blob' });
       const blob = new Blob([data], { type: "text/csv" });
 
       if (window.navigator.msSaveOrOpenBlob) {

@@ -1,8 +1,8 @@
 import axios from "./api/axios-adapter";
 
-export const getJSON = async (path) => {
+export const getJSON = async (path, options = null) => {
   try {
-    const data = await axios.get(path);
+    const data = await axios.get(path, options);
 
     return data;
   } catch (error) {
