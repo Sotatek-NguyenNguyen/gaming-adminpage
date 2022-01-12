@@ -167,7 +167,7 @@ function CatalogPage() {
 
       const serverTx = await sendJSON(`/admin/game-balance/withdrawals`, {
         userAddress,
-        exactAmount,
+        amount: exactAmount,
       });
       const userTx = Transaction.from(
         Buffer.from(serverTx.serializedTx, "base64")
@@ -175,6 +175,7 @@ function CatalogPage() {
       const signed = await signTransaction(userTx);
       const signature = await connection.sendRawTransaction(signed.serialize());
       await connection.confirmTransaction(signature);
+      await refreshWalletBalance();
       alertSuccess("Withdraw successfully");
       setShowWithdrawModal(false);
     } catch (error) {
