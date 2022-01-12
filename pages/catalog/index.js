@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import {
   Connection,
@@ -59,6 +59,10 @@ function CatalogPage() {
   const changeTab = (tab) => () => {
     setTab(tab);
   };
+
+  const convertTokenAmountBaseOnTokenDec = useMemo(() => amount => {
+    return (amount * Math.pow(10, gameData?.tokenDecimals))
+  }, [gameData])
 
   const handleCloseModal = () => {
     if(showGrantTokenModal || showDeductTokenModal){
@@ -155,9 +159,11 @@ function CatalogPage() {
     if (!signTransaction) return;
 
     try {
+      const exactAmount = convertTokenAmountBaseOnTokenDec(amount);
+
       const serverTx = await sendJSON(`/admin/game-balance/withdrawals`, {
         userAddress,
-        amount,
+        exactAmount,
       });
       const userTx = Transaction.from(
         Buffer.from(serverTx.serializedTx, "base64")
@@ -297,7 +303,9 @@ function CatalogPage() {
   };
 
   const sendingToken = () => {
-    sendJSON(`/admin/users/grant-token`, tokenData)
+    const exactTokenData = {...tokenData, amount: convertTokenAmountBaseOnTokenDec(tokenData.amount)};
+    
+    sendJSON(`/admin/users/grant-token`, exactTokenData)
       .then((res) => {
         if (res.success) alertSuccess("Successfully granted token!");
         if (res.statusCode === 404) alertError("User not found!");
@@ -311,7 +319,9 @@ function CatalogPage() {
   };
 
   const deductToken = () => {
-    sendJSON(`/admin/users/deduct-token`, tokenData)
+    const exactTokenData = {...tokenData, amount: convertTokenAmountBaseOnTokenDec(tokenData.amount)};
+
+    sendJSON(`/admin/users/deduct-token`, exactTokenData)
       .then((res) => {
         if (res.success) alertSuccess("Successfully deducted token from originate wallet address");
         if (res.statusCode === 404) alertError("User not found!");
