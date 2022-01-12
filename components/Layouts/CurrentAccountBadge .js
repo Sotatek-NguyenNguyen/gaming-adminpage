@@ -12,7 +12,7 @@ function CurrentAccountBadge({ children }) {
   const router = useRouter();
   const { logout, isAuthenticated } = useAuth();
   const { gameData, setAccountBalance, balance } = useGlobal();
-  const { publicKey, wallet, disconnect, connected } = useWallet();
+  const { publicKey, wallet, disconnect, connected, adapter } = useWallet();
   const base58 = useMemo(() => publicKey?.toBase58(), [publicKey]);
   const content = useMemo(() => {
     if (children) return children;
@@ -47,9 +47,9 @@ function CurrentAccountBadge({ children }) {
     const initBalance = async () => {
       try {
         setLoading(true);
-        // if (!isAuthenticated) {
-        //   await login(publicKey, signMessage, adapter);
-        // }
+        if (!isAuthenticated) {
+          await login(publicKey, signMessage, adapter);
+        }
         await refreshWalletBalance();
         setLoading(false);
       } catch (err) {
