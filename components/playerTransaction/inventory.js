@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react'
 import Button from "../../components/UI/Button.js";
 import DataTable from '../UI/Table/DataTable';
+import PaginationCustom from '../UI/Pagination.js';
 import {  getJSON } from "../../common.js";
 import SearchIcon from '@mui/icons-material/Search';
 import { useRouter } from "next/router";
@@ -8,7 +9,11 @@ import { useRouter } from "next/router";
 function Inventory(){
   const [inventory, setInventory] = useState([]);
   const router = useRouter();
-  const [endpoint, setEndpoint] = useState([`/admin/users/nft?page=1&pageSize=20&userAddress=${router.query.playerId}`]);
+  const [paginate, setPaginate] = useState({
+    currentPage: 1,
+    totalPage: 1
+  });
+  const [endpoint, setEndpoint] = useState(`/admin/users/nft?page=${paginate.currentPage}&pageSize=20&userAddress=${router.query.playerId}`);
 
   const getInventory = useCallback(()=>{
     getJSON(`${endpoint}`)
@@ -26,16 +31,39 @@ function Inventory(){
           name: nameCustom
         };
 
-        if(inventory.status === 'MetadataUploading'){
+        if(inventory.status === 'MetadataUploading' || inventory.status === 'Minting'){
            inventory.status = 'Active';
         }
 
         return inventory;
       });
       setInventory(inventoryCustom);
+
+      const paginate = {
+        currentPage: res.page,
+        totalPage: res.totalPage
+      };
+      setPaginate(paginate);
     })
     .catch (err => {throw err})
   },[endpoint]);
+
+  const OnChangeCurrentPage = (event, value) => {
+    setPaginate({
+      currentPage: value,
+      totalPage: paginate.totalPage,
+    });
+
+    // set endpoint
+    const _endpoint = endpoint;
+    let _endpointNextPage = _endpoint.split('&');
+        _endpointNextPage[0] = _endpointNextPage[0].slice(0, -1) + value; 
+
+    let nextPage = _endpointNextPage.join('&');
+    setEndpoint(nextPage);
+  }
+
+
 
   useEffect(()=>{
     getInventory();
@@ -108,6 +136,11 @@ function Inventory(){
       
       <div style={{marginTop: 8}}>
         <DataTable columns={tableColumns} data={inventory} message="No item available"/>
+        <PaginationCustom 
+          totalPage={paginate.totalPage}
+          currentPage={paginate.currentPage}
+          onChange={OnChangeCurrentPage}
+        />
       </div>
     </>
   )

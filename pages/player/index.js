@@ -3,6 +3,7 @@ import Layout from "../../components/Layouts/Layout";
 import Dropdown from "../../components/UI/Dropdown";
 import Button from "../../components/UI/Button.js";
 import DataTable from "../../components/UI/Table/DataTable";
+import PaginationCustom from '../../components/UI/Pagination.js';
 import { useRouter } from "next/router";
 import { useAuth } from "../../hooks/useAuth";
 import { getJSON } from "../../common";
@@ -14,7 +15,11 @@ function PlayerPage() {
 
   const [players, setPlayers] = useState([]);
   const [totalPLayers, setTotalPlayers] = useState(0);
-  const [endpoint, setEndpoint] = useState("/admin/users?page=1&pageSize=20");
+  const [paginate, setPaginate] = useState({
+    currentPage: 1,
+    totalPage: 1
+  });
+  const [endpoint, setEndpoint] = useState(`/admin/users?page=${paginate.currentPage}&pageSize=20`);
   const [sortBy, setSortBy] = useState(null);
   const walletAddressRef = useRef(null);
 
@@ -28,6 +33,12 @@ function PlayerPage() {
         });
         setPlayers(playersCustom);
         setTotalPlayers(res.total);
+        
+        const paginate = {
+          currentPage: res.page,
+          totalPage: res.pageCount
+        };
+        setPaginate(paginate);
       })
       .catch((err) => {
         throw err;
@@ -50,6 +61,22 @@ function PlayerPage() {
   useEffect(() => {
     getPlayers();
   }, [getPlayers]);
+
+  const OnChangeCurrentPage = (event, value) => {
+    setPaginate({
+      currentPage: value,
+      totalPage: paginate.totalPage,
+    });
+
+    // set endpoint
+    const _endpoint = endpoint;
+    let _endpointNextPage = _endpoint.split('&');
+        _endpointNextPage[0] = _endpointNextPage[0].slice(0, -1) + value; 
+
+    let nextPage = _endpointNextPage.join('&');
+    setEndpoint(nextPage);
+  }
+
 
   const dropdownRef = useRef();
 
@@ -162,8 +189,12 @@ function PlayerPage() {
         <DataTable
           columns={tableColumns}
           data={players}
-          tableMaxHeight={300}
           message="No player available"
+        />
+        <PaginationCustom 
+          totalPage={paginate.totalPage}
+          currentPage={paginate.currentPage}
+          onChange={OnChangeCurrentPage}
         />
       </div>
     </div>
