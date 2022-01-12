@@ -3,7 +3,7 @@ import Layout from "../../components/Layouts/Layout";
 import Dropdown from "../../components/UI/Dropdown";
 import Button from "../../components/UI/Button.js";
 import DataTable from "../../components/UI/Table/DataTable";
-import PaginationCustom from '../../components/UI/Pagination.js';
+import PaginationCustom from "../../components/UI/Pagination.js";
 import { useRouter } from "next/router";
 import { useAuth } from "../../hooks/useAuth";
 import { getJSON } from "../../common";
@@ -17,9 +17,11 @@ function PlayerPage() {
   const [totalPLayers, setTotalPlayers] = useState(0);
   const [paginate, setPaginate] = useState({
     currentPage: 1,
-    totalPage: 1
+    totalPage: 1,
   });
-  const [endpoint, setEndpoint] = useState(`/admin/users?page=${paginate.currentPage}&pageSize=20`);
+  const [endpoint, setEndpoint] = useState(
+    `/admin/users?page=${paginate.currentPage}&pageSize=20`
+  );
   const [sortBy, setSortBy] = useState(null);
   const walletAddressRef = useRef(null);
 
@@ -33,10 +35,10 @@ function PlayerPage() {
         });
         setPlayers(playersCustom);
         setTotalPlayers(res.total);
-        
+
         const paginate = {
           currentPage: res.page,
-          totalPage: res.pageCount
+          totalPage: res.pageCount,
         };
         setPaginate(paginate);
       })
@@ -70,13 +72,12 @@ function PlayerPage() {
 
     // set endpoint
     const _endpoint = endpoint;
-    let _endpointNextPage = _endpoint.split('&');
-        _endpointNextPage[0] = _endpointNextPage[0].slice(0, -1) + value; 
+    let _endpointNextPage = _endpoint.split("&");
+    _endpointNextPage[0] = _endpointNextPage[0].slice(0, -1) + value;
 
-    let nextPage = _endpointNextPage.join('&');
+    let nextPage = _endpointNextPage.join("&");
     setEndpoint(nextPage);
-  }
-
+  };
 
   const dropdownRef = useRef();
 
@@ -107,6 +108,27 @@ function PlayerPage() {
     dropdownRef.current.setSelectedToFirstValue();
     const endpointDefault = "admin/users?page=1&pageSize=20";
     setEndpoint(endpointDefault);
+  };
+
+  const exportPlayerHandler = async () => {
+    try {
+      const data = await getJSON(`/admin/users/excel`);
+      const blob = new Blob([data], { type: "text/csv" });
+
+      if (window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveBlob(blob, 'players.xlsx');
+      } else {
+        const elem = window.document.createElement("a");
+        elem.href = window.URL.createObjectURL(blob);
+        elem.download = 'players.xlsx';
+        document.body.appendChild(elem);
+        elem.click();
+        document.body.removeChild(elem);
+      }
+    } catch (error) {
+      alert(error.message);
+      console.error(error.message);
+    }
   };
 
   const styleLinkTable = {
@@ -156,7 +178,9 @@ function PlayerPage() {
     <div className="container--custom players-contain">
       <section className="interactive-list-player">
         <p>Total player: {totalPLayers}</p>
-        <Button className="btn-main">Export Player</Button>
+        <Button className="btn-main" onClick={exportPlayerHandler}>
+          Export Player
+        </Button>
       </section>
 
       <section className="card-custom">
@@ -191,7 +215,7 @@ function PlayerPage() {
           data={players}
           message="No player available"
         />
-        <PaginationCustom 
+        <PaginationCustom
           totalPage={paginate.totalPage}
           currentPage={paginate.currentPage}
           onChange={OnChangeCurrentPage}
