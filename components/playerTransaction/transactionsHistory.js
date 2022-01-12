@@ -12,6 +12,36 @@ import { useRouter } from "next/router";
 import { useGlobal } from "../../hooks/useGlobal.js";
 import { removePrefix, checkSameDay } from "../../shared/helper";
 
+const styleWalletAddress = {
+  color: "#00C48C",
+};
+const styleStatusTable = {
+  color: "white",
+  textTransform: "capitalize",
+  border: "1px solid transparent",
+  borderRadius: "32px",
+  width: "120px",
+  height: "45px",
+  fontSize: "16px",
+  letterSpacing: "0.8",
+  lineHeight: "34px",
+  padding: "5px 7px",
+};
+const highlightLabel = {
+  deposit: {
+    backgroundColor: "#00C48C",
+  },
+  withdrawn: {
+    backgroundColor: "#FFA803",
+  },
+  deducted: {
+    backgroundColor: "#FFA803",
+  },
+  granted: {
+    backgroundColor: "#FFA803",
+  },
+};
+
 function TransactionsHistory() {
   const router = useRouter();
   const [transactionData, setTransactionsData] = useState([]);
@@ -26,35 +56,6 @@ function TransactionsHistory() {
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(new Date());
 
-  const styleWalletAddress = {
-    color: "#00C48C",
-  };
-  const styleStatusTable = {
-    color: "white",
-    textTransform: "capitalize",
-    border: "1px solid transparent",
-    borderRadius: "32px",
-    width: "120px",
-    height: "45px",
-    fontSize: "16px",
-    letterSpacing: "0.8",
-    lineHeight: "34px",
-    padding: "5px 7px",
-  };
-  const highlightLabel = {
-    deposit: {
-      backgroundColor: "#00C48C",
-    },
-    withdrawn: {
-      backgroundColor: "#FFA803",
-    },
-    deducted: {
-      backgroundColor: "#FFA803",
-    },
-    granted: {
-      backgroundColor: "#FFA803",
-    },
-  };
   const tableColumns = [
     {
       title: "Status",
@@ -80,7 +81,8 @@ function TransactionsHistory() {
         const _transactionHistory = [...res.data];
 
         _transactionHistory.map((transaction) => {
-          transaction.amount = (transaction.amount / Math.pow(10, gameData?.tokenDecimals))
+          transaction.amount =
+            transaction.amount / Math.pow(10, gameData?.tokenDecimals);
           if (
             transaction.type === "admin_deduct" ||
             transaction.type === "admin_grant"
