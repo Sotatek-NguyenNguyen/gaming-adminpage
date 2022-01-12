@@ -1,0 +1,16 @@
+.paginate_custom{
+  margin-top: 32px;
+  display: flex;
+  justify-content: center;
+
+  .MuiPagination-ul > li > button{
+    color: #6823BF;
+    background-color: #EBEAF7;
+    border: 1px solid transparent;
+  }
+}
+
+.MuiPagination-ul > li > button.Mui-selected{
+  background-color: #6823BF;
+  color: white;
+}

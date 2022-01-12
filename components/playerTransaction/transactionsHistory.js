@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react'
 import Button from "../../components/UI/Button.js";
 import DataTable from '../UI/Table/DataTable';
+import PaginationCustom from '../UI/Pagination.js';
 import {  getJSON } from "../../common.js";
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -12,7 +13,11 @@ import { useRouter } from "next/router";
 function TransactionsHistory(){
   const router = useRouter();
   const [transactionData, setTransactionsData] = useState([]);
-  const [endpoint, setEndpoint] = useState([`/admin/users/transactions?page=1&pageSize=20&userAddress=${router.query.playerId}`]);
+  const [paginate, setPaginate] = useState({
+    currentPage: 1,
+    totalPage: 1
+  });
+  const [endpoint, setEndpoint] = useState(`/admin/users/transactions?page=${paginate.currentPage}&pageSize=20&userAddress=${router.query.playerId}`);
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(new Date());
   
@@ -66,14 +71,35 @@ function TransactionsHistory(){
             return transaction.type = removePrefix(transaction.type);
           }
         });
-
         setTransactionsData(_transactionHistory);
+        
+        const paginate = {
+          currentPage: res.page,
+          totalPage: res.totalPage
+        };
+        setPaginate(paginate);
       })
       .catch (err => {throw err})
   },[endpoint]);
+
   useEffect(()=>{
     getTransactionHistory()
   },[getTransactionHistory]);
+
+  const OnChangeCurrentPage = (event, value) => {
+    setPaginate({
+      currentPage: value,
+      totalPage: paginate.totalPage,
+    });
+
+    // set endpoint
+    const _endpoint = endpoint;
+    let _endpointNextPage = _endpoint.split('&');
+        _endpointNextPage[0] = _endpointNextPage[0].slice(0, -1) + value; 
+
+    let nextPage = _endpointNextPage.join('&');
+    setEndpoint(nextPage);
+  }
 
   const transactionIdRef = useRef(null);
 
@@ -215,6 +241,11 @@ function TransactionsHistory(){
 
       <div style={{marginTop: 8}}>
         <DataTable columns={tableColumns} data={transactionData} message="No transaction available"/>
+        <PaginationCustom 
+          totalPage={paginate.totalPage}
+          currentPage={paginate.currentPage}
+          onChange={OnChangeCurrentPage}
+        />
       </div>
     </>
   )
