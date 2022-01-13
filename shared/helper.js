@@ -79,3 +79,25 @@ export const removePrefix = (transactionType) =>
 
 export const checkSameDay = (day1, day2) =>
   day1.setHours(0, 0, 0, 0) == day2.setHours(0, 0, 0, 0);
+
+export const formatStatus = (status) => {
+  switch(status) {
+    case 'deposit':
+      return 'Deposited'
+
+    case 'admin_deduct':
+    case 'deduct':
+      return 'Deducted'
+
+    case 'admin_grant':
+    case 'grant':
+      return 'Granted'
+    
+    case 'MetadataUploading':
+    case 'Minting':
+      return 'Active'
+
+    default:
+      return status
+  }
+}

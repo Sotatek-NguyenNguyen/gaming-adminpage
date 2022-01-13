@@ -4,6 +4,7 @@ import DataTable from '../UI/Table/DataTable';
 import PaginationCustom from '../UI/Pagination.js';
 import {  getJSON } from "../../common.js";
 import SearchIcon from '@mui/icons-material/Search';
+import { formatStatus } from "../../shared/helper";
 
 function Inventory(){
   const [inventory, setInventory] = useState([]);
@@ -23,16 +24,12 @@ function Inventory(){
         const itemsNameToArr = gameItemName.split(' ');
         const typeCustom = itemsNameToArr[0];
         const nameCustom = (gameItemName.length > 1) ? itemsNameToArr.slice(1).join(' ') : ' ';
-
         inventory.name = {
           type: typeCustom,
           name: nameCustom
         };
 
-        if(inventory.status === 'MetadataUploading' || inventory.status === 'Minting'){
-           inventory.status = 'Active';
-        }
-
+        inventory.status = formatStatus(inventory.status);
         return inventory;
       });
       setInventory(inventoryCustom);
