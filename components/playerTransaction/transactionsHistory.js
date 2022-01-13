@@ -10,7 +10,7 @@ import DatePicker from "@mui/lab/DatePicker";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/router";
 import { useGlobal } from "../../hooks/useGlobal.js";
-import { removePrefix, checkSameDay } from "../../shared/helper";
+import { formatStatus, checkSameDay } from "../../shared/helper";
 
 const styleWalletAddress = {
   color: "#00C48C",
@@ -28,16 +28,16 @@ const styleStatusTable = {
   padding: "5px 7px",
 };
 const highlightLabel = {
-  deposit: {
+  Deposited: {
     backgroundColor: "#00C48C",
   },
   withdrawn: {
     backgroundColor: "#FFA803",
   },
-  deducted: {
+  Deducted: {
     backgroundColor: "#FFA803",
   },
-  granted: {
+  Granted: {
     backgroundColor: "#FFA803",
   },
 };
@@ -81,14 +81,10 @@ function TransactionsHistory() {
         const _transactionHistory = [...res.data];
 
         _transactionHistory.map((transaction) => {
-          transaction.amount =
-            transaction.amount / Math.pow(10, gameData?.tokenDecimals);
-          if (
-            transaction.type === "admin_deduct" ||
-            transaction.type === "admin_grant"
-          ) {
-            return (transaction.type = removePrefix(transaction.type));
-          }
+          transaction.amount = transaction.amount / Math.pow(10, gameData?.tokenDecimals);
+          transaction.type = formatStatus(transaction.type);
+          
+          return transaction
         });
         setTransactionsData(_transactionHistory);
 
