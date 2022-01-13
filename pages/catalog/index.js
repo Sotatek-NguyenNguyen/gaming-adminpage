@@ -186,11 +186,11 @@ function CatalogPage() {
   };
 
   const validateDepositAmount = (amount) => {
-    if (amount < 0 || amount === 0) {
+    if (amount === 0) {
       alertWarning("Please enter greater token!");
       return false;
-    } else if (amount > balance) {
-      alertWarning("Please enter smaller token!");
+    } else if (amount > balance?.value) {
+      alertWarning("Deposit amount input exceeded Wallet balance");
       return false;
     } else return true;
   };
