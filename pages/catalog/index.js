@@ -276,7 +276,7 @@ function CatalogPage() {
       alertWarning("Input Token amount must be larger than 0");
       return false;
     } else if (amount > unallocatedInGameBalance) {
-      alertWarning("Please enter smaller token!");
+      alertWarning("Grant Amount cannot be larger than Unallocated in-game balance");
       return false;
     } else return true;
   };
