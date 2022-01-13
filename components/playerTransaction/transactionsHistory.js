@@ -51,7 +51,7 @@ function TransactionsHistory() {
   });
   const { gameData } = useGlobal();
   const [endpoint, setEndpoint] = useState(
-    `/admin/users/transactions?page=${paginate.currentPage}&pageSize=20&userAddress=${router.query.playerId}`
+    `/admin/users/transactions?page=${paginate.currentPage}&pageSize=10&userAddress=${router.query.playerId}`
   );
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(new Date());
@@ -122,7 +122,7 @@ function TransactionsHistory() {
 
   const search = (event) => {
     event.preventDefault();
-    const currentEndpoint = `/admin/users/transactions?page=1&pageSize=20&userAddress=${router.query.playerId}`;
+    const currentEndpoint = `/admin/users/transactions?page=1&pageSize=10&userAddress=${router.query.playerId}`;
 
     if (fromDate !== null) {
       let fromDateFormat = fromDate?.toISOString().split("T")[0];
@@ -149,7 +149,7 @@ function TransactionsHistory() {
     setFromDate(null);
     setToDate(new Date());
 
-    const endpointDefault = `/admin/users/transactions?page=1&pageSize=20&userAddress=${router.query.playerId}`;
+    const endpointDefault = `/admin/users/transactions?page=1&pageSize=10&userAddress=${router.query.playerId}`;
     setEndpoint(endpointDefault);
   };
 
