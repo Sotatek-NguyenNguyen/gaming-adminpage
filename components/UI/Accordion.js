@@ -106,7 +106,6 @@ export default function SimpleAccordion(props) {
               <Input
                 required
                 ref={amountGrantToken}
-                min="1"
                 placeholder="Token Amount"
                 className="input-main large"
                 type="number"
@@ -178,7 +177,6 @@ export default function SimpleAccordion(props) {
                 placeholder="Token Amount"
                 type="number"
                 id="token-amount"
-                min="1"
               />
             </div>
 

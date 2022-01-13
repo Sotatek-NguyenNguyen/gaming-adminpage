@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useAuth } from "../../hooks";
+import { useAuth, useGlobal } from "../../hooks";
 import Layout from "../../components/Layouts/Layout";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -12,6 +12,8 @@ function PlayerDetail() {
   const [tab, setTab] = useState("inventory");
   const [balance, setBalance] = useState('');
   const router = useRouter();
+  const {gameData} = useGlobal();
+  const { tokenDecimals } = gameData;
 
   const {isLoggined} = useAuth();
 
@@ -24,7 +26,8 @@ function PlayerDetail() {
   const getWalletAddress = useCallback(() => {
     getJSON(`/admin/users?page=1&pageSize=20&address=${router.query.playerId}`)
     .then( res => {
-      setBalance(res.data[0].balance);
+      const exactBalance = (res?.data[0]?.balance) / Math.pow(10, tokenDecimals);
+      setBalance(exactBalance);
     })
     .catch(err => {throw err});
   }, [])
