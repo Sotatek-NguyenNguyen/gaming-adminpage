@@ -126,6 +126,10 @@
   }
 }
 
-.label-required{
+.label-required,
+.text-error{
   color: red !important;
+}
+.text-error{
+  text-indent: 10px;
 }

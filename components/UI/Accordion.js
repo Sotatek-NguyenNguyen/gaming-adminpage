@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -16,6 +16,8 @@ export default function SimpleAccordion(props) {
   const amountDeductToken = useRef();
   const deductWalletAddress = useRef();
   const deductNote = useRef();
+
+  const [errors, setErrors] = useState(null);
 
   const { playerList } = useGlobal();
   const { alertError } = useAlert();
@@ -39,11 +41,20 @@ export default function SimpleAccordion(props) {
     const note = grantNote.current.value;
 
     if(findWalletAddress(userAddress)){
+      const _errors = {
+        ...errors,
+        walletAddressGrant: null
+      }
+      setErrors(_errors);
       props.onGrantToKenSubmit(amount, userAddress, note);
+      resetForm();
     }else{
-      alertError("The wallet address is not found in Gaming Service. Either the wallet is not registered with Gaming Service or has been de-registered");
+      const _errors = {
+        ...errors,
+        walletAddressGrant: 'The wallet address is not found in Gaming Service. Either the wallet is not registered with Gaming Service or has been de-registered'
+      }
+      setErrors(_errors);
     }
-    resetForm();
   };
 
   const deductTokenSubmitHandler = (e) => {
@@ -53,11 +64,20 @@ export default function SimpleAccordion(props) {
     const note = deductNote.current.value;
 
     if(findWalletAddress(userAddress)){
+      const _errors = {
+        ...errors,
+        walletAddressDeduct: null
+      }
+      setErrors(_errors);
       props.onDeductTokenSubmit(amount, userAddress, note);
+      resetForm();
     }else{
-      alertError("The wallet address is not found in Gaming Service. Either the wallet is not registered with Gaming Service or has been de-registered");
+      const _errors = {
+        ...errors,
+        walletAddressDeduct: 'The wallet address is not found in Gaming Service. Either the wallet is not registered with Gaming Service or has been de-registered'
+      }
+      setErrors(_errors);
     }
-    resetForm();
   };
 
   return (
@@ -101,6 +121,7 @@ export default function SimpleAccordion(props) {
                 className="input-main large"
                 ref={grantWalletAddress}
                 required
+                error={errors?.walletAddressGrant}
               />
             </div>
 
@@ -162,6 +183,7 @@ export default function SimpleAccordion(props) {
                 className="input-main large"
                 ref={deductWalletAddress}
                 required
+                error={errors?.walletAddressDeduct}
               />
             </div>
 
