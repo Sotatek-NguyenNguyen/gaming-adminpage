@@ -110,6 +110,7 @@ export default function SimpleAccordion(props) {
                 className="input-main large"
                 type="number"
                 id="token-amount"
+                error={props.errors?.grant}
               />
             </div>
 

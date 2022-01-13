@@ -21,7 +21,7 @@ function PlayerDetail() {
     setTab(tab);
   };
 
-  const playerId = `ID#${router.query.playerId}`;
+  const playerId = `${router.query.playerId}`;
 
   const getWalletAddress = useCallback(() => {
     getJSON(`/admin/users?page=1&pageSize=20&address=${router.query.playerId}`)
@@ -47,7 +47,7 @@ function PlayerDetail() {
         <h5 className="card__title">Player Info</h5>
         <div className="card__body">
           <div>
-            <label htmlFor="playerID">Player ID: <span className="label-required">*</span> </label>
+            <label htmlFor="playerID">Wallet Address: <span className="label-required">*</span> </label>
             <input 
               type="text" 
               id="playerID" 

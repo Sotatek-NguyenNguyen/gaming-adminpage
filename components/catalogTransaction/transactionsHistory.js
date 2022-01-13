@@ -233,7 +233,6 @@ function TransactionsHistory() {
                 onChange={setFromDate}
                 disableFuture={true}
                 format="dd/MM/yyyy"
-                InputProps={{ readOnly: true }}
                 renderInput={(params) => <TextField {...params} />}
               />
             </ThemeProvider>
@@ -245,7 +244,6 @@ function TransactionsHistory() {
                 onChange={setToDate}
                 disableFuture={true}
                 format="dd/MM/yyyy"
-                InputProps={{ readOnly: true }}
                 renderInput={(params) => <TextField {...params} />}
               />
             </ThemeProvider>

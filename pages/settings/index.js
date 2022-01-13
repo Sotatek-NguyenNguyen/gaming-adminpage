@@ -127,6 +127,20 @@ function SettingsPage() {
     return updatedGameInfoData;
   }
 
+  const styleTextDisable = {
+    color: disabledEditGameInfo ? "#9F99B3" : "black",
+  };
+  const styleTextEditorDisable = !disabledEditGameInfo ? "#9F99B3" : "black";
+
+  const test = () => {
+    editorRef.current.iframeElement.contentDocument.getElementsByTagName('style')[0].innerHTML = `
+      body { 
+        font-size: 14pt; 
+        font-family: Arial; 
+        color: ${styleTextEditorDisable} !important
+      }`;
+  }
+
   const updateGameInfo = async () => {
     const updatedGameInfoData = checkFieldUpdate();
     if(!updatedGameInfoData) return;
@@ -138,6 +152,7 @@ function SettingsPage() {
       alertSuccess("Changes saved");
       setErrors(null);
       setDisabledEditGameInfo(true);
+      test();
     } catch (err) {
       // alertError(err.message);
     }
@@ -151,11 +166,6 @@ function SettingsPage() {
   useEffect(() => {
     getGameInfo().catch((err) => alertError(err.message));
   }, []);
-
-  const styleTextDisable = {
-    color: disabledEditGameInfo ? "#9F99B3" : "black",
-  };
-  const styleTextEditorDisable = disabledEditGameInfo ? "#9F99B3" : "black";
 
   return (
     <div className="container--custom" ref={topElRef}>
@@ -259,7 +269,7 @@ function SettingsPage() {
                   ],
                   toolbar:
                     "formatselect | bold italic | alignleft aligncenter alignright alignjustify",
-                  content_style: `body { font-size: 14pt; font-family: Arial; color: ${styleTextEditorDisable} !important}`,
+                  content_style: `body { font-size: 14pt; font-family: Arial; color: #9F99B3 !important}`,
                 }}
               />
             </section>
@@ -312,7 +322,7 @@ function SettingsPage() {
                   id="currentCode"
                   ref={tokenCodeRef}
                   className="input-main large"
-                  style={styleTextDisable}
+                  style={{color: '#9F99B3'}}
                   disabled={true}
                 />
               </div>
@@ -327,8 +337,8 @@ function SettingsPage() {
                   id="displayName"
                   ref={tokenNameRef}
                   className="input-main large"
-                  style={styleTextDisable}
                   disabled={true}
+                  style={{color: '#9F99B3'}}
                 />
               </div>
             </div>
@@ -345,8 +355,8 @@ function SettingsPage() {
                   id="initialDeposit"
                   value="0.000.000"
                   className="input-main large"
-                  style={styleTextDisable}
                   disabled={true}
+                  style={{color: '#9F99B3'}}
                 />
               </div>
 
@@ -360,8 +370,8 @@ function SettingsPage() {
                   id="walletAddress"
                   ref={walletAddressRef}
                   className="input-main large"
-                  style={styleTextDisable}
                   disabled={true}
+                  style={{color: '#9F99B3'}}
                 />
               </div>
             </div>
@@ -370,7 +380,7 @@ function SettingsPage() {
         {disabledEditGameInfo && (
           <Button
             variant="contained"
-            onClick={() => setDisabledEditGameInfo(false)}
+            onClick={() => {setDisabledEditGameInfo(false); test()}}
             className="btn-main edit_game_info"
           >
             Edit
