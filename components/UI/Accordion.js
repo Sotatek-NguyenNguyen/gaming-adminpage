@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Input from "./Input.js";
 import Button from "./Button.js";
-import { useGlobal, useAlert } from '../../hooks';
+import { useGlobal, useAlert } from "../../hooks";
 
 export default function SimpleAccordion(props) {
   const amountGrantToken = useRef();
@@ -32,7 +32,8 @@ export default function SimpleAccordion(props) {
     deductNote.current.value = "";
   };
 
-  const findWalletAddress = (address) => playerList.some(player => player.address === address);
+  const findWalletAddress = (address) =>
+    playerList.some((player) => player.address === address);
 
   const grantTokenSubmitHandler = (e) => {
     e.preventDefault();
@@ -40,19 +41,20 @@ export default function SimpleAccordion(props) {
     const userAddress = grantWalletAddress.current.value;
     const note = grantNote.current.value;
 
-    if(findWalletAddress(userAddress)){
+    if (findWalletAddress(userAddress)) {
       const _errors = {
         ...errors,
-        walletAddressGrant: null
-      }
+        walletAddressGrant: null,
+      };
       setErrors(_errors);
       props.onGrantToKenSubmit(amount, userAddress, note);
       resetForm();
-    }else{
+    } else {
       const _errors = {
         ...errors,
-        walletAddressGrant: 'The wallet address is not found in Gaming Service. Either the wallet is not registered with Gaming Service or has been de-registered'
-      }
+        walletAddressGrant:
+          "The wallet address is not found in Gaming Service. Either the wallet is not registered with Gaming Service or has been de-registered",
+      };
       setErrors(_errors);
     }
   };
@@ -63,19 +65,20 @@ export default function SimpleAccordion(props) {
     const userAddress = deductWalletAddress.current.value;
     const note = deductNote.current.value;
 
-    if(findWalletAddress(userAddress)){
+    if (findWalletAddress(userAddress)) {
       const _errors = {
         ...errors,
-        walletAddressDeduct: null
-      }
+        walletAddressDeduct: null,
+      };
       setErrors(_errors);
       props.onDeductTokenSubmit(amount, userAddress, note);
       resetForm();
-    }else{
+    } else {
       const _errors = {
         ...errors,
-        walletAddressDeduct: 'The wallet address is not found in Gaming Service. Either the wallet is not registered with Gaming Service or has been de-registered'
-      }
+        walletAddressDeduct:
+          "The wallet address is not found in Gaming Service. Either the wallet is not registered with Gaming Service or has been de-registered",
+      };
       setErrors(_errors);
     }
   };
@@ -96,23 +99,27 @@ export default function SimpleAccordion(props) {
           <form onSubmit={grantTokenSubmitHandler} className="accordion-form">
             <div>
               <label htmlFor="token-amount">
-                <h5>Enter Token amount: <span className="label-required">*</span> </h5>
+                <h5>
+                  Enter Token amount: <span className="label-required">*</span>{" "}
+                </h5>
               </label>
               <Input
                 required
                 ref={amountGrantToken}
-                min="0"
-                pattern="[0-9]"
+                min="1"
                 placeholder="Token Amount"
                 className="input-main large"
                 type="number"
                 id="token-amount"
               />
             </div>
-            
+
             <div>
               <label htmlFor="wallet-address">
-                <h5>Destination Wallet address: <span className="label-required">*</span></h5>
+                <h5>
+                  Destination Wallet address:{" "}
+                  <span className="label-required">*</span>
+                </h5>
               </label>
               <Input
                 placeholder="Player’s wallet address"
@@ -127,14 +134,16 @@ export default function SimpleAccordion(props) {
 
             <div>
               <label htmlFor="transition-note">
-                <h5>Transaction Note: <span className="label-required">*</span></h5>
+                <h5>
+                  Transaction Note: <span className="label-required">*</span>
+                </h5>
               </label>
               <Input
-                required 
-                type="text" 
-                id="wallet-address" 
-                className="input-main large" 
-                ref={grantNote} 
+                required
+                type="text"
+                id="wallet-address"
+                className="input-main large"
+                ref={grantNote}
               />
             </div>
 
@@ -158,7 +167,9 @@ export default function SimpleAccordion(props) {
           <form onSubmit={deductTokenSubmitHandler} className="accordion-form">
             <div>
               <label htmlFor="token-amount">
-                <h5>Enter Token amount: <span className="label-required">*</span> </h5>
+                <h5>
+                  Enter Token amount: <span className="label-required">*</span>{" "}
+                </h5>
               </label>
               <Input
                 required
@@ -167,14 +178,16 @@ export default function SimpleAccordion(props) {
                 placeholder="Token Amount"
                 type="number"
                 id="token-amount"
-                min="0"
-                pattern="[0-9]"
+                min="1"
               />
             </div>
-              
+
             <div>
               <label htmlFor="wallet-address">
-                <h5>Originate Player’s wallet address: <span className="label-required">*</span></h5>
+                <h5>
+                  Originate Player’s wallet address:{" "}
+                  <span className="label-required">*</span>
+                </h5>
               </label>
               <Input
                 placeholder="Player’s wallet address"
@@ -189,14 +202,16 @@ export default function SimpleAccordion(props) {
 
             <div>
               <label htmlFor="transition-note">
-                <h5>Transaction Note: <span className="label-required">*</span></h5>
+                <h5>
+                  Transaction Note: <span className="label-required">*</span>
+                </h5>
               </label>
-              <Input 
-                required 
-                ref={deductNote} 
-                type="text" 
-                id="wallet-address" 
-                className="input-main large"  
+              <Input
+                required
+                ref={deductNote}
+                type="text"
+                id="wallet-address"
+                className="input-main large"
               />
             </div>
 
