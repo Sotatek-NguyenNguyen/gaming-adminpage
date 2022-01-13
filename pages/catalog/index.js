@@ -176,7 +176,7 @@ function CatalogPage() {
       const signature = await connection.sendRawTransaction(signed.serialize());
       await connection.confirmTransaction(signature);
       await refreshWalletBalance();
-      alertSuccess("Withdraw successfully");
+      alertSuccess("Withdrawn successfully");
       setShowWithdrawModal(false);
     } catch (error) {
       console.error(error.message);

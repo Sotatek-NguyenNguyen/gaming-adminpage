@@ -22,7 +22,7 @@ function PlayerPage() {
     totalPage: 1,
   });
   const [endpoint, setEndpoint] = useState(
-    `/admin/users?page=${paginate.currentPage}&pageSize=20`
+    `/admin/users?page=${paginate.currentPage}&pageSize=10`
   );
   const [sortBy, setSortBy] = useState(null);
   const walletAddressRef = useRef(null);
@@ -91,7 +91,7 @@ function PlayerPage() {
   ];
 
   const search = () => {
-    const currentEndpoint = "admin/users?page=1&pageSize=20";
+    const currentEndpoint = "admin/users?page=1&pageSize=10";
     let newEndpoint = currentEndpoint;
 
     if (walletAddressRef.current.value.trim() !== "") {
@@ -109,7 +109,7 @@ function PlayerPage() {
     setSortBy(null);
     // call function setSelectedToFirstValue of component dropdown
     dropdownRef.current.setSelectedToFirstValue();
-    const endpointDefault = "admin/users?page=1&pageSize=20";
+    const endpointDefault = "admin/users?page=1&pageSize=10";
     setEndpoint(endpointDefault);
   };
 
