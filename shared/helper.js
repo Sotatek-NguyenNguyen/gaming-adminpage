@@ -101,3 +101,28 @@ export const formatStatus = (status) => {
       return status
   }
 }
+
+export const validateURL = (link, isImg = false, callBack) => {
+  let res = link.match(/(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm);
+  if(isImg){
+    let extendsImg = ['JPG', 'JPEG', 'PNG', 'jpg', 'jpeg', 'png'];
+    let extendsURL = ['com', 'vn'];
+    // split url and get last item
+    let linkToArr = link.split('.');
+    let extend = linkToArr[linkToArr.length - 1];
+
+    if(
+      !extendsImg.includes(extend) || 
+       // check before last item(extend img) is .com or .vn
+       extendsURL.includes(linkToArr[linkToArr.length - 2])
+    ){
+      callBack(link);
+      return false;
+    }
+  }
+  // callback run when func return false
+  if(res === null){
+    callBack(link);
+  }
+  return (res !== null);
+}
