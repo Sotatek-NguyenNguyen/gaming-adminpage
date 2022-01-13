@@ -12,7 +12,7 @@ const Input = React.forwardRef((props, ref) => {
   }, [setVal, props.value])
 
   const onChange = (e) => {
-    props.onChange;
+    props.onChange();
     handleChange(e);
   }
 
@@ -35,5 +35,9 @@ const Input = React.forwardRef((props, ref) => {
     </div>
   ); 
 });
+
+Input.defaultProps = {
+  onChange: () => {},
+};
 
 export default Input;
