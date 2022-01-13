@@ -272,8 +272,8 @@ function CatalogPage() {
   };
 
   const validateGrantTokenAmount = (amount) => {
-    if (amount === 0 || amount < 0) {
-      alertWarning("Please enter greater token!");
+    if (amount === 0) {
+      alertWarning("Input Token amount must be larger than 0");
       return false;
     } else if (amount > unallocatedInGameBalance) {
       alertWarning("Please enter smaller token!");
@@ -283,11 +283,11 @@ function CatalogPage() {
 
   const validateDeductTokenAmount = (amount, address) => {
     const playerBalance = getPlayerBalanceByAddress(address);
-    if (amount < 0 || amount === 0) {
-      alertWarning("Please enter greater token!");
+    if (amount === 0) {
+      alertWarning("Input Token amount must be larger than 0");
       return false;
     } else if (amount > playerBalance) {
-      alertWarning("Please enter smaller token!");
+      alertWarning("Input Token amount cannot be larger than Player Game Balance");
       return false;
     } else return true;
   };

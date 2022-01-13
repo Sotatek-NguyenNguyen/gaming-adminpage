@@ -74,7 +74,7 @@ export const GlobalProvider = ({ children }) => {
 
   const getPlayerBalanceByAddress = address => {
     const player = playerList.find(player => player.address === address);
-    return player.balance;
+    return (player.balance / Math.pow(10, gameData?.tokenDecimals));
   };
 
   const setAccountBalance = (accBalance) => {

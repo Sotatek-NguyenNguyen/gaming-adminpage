@@ -7,9 +7,9 @@ const { SOLLET_CHAINS } = solletConfig;
 
 export const getCurrentChain = () => {
   let matched;
-  const defaultChain = SOLLET_CHAINS.find((slc) => slc.name === "testnet");
+  const defaultChain = SOLLET_CHAINS.find((slc) => slc.name === "devnet");
 
-  if (SOLLET_ENV2 && SOLLET_ENV2) {
+  if (SOLLET_ENV2) {
     matched = SOLLET_CHAINS.find((slc) => slc.name === SOLLET_ENV2) || null;
   } else {
     matched = null;
