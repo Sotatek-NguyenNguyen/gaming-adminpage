@@ -14,7 +14,7 @@ function Inventory(){
     currentPage: 1,
     totalPage: 1
   });
-  const [endpoint, setEndpoint] = useState(`/admin/users/nft?page=${paginate.currentPage}&pageSize=20&userAddress=${router.query.playerId}`);
+  const [endpoint, setEndpoint] = useState(`/admin/users/nft?page=${paginate.currentPage}&pageSize=10&userAddress=${router.query.playerId}`);
 
   const getInventory = useCallback(()=>{
     getJSON(`${endpoint}`)
@@ -69,13 +69,13 @@ function Inventory(){
   const itemIdRef = useRef(null);
   const search = () => {
     if(itemIdRef.current.value.trim() === '') return;
-    const currentEndpoint = `/admin/users/nft?page=1&pageSize=20&userAddress=${router.query.playerId}`;
+    const currentEndpoint = `/admin/users/nft?page=1&pageSize=10&userAddress=${router.query.playerId}`;
     const newEndpoint = `${currentEndpoint}&gameItemId=${itemIdRef.current.value}`;
     setEndpoint(newEndpoint);
   };
   const clearQuery = () => {
     itemIdRef.current.value = '';
-    const endpointDefault = `/admin/users/nft?page=1&pageSize=20&userAddress=${router.query.playerId}`;
+    const endpointDefault = `/admin/users/nft?page=1&pageSize=10&userAddress=${router.query.playerId}`;
     setEndpoint(endpointDefault);
   };
 

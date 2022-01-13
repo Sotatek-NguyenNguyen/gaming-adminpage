@@ -12,7 +12,7 @@ function Inventory(){
     currentPage: 1,
     totalPage: 1
   });
-  const [endpoint, setEndpoint] = useState(`/admin/users/nft?page=${paginate.currentPage}&pageSize=20`);
+  const [endpoint, setEndpoint] = useState(`/admin/users/nft?page=${paginate.currentPage}&pageSize=10`);
 
   const getInventory = useCallback(()=>{
     getJSON(`${endpoint}`)
@@ -65,13 +65,13 @@ function Inventory(){
   const itemIdRef = useRef(null);
   const search = () => {
     if(itemIdRef.current.value.trim() === '') return;
-    const currentEndpoint = '/admin/users/nft?page=1&pageSize=20';
+    const currentEndpoint = '/admin/users/nft?page=1&pageSize=10';
     const newEndpoint = `${currentEndpoint}&gameItemId=${itemIdRef.current.value}`;
     setEndpoint(newEndpoint);
   };
   const clearQuery = () => {
     itemIdRef.current.value = '';
-    const endpointDefault = '/admin/users/nft?page=1&pageSize=20';
+    const endpointDefault = '/admin/users/nft?page=1&pageSize=10';
     setEndpoint(endpointDefault);
   };
 
