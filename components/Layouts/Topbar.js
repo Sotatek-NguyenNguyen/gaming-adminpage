@@ -7,18 +7,18 @@ function Topbar() {
   const router = useRouter();
   const pathName = router.pathname.replace("/", "");
   const pageTitle = pathName[0].toUpperCase() + pathName.slice(1);
-  const [idPlayer, setIdPlayer] = useState("");
+  const [playerWalletAddress, setPlayerWalletAddress] = useState("");
 
-  const getIdPlayer = useCallback(() => {
+  const getPlayerWalletAddress = useCallback(() => {
     getJSON(`/admin/users?page=1&pageSize=20&address=${router.query.playerId}`)
-    .then( res => setIdPlayer(`${res.data[0].id}`))
+    .then( res => setPlayerWalletAddress(`${res?.data[0].address}`))
     .catch(err => {throw err});
   }, [router.query.playerId])
 
   useEffect(()=>{
     if(pathName !== "player/[playerId]") return;
-    getIdPlayer();
-  }, [pathName, getIdPlayer])
+    getPlayerWalletAddress();
+  }, [pathName, getPlayerWalletAddress])
 
   const renderPageTitle = (pathName) => {
     switch (pathName) {
@@ -26,7 +26,7 @@ function Topbar() {
         return (
           <div className="topbar__player-detail">
             <span>Player: </span>{" "}
-            <span className="topbar__playerID"> {idPlayer}</span>
+            <span className="topbar__playerID"> {playerWalletAddress}</span>
           </div>
         );
 
