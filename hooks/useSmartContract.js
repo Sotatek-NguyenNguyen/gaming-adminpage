@@ -9,7 +9,6 @@ import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
-import * as spl from "@solana/spl-token";
 import { PublicKey } from "@solana/web3.js";
 
 export function useSmartContract() {
@@ -47,11 +46,11 @@ export function useSmartContract() {
     }
 
     try {
-      const tokenAccount = await spl.Token.getAssociatedTokenAddress(
-        spl.ASSOCIATED_TOKEN_PROGRAM_ID,
-        spl.TOKEN_PROGRAM_ID,
+      const tokenAccount = await Token.getAssociatedTokenAddress(
+        ASSOCIATED_TOKEN_PROGRAM_ID,
+        TOKEN_PROGRAM_ID,
         new PublicKey(gameData.tokenAddress),
-        new PublicKey(publicKey)
+        publicKey
       );
       const tokenAccountBalance = await connection.getTokenAccountBalance(
         tokenAccount
