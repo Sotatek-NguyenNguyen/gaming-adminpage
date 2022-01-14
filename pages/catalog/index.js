@@ -40,9 +40,9 @@ function CatalogPage() {
   const [tokenData, setTokenData] = useState({});
   const { alertError, alertSuccess, alertWarning } = useAlert();
   const { publicKey, signTransaction } = useWallet();
-  const { isLoggined, balance, cluster } = useAuth();
+  const { isLoggined, cluster } = useAuth();
   const { refreshWalletBalance } = useSmartContract();
-  const { gameData, getPlayerBalanceByAddress } = useGlobal();
+  const { gameData, getPlayerBalanceByAddress, balance } = useGlobal();
   const router = useRouter();
 
   const opts = {

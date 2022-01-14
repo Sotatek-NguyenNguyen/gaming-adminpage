@@ -2,6 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import { getJSON } from "../common.js";
 import { useAlert } from "../hooks/useAlert";
 import { formatNumber } from "../shared/helper.js";
+import { useAuth } from "../hooks/useAuth";
 
 const defaultState = {
   gameData: {
@@ -20,7 +21,7 @@ const defaultState = {
     tokenDecimals: 6,
   },
   playerList: [],
-  getPlayerBalanceByAddress: address => {},
+  getPlayerBalanceByAddress: (address) => {},
   balance: {
     value: 0,
     formatted: "0",
@@ -47,6 +48,7 @@ export const GlobalProvider = ({ children }) => {
     tokenAddress: "",
     tokenDecimals: 6,
   });
+  const { isAuthenticated } = useAuth();
   const [playerList, setPlayerList] = useState([]);
 
   const [balance, setBalance] = useState({
@@ -72,9 +74,9 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
-  const getPlayerBalanceByAddress = address => {
-    const player = playerList.find(player => player.address === address);
-    return (player.balance / Math.pow(10, gameData?.tokenDecimals));
+  const getPlayerBalanceByAddress = (address) => {
+    const player = playerList.find((player) => player.address === address);
+    return player.balance / Math.pow(10, gameData?.tokenDecimals);
   };
 
   const setAccountBalance = (accBalance) => {
@@ -87,9 +89,11 @@ export const GlobalProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    getGameData().catch((err) => alertError(err.message));
-    getPlayerList().catch(err => alertError(err.message));
-  }, []);
+    if (isAuthenticated) {
+      getGameData().catch((err) => alertError(err.message));
+      getPlayerList().catch((err) => alertError(err.message));
+    }
+  }, [isAuthenticated]);
 
   return (
     <GlobalContext.Provider
@@ -98,7 +102,7 @@ export const GlobalProvider = ({ children }) => {
         getPlayerBalanceByAddress,
         balance,
         setAccountBalance,
-        playerList
+        playerList,
       }}
     >
       {children}

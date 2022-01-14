@@ -25,8 +25,8 @@ function AdminApp({ Component, pageProps }) {
   return (
     <WalletConnectionProvider>
       <WalletModalProvider>
-        <GlobalProvider>
-          <AuthProvider>
+        <AuthProvider>
+          <GlobalProvider>
             {getLayout(<Component {...pageProps} />)}
             <ToastContainer
               hideProgressBar
@@ -37,8 +37,8 @@ function AdminApp({ Component, pageProps }) {
               autoClose={2000}
               transition={Zoom}
             />
-          </AuthProvider>
-        </GlobalProvider>
+          </GlobalProvider>
+        </AuthProvider>
       </WalletModalProvider>
     </WalletConnectionProvider>
   );
