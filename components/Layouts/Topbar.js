@@ -11,7 +11,7 @@ function Topbar() {
 
   const getIdPlayer = useCallback(() => {
     getJSON(`/admin/users?page=1&pageSize=20&address=${router.query.playerId}`)
-    .then( res => setIdPlayer(`ID#${res.data[0].id}`))
+    .then( res => setIdPlayer(`${res.data[0].id}`))
     .catch(err => {throw err});
   }, [router.query.playerId])
 
