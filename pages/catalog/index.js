@@ -188,7 +188,7 @@ function CatalogPage() {
 
   const validateDepositAmount = (amount) => {
     if (amount === 0) {
-      alertWarning("Please enter greater token!");
+      alertWarning("Input Token amount must be larger than 0");
       return false;
     } else if (amount > balance?.value) {
       alertWarning("Deposit amount input exceeded Wallet balance");
