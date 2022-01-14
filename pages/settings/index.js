@@ -56,7 +56,7 @@ function SettingsPage() {
 
   const checkFieldIsEmpty = (value, prefix, _errors) => {
     if(value.trim() === ''){
-      _errors[prefix] = `${prefix} should not be empty`;
+      _errors[prefix] = `This field is required`;
       return false;
     }
     return true;
@@ -82,32 +82,32 @@ function SettingsPage() {
 
     let logoURL = validateURL(updatedGameInfoData.logoURL, true, (link) => {
       if(!checkFieldIsEmpty(link, 'logoURL', _errors)) return;
-      _errors['logoURL'] = `logoURL must be an URL address image`;
+      _errors['logoURL'] = `This field must be a valid image URL`;
     });
 
     let backgroundURL = validateURL(updatedGameInfoData.backgroundURL, true, (link) => {
       if(!checkFieldIsEmpty(link, 'backgroundURL', _errors)) return;
-      _errors['backgroundURL'] = `backgroundURL must be an URL address image`;
+      _errors['backgroundURL'] = `This field must be a valid image URL`;
     });
 
     let videoIntroURL = validateURL(updatedGameInfoData.videoIntroURL, false, (link) => {
       if(!checkFieldIsEmpty(link, 'videoIntroURL', _errors)) return;
-      _errors['videoIntroURL'] = `videoIntroURL must be an URL address`;
+      _errors['videoIntroURL'] = `This field must be a valid URL`;
     });
 
     let gameURL = validateURL(updatedGameInfoData.gameURL, false, (link) => {
       if(!checkFieldIsEmpty(link, 'gameURL', _errors)) return;
-      _errors['gameURL'] = `gameURL must be an URL address`;
+      _errors['gameURL'] = `This field must be a valid URL`;
     });
 
     let webhookUrl = validateURL(updatedGameInfoData.webhookUrl, false, (link) => {
       if(!checkFieldIsEmpty(link, 'webhookUrl', _errors)) return;
-      _errors['webhookUrl'] = `webhookUrl must be an URL address`;
+      _errors['webhookUrl'] = `This field must be a valid URL`;
     });
 
     let getItemUrl = validateURL(updatedGameInfoData.getItemUrl, false, (link) => {
       if(!checkFieldIsEmpty(link, 'getItemUrl', _errors)) return;
-      _errors['getItemUrl'] = `getItemUrl must be an URL address`;
+      _errors['getItemUrl'] = `This field must be a valid URL`;
     });
 
     if(
@@ -132,7 +132,7 @@ function SettingsPage() {
   };
   const styleTextEditorDisable = !disabledEditGameInfo ? "#9F99B3" : "black";
 
-  const test = () => {
+  const changeColorEditor = () => {
     editorRef.current.iframeElement.contentDocument.getElementsByTagName('style')[0].innerHTML = `
       body { 
         font-size: 14pt; 
@@ -152,7 +152,7 @@ function SettingsPage() {
       alertSuccess("Changes saved");
       setErrors(null);
       setDisabledEditGameInfo(true);
-      test();
+      changeColorEditor();
     } catch (err) {
       // alertError(err.message);
     }
@@ -380,7 +380,7 @@ function SettingsPage() {
         {disabledEditGameInfo && (
           <Button
             variant="contained"
-            onClick={() => {setDisabledEditGameInfo(false); test()}}
+            onClick={() => {setDisabledEditGameInfo(false); changeColorEditor()}}
             className="btn-main edit_game_info"
           >
             Edit
