@@ -33,6 +33,7 @@ function CatalogPage() {
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showGrantTokenModal, setShowGrantTokenModal] = useState(false);
   const [showDeductTokenModal, setShowDeductTokenModal] = useState(false);
+  const [errors, setErrors] = useState(null);
   const [tab, setTab] = useState("inventory");
   const [actualGameBalance, setActualGameBalance] = useState("");
   const [allocatedInGameBalance, setAllocatedInGameBalance] = useState("");
@@ -276,6 +277,10 @@ function CatalogPage() {
       alertWarning("Input Token amount must be larger than 0");
       return false;
     } else if (amount > unallocatedInGameBalance) {
+      const _errors = {...errors};
+      _errors['grant'] = 'Grant Amount cannot be larger than Unallocated in-game balance';
+      setErrors(_errors);
+
       alertWarning("Grant Amount cannot be larger than Unallocated in-game balance");
       return false;
     } else return true;
@@ -316,7 +321,12 @@ function CatalogPage() {
 
     sendJSON(`/admin/users/grant-token`, exactTokenData)
       .then((res) => {
-        if (res.success) alertSuccess("Successfully granted token!");
+        if (res.success) {
+          const _errors = {...errors};
+          _errors['grant'] = null;
+          setErrors(_errors)
+          alertSuccess("Successfully granted token!")
+        };
         if (res.statusCode === 404) alertError("User not found!");
       })
       .finally(() => {
@@ -452,6 +462,7 @@ function CatalogPage() {
       <SimpleAccordion
         onGrantToKenSubmit={grantTokenHandler}
         onDeductTokenSubmit={deductTokenHandler}
+        errors={errors}
       />
 
       <section className="player__info container--custom">

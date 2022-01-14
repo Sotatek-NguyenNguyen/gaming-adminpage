@@ -7,6 +7,7 @@ import { getJSON, updateJSON } from "../../common.js";
 import { useAuth } from "../../hooks";
 import { useRouter } from "next/router";
 import { useAlert } from "../../hooks/useAlert";
+import { validateURL } from "../../shared/helper";
 
 function SettingsPage() {
   const editorRef = useRef(null);
@@ -20,12 +21,14 @@ function SettingsPage() {
   const walletAddressRef = useRef(null);
   const webhookRef = useRef(null);
   const itemInfoRef = useRef(null);
+  const topElRef = useRef(null);
 
   const { isLoggined } = useAuth();
   const router = useRouter();
 
   const [disabledEditGameInfo, setDisabledEditGameInfo] = useState(true);
   const [editorInitValue, setEditorInitValue] = useState("");
+  const [errors, setErrors] = useState(null);
 
   const { alertSuccess, alertError } = useAlert();
 
@@ -51,7 +54,15 @@ function SettingsPage() {
     }
   };
 
-  const updateGameInfo = async () => {
+  const checkFieldIsEmpty = (value, prefix, _errors) => {
+    if(value.trim() === ''){
+      _errors[prefix] = `${prefix} should not be empty`;
+      return false;
+    }
+    return true;
+  }
+
+  const checkFieldUpdate = () => {
     const updatedGameInfoData = {
       name: nameRef.current.value,
       videoIntroURL: videoIntroURLRef.current.value,
@@ -66,16 +77,84 @@ function SettingsPage() {
       walletAddressRef: walletAddressRef.current.value,
     };
 
+    let _errors = {...errors};
+    let gameName = checkFieldIsEmpty(updatedGameInfoData.name, 'GameName', _errors);
+
+    let logoURL = validateURL(updatedGameInfoData.logoURL, true, (link) => {
+      if(!checkFieldIsEmpty(link, 'logoURL', _errors)) return;
+      _errors['logoURL'] = `logoURL must be an URL address image`;
+    });
+
+    let backgroundURL = validateURL(updatedGameInfoData.backgroundURL, true, (link) => {
+      if(!checkFieldIsEmpty(link, 'backgroundURL', _errors)) return;
+      _errors['backgroundURL'] = `backgroundURL must be an URL address image`;
+    });
+
+    let videoIntroURL = validateURL(updatedGameInfoData.videoIntroURL, false, (link) => {
+      if(!checkFieldIsEmpty(link, 'videoIntroURL', _errors)) return;
+      _errors['videoIntroURL'] = `videoIntroURL must be an URL address`;
+    });
+
+    let gameURL = validateURL(updatedGameInfoData.gameURL, false, (link) => {
+      if(!checkFieldIsEmpty(link, 'gameURL', _errors)) return;
+      _errors['gameURL'] = `gameURL must be an URL address`;
+    });
+
+    let webhookUrl = validateURL(updatedGameInfoData.webhookUrl, false, (link) => {
+      if(!checkFieldIsEmpty(link, 'webhookUrl', _errors)) return;
+      _errors['webhookUrl'] = `webhookUrl must be an URL address`;
+    });
+
+    let getItemUrl = validateURL(updatedGameInfoData.getItemUrl, false, (link) => {
+      if(!checkFieldIsEmpty(link, 'getItemUrl', _errors)) return;
+      _errors['getItemUrl'] = `getItemUrl must be an URL address`;
+    });
+
+    if(
+      !gameName ||
+      !logoURL ||
+      !backgroundURL ||
+      !videoIntroURL ||
+      !gameURL ||
+      !webhookUrl ||
+      !getItemUrl 
+    ) {
+      setErrors(_errors);
+      topElRef.current.scrollIntoView();
+      return false;
+    };
+
+    return updatedGameInfoData;
+  }
+
+  const styleTextDisable = {
+    color: disabledEditGameInfo ? "#9F99B3" : "black",
+  };
+  const styleTextEditorDisable = !disabledEditGameInfo ? "#9F99B3" : "black";
+
+  const test = () => {
+    editorRef.current.iframeElement.contentDocument.getElementsByTagName('style')[0].innerHTML = `
+      body { 
+        font-size: 14pt; 
+        font-family: Arial; 
+        color: ${styleTextEditorDisable} !important
+      }`;
+  }
+
+  const updateGameInfo = async () => {
+    const updatedGameInfoData = checkFieldUpdate();
+    if(!updatedGameInfoData) return;
     try {
       const res = await updateJSON(`/admin/game-info`, updatedGameInfoData);
 
-      if (res.statusCode === 400 && !res.success)
-        return alertError(res.message[0]);
+      if (res.statusCode === 400 && !res.success) return;
 
       alertSuccess("Changes saved");
+      setErrors(null);
       setDisabledEditGameInfo(true);
+      test();
     } catch (err) {
-      alertError(err.message);
+      // alertError(err.message);
     }
   };
 
@@ -88,13 +167,8 @@ function SettingsPage() {
     getGameInfo().catch((err) => alertError(err.message));
   }, []);
 
-  const styleTextDisable = {
-    color: disabledEditGameInfo ? "#9F99B3" : "black",
-  };
-  const styleTextEditorDisable = disabledEditGameInfo ? "#9F99B3" : "black";
-
   return (
-    <div className="container--custom">
+    <div className="container--custom" ref={topElRef}>
       <form className="container--main" onSubmit={(e) => e.preventDefault()}>
         <div className="card-custom">
           <h3 className="card__title">Game information</h3>
@@ -111,6 +185,7 @@ function SettingsPage() {
                   id="gameName"
                   style={styleTextDisable}
                   disabled={disabledEditGameInfo}
+                  error={errors?.GameName}
                 />
               </div>
               <div className="form__input">
@@ -124,6 +199,7 @@ function SettingsPage() {
                   style={styleTextDisable}
                   disabled={disabledEditGameInfo}
                   id="gameBackground"
+                  error={errors?.backgroundURL}
                 />
               </div>
             </section>
@@ -140,6 +216,7 @@ function SettingsPage() {
                   className="input-main large"
                   style={styleTextDisable}
                   disabled={disabledEditGameInfo}
+                  error={errors?.logoURL}
                 />
               </div>
               <div className="form__input">
@@ -154,6 +231,7 @@ function SettingsPage() {
                   className="input-main large"
                   style={styleTextDisable}
                   disabled={disabledEditGameInfo}
+                  error={errors?.videoIntroURL}
                 />
               </div>
               <div className="form__input">
@@ -167,6 +245,7 @@ function SettingsPage() {
                   disabled={disabledEditGameInfo}
                   className="input-main large"
                   ref={gameURLRef}
+                  error={errors?.gameURL}
                 />
               </div>
             </section>
@@ -190,7 +269,7 @@ function SettingsPage() {
                   ],
                   toolbar:
                     "formatselect | bold italic | alignleft aligncenter alignright alignjustify",
-                  content_style: `body { font-size: 14pt; font-family: Arial; color: ${styleTextEditorDisable} !important}`,
+                  content_style: `body { font-size: 14pt; font-family: Arial; color: #9F99B3 !important}`,
                 }}
               />
             </section>
@@ -210,6 +289,7 @@ function SettingsPage() {
                 className="input-main large"
                 style={styleTextDisable}
                 disabled={disabledEditGameInfo}
+                error={errors?.webhookUrl}
               />
             </div>
 
@@ -223,6 +303,7 @@ function SettingsPage() {
                 className="input-main large"
                 style={styleTextDisable}
                 disabled={disabledEditGameInfo}
+                error={errors?.getItemUrl}
               />
             </div>
           </div>
@@ -241,7 +322,7 @@ function SettingsPage() {
                   id="currentCode"
                   ref={tokenCodeRef}
                   className="input-main large"
-                  style={styleTextDisable}
+                  style={{color: '#9F99B3'}}
                   disabled={true}
                 />
               </div>
@@ -256,8 +337,8 @@ function SettingsPage() {
                   id="displayName"
                   ref={tokenNameRef}
                   className="input-main large"
-                  style={styleTextDisable}
                   disabled={true}
+                  style={{color: '#9F99B3'}}
                 />
               </div>
             </div>
@@ -274,8 +355,8 @@ function SettingsPage() {
                   id="initialDeposit"
                   value="0.000.000"
                   className="input-main large"
-                  style={styleTextDisable}
                   disabled={true}
+                  style={{color: '#9F99B3'}}
                 />
               </div>
 
@@ -289,8 +370,8 @@ function SettingsPage() {
                   id="walletAddress"
                   ref={walletAddressRef}
                   className="input-main large"
-                  style={styleTextDisable}
                   disabled={true}
+                  style={{color: '#9F99B3'}}
                 />
               </div>
             </div>
@@ -299,7 +380,7 @@ function SettingsPage() {
         {disabledEditGameInfo && (
           <Button
             variant="contained"
-            onClick={() => setDisabledEditGameInfo(false)}
+            onClick={() => {setDisabledEditGameInfo(false); test()}}
             className="btn-main edit_game_info"
           >
             Edit

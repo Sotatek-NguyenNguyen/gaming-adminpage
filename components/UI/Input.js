@@ -17,6 +17,7 @@ const Input = React.forwardRef((props, ref) => {
   };
 
   const styleErrorValue = {
+    ...props.style,
     borderColor: props.error ? "red" : "#9F99B3",
   };
 
@@ -25,19 +26,19 @@ const Input = React.forwardRef((props, ref) => {
       {props.type === "number" ? (
         <input
           className={props.className}
-          style={styleErrorValue}
           ref={ref}
           {...props}
           value={value}
           onChange={onChange}
           type="text"
+          style={styleErrorValue}
         />
       ) : (
         <input
           className={props.className}
-          style={styleErrorValue}
           ref={ref}
           {...props}
+          style={styleErrorValue}
         />
       )}
       {props.error ? <span className="text-error">{props.error}</span> : ""}

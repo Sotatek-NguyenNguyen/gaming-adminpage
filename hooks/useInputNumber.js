@@ -2,16 +2,17 @@ import {useState} from 'react'
 
 const useInputNumber = init => {
     const [value, setValue] = useState(init);
-
+    const regexp  = /^\d*\.?\d{0,6}$/;
+    
     const handleChange = (e) => {
         const newValue = e.target.value;
-        if(/^\d*\.?\d*$/.test(newValue) || newValue === ''){
+        if(regexp .test(newValue) || newValue === ''){
             setValue(newValue);
         }
     }
 
     const setVal = (val) => {
-        if(/^\d*\.?\d*$/.test(val) || val === ''){
+        if(regexp .test(val) || val === ''){
             setValue(val);
         }
     }

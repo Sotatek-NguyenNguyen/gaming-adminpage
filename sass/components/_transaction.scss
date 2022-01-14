@@ -79,3 +79,10 @@
     border-radius: 32px !important;
     border-color: #9F99B3;
 }
+
+.Mui-focused > .MuiOutlinedInput-notchedOutline{
+    border-color: $color-primary !important;
+}
+.Mui-error > .MuiOutlinedInput-notchedOutline{
+    border-color: red !important;
+}

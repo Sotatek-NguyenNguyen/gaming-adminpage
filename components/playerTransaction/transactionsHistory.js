@@ -123,7 +123,6 @@ function TransactionsHistory() {
   const search = (event) => {
     event.preventDefault();
     const currentEndpoint = `/admin/users/transactions?page=1&pageSize=10&userAddress=${router.query.playerId}`;
-
     if (fromDate !== null) {
       let fromDateFormat = fromDate?.toISOString().split("T")[0];
       let toDateFormat = toDate?.toISOString().split("T")[0];
