@@ -86,3 +86,11 @@
 .Mui-error > .MuiOutlinedInput-notchedOutline{
     border-color: red !important;
 }
+
+/* Change the white to any color */
+input.MuiOutlinedInput-input.MuiInputBase-input:-webkit-autofill,
+input.MuiOutlinedInput-input.MuiInputBase-input:-webkit-autofill:hover, 
+input.MuiOutlinedInput-input.MuiInputBase-input:-webkit-autofill:focus, 
+input.MuiOutlinedInput-input.MuiInputBase-input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+}

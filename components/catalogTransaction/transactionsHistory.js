@@ -132,7 +132,7 @@ function TransactionsHistory() {
           fromDate.setHours(23, 59, 59, 999)
         ).toISOString();
       }
-
+      
       currentEndpoint += `&fromDate=${fromDateFormat}&toDate=${toDateFormat}`;
     }
     if (transactionIdRef.current.value !== "") {

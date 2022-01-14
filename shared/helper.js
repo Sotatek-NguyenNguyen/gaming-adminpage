@@ -77,8 +77,13 @@ export const renderTokenBalance = (balance, tokenDecimals) => {
 export const removePrefix = (transactionType) =>
   transactionType.split("_")[1] + "ed";
 
-export const checkSameDay = (day1, day2) =>
-  day1.setHours(0, 0, 0, 0) == day2.setHours(0, 0, 0, 0);
+export const checkSameDay = (day1, day2) => {
+  const checkDay1 = new Date(day1).setHours(0, 0, 0, 0);
+  const checkDay2 = new Date(day2).setHours(0, 0, 0, 0);
+
+  return checkDay1 == checkDay2;
+};
+  
 
 export const formatStatus = (status) => {
   switch(status) {
