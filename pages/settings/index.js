@@ -54,6 +54,11 @@ function SettingsPage() {
     }
   };
 
+  const removeErrors = (field, _errors) => {
+    if(!_errors[field]) return;
+    _errors[field] = null;
+  }
+
   const checkFieldIsEmpty = (value, prefix, _errors) => {
     if(value.trim() === ''){
       _errors[prefix] = `This field is required`;
@@ -79,36 +84,43 @@ function SettingsPage() {
 
     let _errors = {...errors};
     let gameName = checkFieldIsEmpty(updatedGameInfoData.name, 'GameName', _errors);
+    if(gameName) removeErrors('GameName', _errors);
 
     let logoURL = validateURL(updatedGameInfoData.logoURL, true, (link) => {
       if(!checkFieldIsEmpty(link, 'logoURL', _errors)) return;
       _errors['logoURL'] = `This field must be a valid image URL`;
     });
+    if(logoURL) removeErrors('logoURL', _errors);
 
     let backgroundURL = validateURL(updatedGameInfoData.backgroundURL, true, (link) => {
       if(!checkFieldIsEmpty(link, 'backgroundURL', _errors)) return;
       _errors['backgroundURL'] = `This field must be a valid image URL`;
     });
+    if(backgroundURL) removeErrors('backgroundURL', _errors);
 
     let videoIntroURL = validateURL(updatedGameInfoData.videoIntroURL, false, (link) => {
       if(!checkFieldIsEmpty(link, 'videoIntroURL', _errors)) return;
       _errors['videoIntroURL'] = `This field must be a valid URL`;
     });
+    if(videoIntroURL) removeErrors('videoIntroURL', _errors);
 
     let gameURL = validateURL(updatedGameInfoData.gameURL, false, (link) => {
       if(!checkFieldIsEmpty(link, 'gameURL', _errors)) return;
       _errors['gameURL'] = `This field must be a valid URL`;
     });
+    if(gameURL) removeErrors('gameURL', _errors);
 
     let webhookUrl = validateURL(updatedGameInfoData.webhookUrl, false, (link) => {
       if(!checkFieldIsEmpty(link, 'webhookUrl', _errors)) return;
       _errors['webhookUrl'] = `This field must be a valid URL`;
     });
+    if(webhookUrl) removeErrors('webhookUrl', _errors);
 
     let getItemUrl = validateURL(updatedGameInfoData.getItemUrl, false, (link) => {
       if(!checkFieldIsEmpty(link, 'getItemUrl', _errors)) return;
       _errors['getItemUrl'] = `This field must be a valid URL`;
     });
+    if(getItemUrl) removeErrors('getItemUrl', _errors);
 
     if(
       !gameName ||

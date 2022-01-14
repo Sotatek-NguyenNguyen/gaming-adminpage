@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import Button from "../UI/Button.js";
 import Input from "../../components/UI/Input.js";
-import { useAlert } from "../../hooks/useAlert.js";
+import { useGlobal, useAlert } from "../../hooks";
 
 const BackDrops = (props) => {
   return <div className="backdrop" onClick={props.onCloseModal}></div>;
@@ -19,11 +19,32 @@ const ModalOverlay = (props) => {
   } = props;
   const amountRef = useRef();
   const addressRef = useRef();
+  const [errors, setErrors] = useState(null);
+  const { alertError } = useAlert();
+  const { playerList } = useGlobal();
+
+  const findWalletAddress = (address) =>
+    playerList.some((player) => player.address === address);
 
   const handleClick = () => {
+
     if (inputDisabled) props.onClick();
-    if (!inputDisabled && editableAddress)
+    if (!inputDisabled && editableAddress){
+      const _errors = {...errors};
+      if (addressRef?.current.value === ""){
+        _errors['withDraw'] = 'Destination address cannot be empty';
+        return setErrors(_errors);
+      };
+      if (!findWalletAddress(addressRef?.current.value)){
+        _errors['withDraw'] = ' ';
+        alertError('The wallet address is not found in Gaming Service. Either the wallet is not registered with Gaming Service or has been de-registered');
+        return setErrors(_errors);
+      };
+
       props.onClick(addressRef?.current.value, amountRef?.current.value);
+      setErrors(null);
+    }
+      
     if (!inputDisabled && !editableAddress)
       props.onClick(amountRef?.current?.value);
   };
@@ -42,6 +63,7 @@ const ModalOverlay = (props) => {
             style={{ marginBottom: 10 }}
             required={true}
             ref={addressRef}
+            error={errors?.withDraw}
           />
         )}
         <Input
