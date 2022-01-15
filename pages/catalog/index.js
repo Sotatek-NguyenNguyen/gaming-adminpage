@@ -77,6 +77,8 @@ function CatalogPage() {
     setShowWithdrawModal(false);
     setShowGrantTokenModal(false);
     setShowDeductTokenModal(false);
+
+    setErrors(null);
   };
 
   const DepositModal = () => {
@@ -92,6 +94,7 @@ function CatalogPage() {
         onCloseModal={handleCloseModal}
         inputDisabled={false}
         onClick={handleDeposit}
+        amountInGame={balance?.value}
       />
     );
   };
@@ -104,6 +107,7 @@ function CatalogPage() {
         onCloseModal={handleCloseModal}
         inputDisabled={false}
         onClick={handleWithDraw}
+        amountInGame={unallocatedInGameBalance}
       />
     );
   };
@@ -144,25 +148,8 @@ function CatalogPage() {
     );
   };
 
-  const validateWithDrawAmount = (amount) => {
-    if (amount === 0) {
-      alertWarning("Please enter greater token!");
-      return false;
-    } else if (amount > unallocatedInGameBalance) {
-      alertWarning("Please enter smaller token!");
-      return false;
-    } else return true;
-  };
-
   const handleWithDraw = async (userAddress, amount) => {
-    if (userAddress === "")
-      return alertWarning("Destination address cannot be empty!");
-
-    const validatedAmount = validateWithDrawAmount(+amount);
-    if (!validatedAmount) return;
-
-    if (!signTransaction) return;
-
+    if(!signTransaction) return;
     try {
       const exactAmount = convertTokenAmountBaseOnTokenDec(amount);
 
@@ -178,6 +165,7 @@ function CatalogPage() {
       await connection.confirmTransaction(signature);
       await refreshWalletBalance();
       alertSuccess("Withdrawn successfully");
+      setErrors(null);
       setShowWithdrawModal(false);
     } catch (error) {
       console.error(error.message);
@@ -186,20 +174,7 @@ function CatalogPage() {
     }
   };
 
-  const validateDepositAmount = (amount) => {
-    if (amount === 0) {
-      alertWarning("Input Token amount must be larger than 0");
-      return false;
-    } else if (amount > balance?.value) {
-      alertWarning("Deposit amount input exceeded Wallet balance");
-      return false;
-    } else return true;
-  };
-
   const handleDeposit = async (depositValue) => {
-    const validatedAmount = validateDepositAmount(+depositValue);
-    if (!validatedAmount) return;
-
     const wallet = window.solana;
 
     if (
