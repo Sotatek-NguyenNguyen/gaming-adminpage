@@ -17,57 +17,87 @@ const ModalOverlay = (props) => {
     tokenAmount,
     inputDisabled,
     editableAddress,
+    amountInGame
   } = props;
   const amountRef = useRef();
   const addressRef = useRef();
   const [errors, setErrors] = useState(null);
-  const { alertError } = useAlert();
-  const { playerList } = useGlobal();
 
-  const getWalletAddress =  async (address) => {
-    let result;
-   
-    try {
-      let res = await getJSON(`/admin/users?page=1&pageSize=20&address=${address}`);
-      
-      if(res.data){
-        result = true;
-      }else{
-        result = false;
-      }
-    }catch(err){
-      throw err;
+  // validate withdraw balance
+  const validateAmountWithDraw = (amount, _errors) => {
+    if(amount === ''){
+      _errors['balanceAmount'] = 'This field is required';
+      return false;
+    }else if (amount == 0) {
+      _errors['balanceAmount'] = 'Input Token amount must be larger than 0';
+      return false;
+    } else if (amount > amountInGame) {
+      _errors['balanceAmount'] = 'Input Token amount cannot be larger than Unallocated in-game balance';
+      return false;
+    } else{ 
+      _errors['balanceAmount'] = null;
+      return true
+    };
+  };
+  const checkValidateBalanceWithDraw = () => {
+    const _errors = {...errors};
+
+    if (addressRef?.current.value === ""){
+      _errors['balanceAddress'] = 'This field is required';
+    }else{
+      _errors['balanceAddress'] = null;
     }
 
-    return result;
-  };
+    const validatedAmount = validateAmountWithDraw(amountRef?.current.value, _errors);
+    if (addressRef?.current.value === "" || !validatedAmount) {
+      setErrors({
+        ..._errors,
+        message: 'test',
+        validatedAmount
+      });
+      return false;
+    };
 
-  const findWalletAddress = async (address) =>{
-    let check = await getWalletAddress(address);
-    return check;
+    return true;
+  }
+
+  // validate deposit balance
+  const validateDepositAmount = (amount) => {
+    const _errors = {...errors};
+
+    if(amount === ''){
+      _errors['balanceAmount'] = 'This field is required';
+      setErrors(_errors);
+      return false;
+    }else if (amount == 0) {
+      _errors['balanceAmount'] = 'Input Token amount must be larger than 0';
+      setErrors(_errors);
+      return false;
+    } else if (amount > amountInGame) {
+      _errors['balanceAmount'] = "Deposit amount input exceeded Wallet balance";
+      setErrors(_errors);
+      return false;
+    } else{
+      _errors['balanceAmount'] = null;
+      setErrors(_errors);
+      return true;
+    } 
   };
 
   const handleClick = () => {
-
     if (inputDisabled) props.onClick();
-    if (!inputDisabled && editableAddress){
-      const _errors = {...errors};
-      if (addressRef?.current.value === ""){
-        _errors['withDraw'] = 'Destination address cannot be empty';
-        return setErrors(_errors);
-      };
-      if (!findWalletAddress(addressRef?.current.value)){
-        _errors['withDraw'] = ' ';
-        alertError('The wallet address is not found in Gaming Service. Either the wallet is not registered with Gaming Service or has been de-registered');
-        return setErrors(_errors);
-      };
 
-      props.onClick(addressRef?.current.value, amountRef?.current.value);
+    if (!inputDisabled && editableAddress){
+      if(!checkValidateBalanceWithDraw()) return;
       setErrors(null);
+      props.onClick(addressRef?.current.value, amountRef?.current.value);
     }
-      
-    if (!inputDisabled && !editableAddress)
+    
+    if (!inputDisabled && !editableAddress){
+      if (!validateDepositAmount(amountRef?.current?.value)) return;
+      setErrors(null);
       props.onClick(amountRef?.current?.value);
+    }
   };
 
   return (
@@ -84,7 +114,7 @@ const ModalOverlay = (props) => {
             style={{ marginBottom: 10 }}
             required={true}
             ref={addressRef}
-            error={errors?.withDraw}
+            error={errors?.balanceAddress}
           />
         )}
         <Input
@@ -96,6 +126,7 @@ const ModalOverlay = (props) => {
           disabled={inputDisabled}
           ref={amountRef}
           required={true}
+          error={errors?.balanceAmount}
         />
       </div>
 
