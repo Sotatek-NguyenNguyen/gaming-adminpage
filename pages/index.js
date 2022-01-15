@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import Header from "../components/Layouts/Header.js";
 import Button from "../components/UI/Button.js";
 import { useRouter } from "next/router";
@@ -13,7 +13,8 @@ function HomePage() {
   const router = useRouter();
   const { login } = useAuth();
   const { connected, wallet, publicKey, signMessage, adapter, connecting } = useWallet();
-  const { setVisible } = useWalletModal();
+  const { visible, setVisible } = useWalletModal();
+  const [showErr, setShowErr] = useState(false);
   const [loading, setLoading] = useState(false);
   const { alertError } = useAlert();
 
@@ -23,6 +24,11 @@ function HomePage() {
     if (wallet) return 'Connect';
     return 'Select Wallet';
   }, [connecting, connected, wallet]);
+
+  const openModal = useCallback(() => {
+    setVisible(true);
+    setShowErr(true);
+  }, [setVisible, setShowErr]);
 
   const handleLogin = async () => {
     if (connected) {
@@ -47,7 +53,7 @@ function HomePage() {
           Connect your wallet to continue signing in
         </p>
         <Button
-          onClick={() => setVisible(true)}
+          onClick={openModal}
           className="heading-primary--btn"
         >
           {buttonText}
@@ -83,6 +89,25 @@ function HomePage() {
       </div>
     );
   };
+
+  useEffect(() => {
+    if (wallet && showErr && !visible) {
+
+      const solanaWallet = typeof window !== 'undefined' && window.solana;
+      const solletWallet = typeof window !== 'undefined' && window.sollet;
+
+      if (
+        wallet.name === 'Phantom' &&
+        (!solanaWallet || (solanaWallet && !solanaWallet.isPhantom))
+      ) {
+        alertError('Please install Phantom wallet extension');
+        setShowErr(false);
+      } else if (wallet.name === 'Sollet (Extension)' && !solletWallet) {
+        alertError('Please install Sollet wallet extension');
+        setShowErr(false);
+      }
+    }
+  }, [wallet, alertError, showErr, visible]);
 
   return (
     <React.Fragment>

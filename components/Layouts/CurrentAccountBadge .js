@@ -12,7 +12,7 @@ function CurrentAccountBadge({ children }) {
   const router = useRouter();
   const { logout, isAuthenticated, login } = useAuth();
   const { gameData, setAccountBalance, balance } = useGlobal();
-  const { publicKey, wallet, disconnect, connected, signMessage, adapter } = useWallet();
+  const { publicKey, wallet, disconnect, connected, adapter } = useWallet();
   const base58 = useMemo(() => publicKey?.toBase58(), [publicKey]);
   const content = useMemo(() => {
     if (children) return children;

@@ -33,36 +33,40 @@ export default function SimpleAccordion(props) {
     deductNote.current.value = "";
   };
 
-  const getWalletAddress =  async (address) => {
+  const getWalletAddress = async (address) => {
     let result;
-   
+
     try {
-      let res = await getJSON(`/admin/users?page=1&pageSize=20&address=${address}`);
-      
-      if(res.data){
+      let res = await getJSON(
+        `/admin/users?page=1&pageSize=20&address=${address}`
+      );
+
+      if (res?.data?.[0]) {
         result = true;
-      }else{
+      } else {
         result = false;
       }
-    }catch(err){
+    } catch (err) {
       throw err;
     }
 
     return result;
   };
 
-  const findWalletAddress = async (address) =>{
+  const findWalletAddress = async (address) => {
     let check = await getWalletAddress(address);
     return check;
   };
 
-  const grantTokenSubmitHandler = (e) => {
+  const grantTokenSubmitHandler = async (e) => {
     e.preventDefault();
     const amount = +amountGrantToken.current.value;
     const userAddress = grantWalletAddress.current.value;
     const note = grantNote.current.value;
+    
+    const check = await findWalletAddress(userAddress)
 
-    if (findWalletAddress(userAddress)) {
+    if (check) {
       const _errors = {
         ...errors,
         walletAddressGrant: null,
