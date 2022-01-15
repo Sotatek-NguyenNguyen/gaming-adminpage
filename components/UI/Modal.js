@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import Button from "../UI/Button.js";
 import Input from "../../components/UI/Input.js";
+import { getJSON } from "../../common";
 import { useGlobal, useAlert } from "../../hooks";
 
 const BackDrops = (props) => {
@@ -23,8 +24,28 @@ const ModalOverlay = (props) => {
   const { alertError } = useAlert();
   const { playerList } = useGlobal();
 
-  const findWalletAddress = (address) =>
-    playerList.some((player) => player.address === address);
+  const getWalletAddress =  async (address) => {
+    let result;
+   
+    try {
+      let res = await getJSON(`/admin/users?page=1&pageSize=20&address=${address}`);
+      
+      if(res.data){
+        result = true;
+      }else{
+        result = false;
+      }
+    }catch(err){
+      throw err;
+    }
+
+    return result;
+  };
+
+  const findWalletAddress = async (address) =>{
+    let check = await getWalletAddress(address);
+    return check;
+  };
 
   const handleClick = () => {
 

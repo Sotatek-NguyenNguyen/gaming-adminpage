@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Input from "./Input.js";
 import Button from "./Button.js";
+import { getJSON } from "../../common";
 import { useGlobal, useAlert } from "../../hooks";
 
 export default function SimpleAccordion(props) {
@@ -32,8 +33,28 @@ export default function SimpleAccordion(props) {
     deductNote.current.value = "";
   };
 
-  const findWalletAddress = (address) =>
-    playerList.some((player) => player.address === address);
+  const getWalletAddress =  async (address) => {
+    let result;
+   
+    try {
+      let res = await getJSON(`/admin/users?page=1&pageSize=20&address=${address}`);
+      
+      if(res.data){
+        result = true;
+      }else{
+        result = false;
+      }
+    }catch(err){
+      throw err;
+    }
+
+    return result;
+  };
+
+  const findWalletAddress = async (address) =>{
+    let check = await getWalletAddress(address);
+    return check;
+  };
 
   const grantTokenSubmitHandler = (e) => {
     e.preventDefault();
