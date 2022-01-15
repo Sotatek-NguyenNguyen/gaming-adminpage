@@ -96,7 +96,6 @@ function CatalogPage() {
         onCloseModal={handleCloseModal}
         inputDisabled={false}
         onClick={handleDeposit}
-        amountInGame={balance?.value}
       />
     );
   };
@@ -109,7 +108,6 @@ function CatalogPage() {
         onCloseModal={handleCloseModal}
         inputDisabled={false}
         onClick={handleWithDraw}
-        amountInGame={unallocatedInGameBalance}
       />
     );
   };
@@ -383,7 +381,6 @@ function CatalogPage() {
       <SimpleAccordion
         onGrantToKenSubmit={grantTokenHandler}
         onDeductTokenSubmit={deductTokenHandler}
-        unallocatedInGameBalance={unallocatedInGameBalance}
       />
 
       <section className="player__info container--custom">

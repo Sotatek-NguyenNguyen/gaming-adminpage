@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import Button from "../UI/Button.js";
 import Input from "../../components/UI/Input.js";
 import { getJSON } from "../../common";
-import { useGlobal, useAlert } from "../../hooks";
+import { useGlobal, useGameBalance } from "../../hooks";
 
 const BackDrops = (props) => {
   return <div className="backdrop" onClick={props.onCloseModal}></div>;
@@ -22,6 +22,8 @@ const ModalOverlay = (props) => {
   const amountRef = useRef();
   const addressRef = useRef();
   const [errors, setErrors] = useState(null);
+  const {unallocatedInGameBalance} = useGameBalance();
+  const {balance} = useGlobal();
 
   // validate withdraw balance
   const validateAmountWithDraw = (amount, _errors) => {
@@ -31,7 +33,7 @@ const ModalOverlay = (props) => {
     }else if (amount == 0) {
       _errors['balanceAmount'] = 'Input Token amount must be larger than 0';
       return false;
-    } else if (amount > amountInGame) {
+    } else if (amount > unallocatedInGameBalance) {
       _errors['balanceAmount'] = 'Input Token amount cannot be larger than Unallocated in-game balance';
       return false;
     } else{ 
@@ -45,7 +47,7 @@ const ModalOverlay = (props) => {
     if (addressRef?.current.value === ""){
       _errors['balanceAddress'] = 'This field is required';
     } else if(addressRef?.current.value.length < 44) {
-      _errors['balanceAddress'] = 'This field must be a valid address';
+      _errors['balanceAddress'] = 'This field must be a valid wallet address';
     } else{
       _errors['balanceAddress'] = null;
     }
@@ -75,7 +77,7 @@ const ModalOverlay = (props) => {
       _errors['balanceAmount'] = 'Input Token amount must be larger than 0';
       setErrors(_errors);
       return false;
-    } else if (amount > amountInGame) {
+    } else if (amount > balance?.value) {
       _errors['balanceAmount'] = "Deposit amount input exceeded Wallet balance";
       setErrors(_errors);
       return false;
@@ -165,4 +167,4 @@ function Modal(props) {
   ) : null;
 }
 
-export default Modal;
+export default React.memo(Modal);

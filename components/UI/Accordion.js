@@ -7,7 +7,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Input from "./Input.js";
 import Button from "./Button.js";
 import { getJSON } from "../../common";
-import { useGlobal } from "../../hooks";
+import { useGlobal, useGameBalance } from "../../hooks";
 
 export default function SimpleAccordion(props) {
   const amountGrantToken = useRef();
@@ -18,6 +18,7 @@ export default function SimpleAccordion(props) {
   const deductWalletAddress = useRef();
   const deductNote = useRef();
   const { getPlayerBalanceByAddress } = useGlobal();
+  const { unallocatedInGameBalance } = useGameBalance();
 
   const [errors, setErrors] = useState(null);
 
@@ -63,7 +64,7 @@ export default function SimpleAccordion(props) {
     } else if (amount == 0) {
         _errors['grantAmount'] = 'Input Token amount must be larger than 0';
         return false;
-    } else if (amount > props.unallocatedInGameBalance) {
+    } else if (amount > unallocatedInGameBalance) {
         _errors['grantAmount'] = 'Grant Amount cannot be larger than Unallocated in-game balance';
         return false;
     } else{
