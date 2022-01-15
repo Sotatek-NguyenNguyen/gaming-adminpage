@@ -44,12 +44,14 @@ const ModalOverlay = (props) => {
 
     if (addressRef?.current.value === ""){
       _errors['balanceAddress'] = 'This field is required';
-    }else{
+    } else if(addressRef?.current.value.length < 44) {
+      _errors['balanceAddress'] = 'This field must be a valid address';
+    } else{
       _errors['balanceAddress'] = null;
     }
 
     const validatedAmount = validateAmountWithDraw(amountRef?.current.value, _errors);
-    if (addressRef?.current.value === "" || !validatedAmount) {
+    if (addressRef?.current.value === "" || addressRef?.current.value.length < 44 || !validatedAmount) {
       setErrors({
         ..._errors,
         message: 'test',
