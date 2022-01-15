@@ -11,6 +11,12 @@ const Input = React.forwardRef((props, ref) => {
     }
   }, [setVal, props.value]);
 
+  useEffect(() => {
+    if(props.refresh !== 0){
+      setVal('');
+    }
+  }, [props.resetValue])
+
   const onChange = (e) => {
     props.onChange();
     handleChange(e);

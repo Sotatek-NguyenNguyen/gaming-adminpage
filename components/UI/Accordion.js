@@ -21,11 +21,13 @@ export default function SimpleAccordion(props) {
   const { unallocatedInGameBalance } = useGameBalance();
 
   const [errors, setErrors] = useState(null);
+  const [refresh, doRefresh] = useState(0);
 
   const resetForm = () => {
     amountGrantToken.current.value = "";
     grantWalletAddress.current.value = "";
     grantNote.current.value = "";
+    doRefresh(prev => prev + 1);
 
     amountDeductToken.current.value = "";
     deductWalletAddress.current.value = "";
@@ -199,6 +201,7 @@ export default function SimpleAccordion(props) {
                 type="number"
                 id="token-amount"
                 error={errors?.grantAmount}
+                resetValue={refresh}
               />
             </div>
 
@@ -265,6 +268,7 @@ export default function SimpleAccordion(props) {
                 type="number"
                 id="token-amount"
                 error={errors?.deductAmount}
+                resetValue={refresh}
               />
             </div>
 
