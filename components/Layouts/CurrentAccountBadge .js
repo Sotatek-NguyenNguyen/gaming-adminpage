@@ -10,9 +10,9 @@ function CurrentAccountBadge({ children }) {
   const { alertInfo } = useAlert();
   const { refreshWalletBalance } = useSmartContract();
   const router = useRouter();
-  const { logout, isAuthenticated } = useAuth();
+  const { logout, isAuthenticated, login } = useAuth();
   const { gameData, setAccountBalance, balance } = useGlobal();
-  const { publicKey, wallet, disconnect, connected, adapter } = useWallet();
+  const { publicKey, wallet, disconnect, connected, signMessage, adapter } = useWallet();
   const base58 = useMemo(() => publicKey?.toBase58(), [publicKey]);
   const content = useMemo(() => {
     if (children) return children;
@@ -63,6 +63,16 @@ function CurrentAccountBadge({ children }) {
     } else {
       setAccountBalance(0);
     }
+
+    let timerId;
+    if (connected && isAuthenticated) {
+      timerId = setInterval(() => {
+        refreshWalletBalance();
+      }, 10000);
+    } else {
+      clearInterval(timerId);
+    }
+    return () => clearInterval(timerId);
   }, [connected, isAuthenticated]);
 
   return (

@@ -28,7 +28,15 @@ export const WalletConnectionProvider = ({ children }) => {
 
   return (
     <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets} autoConnect>
+      <WalletProvider 
+      wallets={wallets} 
+      onError={e => {
+        if (e.name === 'WalletDisconnectedError') {
+          window.location.reload();
+        }
+      }}
+      autoConnect
+      >
         {children}
       </WalletProvider>
     </ConnectionProvider>
