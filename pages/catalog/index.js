@@ -247,43 +247,12 @@ function CatalogPage() {
     }
   };
 
-  const validateGrantTokenAmount = (amount) => {
-    if (amount === 0) {
-      alertWarning("Input Token amount must be larger than 0");
-      return false;
-    } else if (amount > unallocatedInGameBalance) {
-      const _errors = {...errors};
-      _errors['grant'] = 'Grant Amount cannot be larger than Unallocated in-game balance';
-      setErrors(_errors);
-
-      alertWarning("Grant Amount cannot be larger than Unallocated in-game balance");
-      return false;
-    } else return true;
-  };
-
-  const validateDeductTokenAmount = (amount, address) => {
-    const playerBalance = getPlayerBalanceByAddress(address);
-    if (amount === 0) {
-      alertWarning("Input Token amount must be larger than 0");
-      return false;
-    } else if (amount > playerBalance) {
-      alertWarning("Input Token amount cannot be larger than Player Game Balance");
-      return false;
-    } else return true;
-  };
-
   const grantTokenHandler = (amount, userAddress, note) => {
-    const validatedAmount = validateGrantTokenAmount(+amount);
-    if (!validatedAmount) return;
-
     setShowGrantTokenModal(true);
     setTokenData({ amount, userAddress, note });
   };
 
   const deductTokenHandler = (amount, userAddress, note) => {
-    const validatedAmount = validateDeductTokenAmount(+amount, userAddress);
-    if (!validatedAmount) return;
-
     setShowDeductTokenModal(true);
     setTokenData({ amount, userAddress, note });
   };
@@ -437,7 +406,7 @@ function CatalogPage() {
       <SimpleAccordion
         onGrantToKenSubmit={grantTokenHandler}
         onDeductTokenSubmit={deductTokenHandler}
-        errors={errors}
+        unallocatedInGameBalance={unallocatedInGameBalance}
       />
 
       <section className="player__info container--custom">

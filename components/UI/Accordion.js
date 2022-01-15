@@ -7,7 +7,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Input from "./Input.js";
 import Button from "./Button.js";
 import { getJSON } from "../../common";
-import { useGlobal, useAlert } from "../../hooks";
+import { useGlobal } from "../../hooks";
 
 export default function SimpleAccordion(props) {
   const amountGrantToken = useRef();
@@ -17,11 +17,9 @@ export default function SimpleAccordion(props) {
   const amountDeductToken = useRef();
   const deductWalletAddress = useRef();
   const deductNote = useRef();
+  const { getPlayerBalanceByAddress } = useGlobal();
 
   const [errors, setErrors] = useState(null);
-
-  const { playerList } = useGlobal();
-  const { alertError } = useAlert();
 
   const resetForm = () => {
     amountGrantToken.current.value = "";
@@ -58,52 +56,117 @@ export default function SimpleAccordion(props) {
     return check;
   };
 
+  const validateGrantTokenAmount = (amount, _errors) => {
+    if (amount == ''){
+        _errors['grantAmount'] = 'This field is required';
+        return false;
+    } else if (amount == 0) {
+        _errors['grantAmount'] = 'Input Token amount must be larger than 0';
+        return false;
+    } else if (amount > props.unallocatedInGameBalance) {
+        _errors['grantAmount'] = 'Grant Amount cannot be larger than Unallocated in-game balance';
+        return false;
+    } else{
+        _errors['grantAmount'] = null;
+        return true;
+    } 
+  };
+
+  const validateDeductTokenAmount = (amount, address, _errors) => {
+    const playerBalance = getPlayerBalanceByAddress(address)
+    if (amount == ''){
+        _errors['deductAmount'] = 'This field is required';
+        return false;
+    } else if (amount == 0) {
+        _errors['deductAmount'] = 'Input Token amount must be larger than 0';
+        return false;
+    } else if (amount > playerBalance) {
+        _errors['deductAmount'] = "Input Token amount cannot be larger than Player Game Balance";
+        return false;
+    } else {
+        _errors['deductAmount'] = null;
+        return true;
+    } 
+  };
+
   const grantTokenSubmitHandler = async (e) => {
     e.preventDefault();
     const amount = +amountGrantToken.current.value;
     const userAddress = grantWalletAddress.current.value;
     const note = grantNote.current.value;
-    
-    const check = await findWalletAddress(userAddress)
 
-    if (check) {
-      const _errors = {
-        ...errors,
-        walletAddressGrant: null,
-      };
-      setErrors(_errors);
+    const _errors = {...errors};
+
+    if(note.trim() == ''){
+      _errors['noteGrant'] = 'This field is required';
+    }else{
+      _errors['noteGrant'] = null;
+    }
+
+    let checkAddress;
+
+    if(userAddress.trim() === ''){
+      checkAddress = false;
+    }else{
+      checkAddress = await findWalletAddress(userAddress);
+    } 
+    
+    if(userAddress.trim() === ''){
+      _errors['walletAddressGrant'] = 'This field is required';
+    } else if(!checkAddress) {
+      _errors['walletAddressGrant'] = 'The wallet address is not found in Gaming Service. Either the wallet is not registered with Gaming Service or has been de-registered';
+    }else{
+      _errors['walletAddressGrant'] = null;
+    }
+
+    const checkAmount = validateGrantTokenAmount(amount, _errors);
+
+    if (checkAddress && checkAmount && note.trim() !== '') {
+      setErrors(null);
       props.onGrantToKenSubmit(amount, userAddress, note);
       resetForm();
     } else {
-      const _errors = {
-        ...errors,
-        walletAddressGrant:
-          "The wallet address is not found in Gaming Service. Either the wallet is not registered with Gaming Service or has been de-registered",
-      };
       setErrors(_errors);
     }
   };
 
-  const deductTokenSubmitHandler = (e) => {
+  const deductTokenSubmitHandler = async (e) => {
     e.preventDefault();
     const amount = +amountDeductToken.current.value;
     const userAddress = deductWalletAddress.current.value;
     const note = deductNote.current.value;
+    
+    const _errors = {...errors};
 
-    if (findWalletAddress(userAddress)) {
-      const _errors = {
-        ...errors,
-        walletAddressDeduct: null,
-      };
-      setErrors(_errors);
+    if(note.trim() == ''){
+      _errors['noteDeduct'] = 'This field is required';
+    }else{
+      _errors['noteDeduct'] = null;
+    }
+
+    let checkAddress;
+
+    if(userAddress.trim() === ''){
+      checkAddress = false;
+    }else{
+      checkAddress = await findWalletAddress(userAddress);
+    } 
+
+    if(userAddress.trim() === ''){
+      _errors['walletAddressDeduct'] = 'This field is required';
+    } else if(!checkAddress) {
+      _errors['walletAddressDeduct'] = 'The wallet address is not found in Gaming Service. Either the wallet is not registered with Gaming Service or has been de-registered';
+    }else{
+      _errors['walletAddressDeduct'] = null;
+    }
+
+    const checkAmount = validateDeductTokenAmount(amount, userAddress, _errors);
+
+    if (checkAddress && checkAmount && note.trim() !== '') {
+      setErrors(null);
       props.onDeductTokenSubmit(amount, userAddress, note);
       resetForm();
     } else {
-      const _errors = {
-        ...errors,
-        walletAddressDeduct:
-          "The wallet address is not found in Gaming Service. Either the wallet is not registered with Gaming Service or has been de-registered",
-      };
       setErrors(_errors);
     }
   };
@@ -129,13 +192,12 @@ export default function SimpleAccordion(props) {
                 </h5>
               </label>
               <Input
-                required
                 ref={amountGrantToken}
                 placeholder="Token Amount"
                 className="input-main large"
                 type="number"
                 id="token-amount"
-                error={props.errors?.grant}
+                error={errors?.grantAmount}
               />
             </div>
 
@@ -152,7 +214,6 @@ export default function SimpleAccordion(props) {
                 id="wallet-address"
                 className="input-main large"
                 ref={grantWalletAddress}
-                required
                 error={errors?.walletAddressGrant}
               />
             </div>
@@ -164,11 +225,11 @@ export default function SimpleAccordion(props) {
                 </h5>
               </label>
               <Input
-                required
                 type="text"
                 id="wallet-address"
                 className="input-main large"
                 ref={grantNote}
+                error={errors?.noteGrant}
               />
             </div>
 
@@ -197,12 +258,12 @@ export default function SimpleAccordion(props) {
                 </h5>
               </label>
               <Input
-                required
                 ref={amountDeductToken}
                 className="input-main large"
                 placeholder="Token Amount"
                 type="number"
                 id="token-amount"
+                error={errors?.deductAmount}
               />
             </div>
 
@@ -219,7 +280,6 @@ export default function SimpleAccordion(props) {
                 id="wallet-address"
                 className="input-main large"
                 ref={deductWalletAddress}
-                required
                 error={errors?.walletAddressDeduct}
               />
             </div>
@@ -231,11 +291,11 @@ export default function SimpleAccordion(props) {
                 </h5>
               </label>
               <Input
-                required
                 ref={deductNote}
                 type="text"
                 id="wallet-address"
                 className="input-main large"
+                error={errors?.noteDeduct}
               />
             </div>
 
