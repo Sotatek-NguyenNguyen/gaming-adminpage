@@ -51,7 +51,7 @@ export const useGameBalance = () => {
   useEffect(() => {
     if (isAuthenticated) {
       getGameBalance().catch((err) => console.error(err.message));
-      const interval = setInterval(() => resetGameBalance(), 10000);
+      const interval = setInterval(() => resetGameBalance(), 7000);
       return () => clearInterval(interval);
     }
   }, []);
