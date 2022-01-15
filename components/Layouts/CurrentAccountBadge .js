@@ -63,6 +63,17 @@ function CurrentAccountBadge({ children }) {
     } else {
       setAccountBalance(0);
     }
+
+    let timeId;
+    if (isAuthenticated && connected) {
+      timeId = setInterval(() => {
+        refreshWalletBalance();
+      }, 8000);
+    } else {
+      clearInterval(timeId)
+    }
+
+    return () => clearInterval(timeId)
   }, [connected, isAuthenticated]);
 
   return (
