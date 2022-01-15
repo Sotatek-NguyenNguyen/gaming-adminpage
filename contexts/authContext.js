@@ -68,13 +68,13 @@ export const AuthProvider = ({ children }) => {
   }, [wallet, walletPublicKey]);
 
   const getAccountTokenInfo = async () => {
-    if (gameData?.tokenAddress && publicKey) {
+    if (gameData?.tokenAddress && walletPublicKey) {
       try {
         const tokenAccount = await Token.getAssociatedTokenAddress(
           ASSOCIATED_TOKEN_PROGRAM_ID,
           TOKEN_PROGRAM_ID,
           new PublicKey(gameData.tokenAddress),
-          publicKey
+          walletPublicKey
         );
         const tokenAccountBalance = await connection.getTokenAccountBalance(
           tokenAccount
@@ -97,10 +97,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (publicKey) {
+    if (walletPublicKey) {
       getAccountTokenInfo();
     }
-  }, [publicKey]);
+  }, [walletPublicKey]);
 
   const login = async (walletAddress, signMessage, adapter) => {
     try {

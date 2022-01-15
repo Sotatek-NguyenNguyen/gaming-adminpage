@@ -74,9 +74,15 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
-  const getPlayerBalanceByAddress = (address) => {
-    const player = playerList.find((player) => player.address === address);
-    return player.balance / Math.pow(10, gameData?.tokenDecimals);
+  const getPlayerBalanceByAddress = async (address) => {
+    try {
+      const res = await getJSON(`/admin/users?page=1&pageSize=20&address=${address}`);
+      const playerBalance = res?.data[0].balance;
+
+      return playerBalance / Math.pow(10, gameData?.tokenDecimals)
+    } catch(error) {
+      console.error(error)
+    }
   };
 
   const setAccountBalance = (accBalance) => {
