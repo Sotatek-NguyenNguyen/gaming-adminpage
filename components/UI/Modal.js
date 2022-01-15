@@ -89,11 +89,13 @@ const ModalOverlay = (props) => {
 
     if (!inputDisabled && editableAddress){
       if(!checkValidateBalanceWithDraw()) return;
+      setErrors(null);
       props.onClick(addressRef?.current.value, amountRef?.current.value);
     }
     
     if (!inputDisabled && !editableAddress){
       if (!validateDepositAmount(amountRef?.current?.value)) return;
+      setErrors(null);
       props.onClick(amountRef?.current?.value);
     }
   };
