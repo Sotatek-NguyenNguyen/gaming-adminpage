@@ -3,6 +3,8 @@ import { getJSON } from "../common.js";
 import { useAlert } from "../hooks/useAlert";
 import { formatNumber } from "../shared/helper.js";
 import { useAuth } from "../hooks/useAuth";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useSmartContract } from "../hooks/useSmartContract.js";
 
 const defaultState = {
   gameData: {
@@ -33,6 +35,8 @@ const GlobalContext = createContext(defaultState);
 
 export const GlobalProvider = ({ children }) => {
   const { alertError } = useAlert();
+  const { connected } = useWallet();
+  const { refreshWalletBalance } = useSmartContract();
   const [gameData, setGameData] = useState({
     name: "",
     videoIntroURL: "",
@@ -76,12 +80,14 @@ export const GlobalProvider = ({ children }) => {
 
   const getPlayerBalanceByAddress = async (address) => {
     try {
-      const res = await getJSON(`/admin/users?page=1&pageSize=20&address=${address}`);
+      const res = await getJSON(
+        `/admin/users?page=1&pageSize=20&address=${address}`
+      );
       const playerBalance = res?.data[0].balance;
 
-      return playerBalance / Math.pow(10, gameData?.tokenDecimals)
-    } catch(error) {
-      console.error(error)
+      return playerBalance / Math.pow(10, gameData?.tokenDecimals);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -99,7 +105,17 @@ export const GlobalProvider = ({ children }) => {
       getGameData().catch((err) => alertError(err.message));
       getPlayerList().catch((err) => alertError(err.message));
     }
-  }, [isAuthenticated]);
+
+    let timerId;
+    if (connected && isAuthenticated) {
+      timerId = setInterval(() => {
+        refreshWalletBalance();
+      }, 10000);
+    } else {
+      clearInterval(timerId);
+    }
+    return () => clearInterval(timerId);
+  }, [isAuthenticated, connected]);
 
   return (
     <GlobalContext.Provider
