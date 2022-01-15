@@ -143,7 +143,13 @@ export const AuthProvider = ({ children }) => {
 
         return token;
       }
-    } catch (e) {
+    } catch (error) {
+      if (error && error.message === 'User rejected the request.') {
+        setIsAuthenticated(false);
+        setPublicKey(null);
+        alertError('Transaction Canceled')
+        throw error;
+      };
       setIsAuthenticated(false);
       setPublicKey(null);
       alertError("Can not login, please try again");
