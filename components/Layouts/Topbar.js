@@ -11,14 +11,16 @@ function Topbar() {
 
   const getPlayerWalletAddress = useCallback(() => {
     getJSON(`/admin/users?page=1&pageSize=20&address=${router.query.playerId}`)
-    .then( res => setPlayerWalletAddress(`${res?.data[0].address}`))
-    .catch(err => {throw err});
-  }, [router.query.playerId])
+      .then((res) => setPlayerWalletAddress(`${res?.data[0].address}`))
+      .catch((err) => {
+        throw err;
+      });
+  }, [router.query.playerId]);
 
-  useEffect(()=>{
-    if(pathName !== "player/[playerId]") return;
+  useEffect(() => {
+    if (pathName !== "player/[playerId]") return;
     getPlayerWalletAddress();
-  }, [pathName, getPlayerWalletAddress])
+  }, [pathName, getPlayerWalletAddress]);
 
   const renderPageTitle = (pathName) => {
     switch (pathName) {

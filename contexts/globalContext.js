@@ -3,6 +3,7 @@ import { getJSON } from "../common.js";
 import { useAlert } from "../hooks/useAlert";
 import { formatNumber } from "../shared/helper.js";
 import { useAuth } from "../hooks/useAuth";
+import { useRouter } from "next/router";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useSmartContract } from "../hooks/useSmartContract.js";
 
@@ -23,6 +24,7 @@ const defaultState = {
     tokenDecimals: 6,
   },
   playerList: [],
+  getGameData: async () => {},
   getPlayerBalanceByAddress: (address) => {},
   balance: {
     value: 0,
@@ -36,6 +38,7 @@ const GlobalContext = createContext(defaultState);
 export const GlobalProvider = ({ children }) => {
   const { alertError } = useAlert();
   const { connected } = useWallet();
+  const router = useRouter();
   const { refreshWalletBalance } = useSmartContract();
   const [gameData, setGameData] = useState({
     name: "",
@@ -52,7 +55,7 @@ export const GlobalProvider = ({ children }) => {
     tokenAddress: "",
     tokenDecimals: 6,
   });
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoggined } = useAuth();
   const [playerList, setPlayerList] = useState([]);
 
   const [balance, setBalance] = useState({
@@ -64,6 +67,7 @@ export const GlobalProvider = ({ children }) => {
     try {
       const gameInfo = await getJSON(`/admin/game-info`);
       setGameData(gameInfo);
+      return gameInfo
     } catch (error) {
       throw error;
     }
@@ -101,10 +105,10 @@ export const GlobalProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
-      getGameData().catch((err) => alertError(err.message));
-      getPlayerList().catch((err) => alertError(err.message));
-    }
+    if (router.pathname === "/") return;
+
+    getGameData().catch((err) => alertError(err.message));
+    getPlayerList().catch((err) => alertError(err.message));
 
     // let timerId;
     // if (connected && isAuthenticated) {
@@ -115,12 +119,13 @@ export const GlobalProvider = ({ children }) => {
     //   clearInterval(timerId);
     // }
     // return () => clearInterval(timerId);
-  }, [isAuthenticated, connected]);
+  }, [router]);
 
   return (
     <GlobalContext.Provider
       value={{
         gameData,
+        getGameData,
         getPlayerBalanceByAddress,
         balance,
         setAccountBalance,

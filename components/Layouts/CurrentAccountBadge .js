@@ -9,9 +9,9 @@ function CurrentAccountBadge({ children }) {
   const [loading, setLoading] = useState(false);
   const { alertInfo } = useAlert();
   const { refreshWalletBalance } = useSmartContract();
+  const { gameData, setAccountBalance, balance } = useGlobal();
   const router = useRouter();
   const { logout, isAuthenticated, login } = useAuth();
-  const { gameData, setAccountBalance, balance } = useGlobal();
   const { publicKey, wallet, disconnect, connected, adapter } = useWallet();
   const base58 = useMemo(() => publicKey?.toBase58(), [publicKey]);
   const content = useMemo(() => {

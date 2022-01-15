@@ -11,7 +11,7 @@ function Layout(props) {
         <CurrentAccountBadge />
       </div>
     );
-  }
+  };
   const router = useRouter();
   return (
     <div className="main-layout">

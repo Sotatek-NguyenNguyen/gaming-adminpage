@@ -12,11 +12,10 @@ import {
 import { PublicKey } from "@solana/web3.js";
 
 export function useSmartContract() {
-  const { setAccountBalance } = useGlobal();
   const { alertError } = useAlert();
   const { connection } = useConnection();
   const { publicKey } = useWallet();
-  const { gameData } = useGlobal();
+  const { setAccountBalance, getGameData } = useGlobal();
 
   const handleOnchainError = (err) => {
     console.log({ err });
@@ -46,6 +45,8 @@ export function useSmartContract() {
     }
 
     try {
+      const gameData = await getGameData();
+
       const tokenAccount = await Token.getAssociatedTokenAddress(
         ASSOCIATED_TOKEN_PROGRAM_ID,
         TOKEN_PROGRAM_ID,

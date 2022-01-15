@@ -45,7 +45,7 @@ function CatalogPage() {
   const { publicKey, signTransaction } = useWallet();
   const { isLoggined, cluster } = useAuth();
   const { refreshWalletBalance } = useSmartContract();
-  const { gameData, getPlayerBalanceByAddress, balance } = useGlobal();
+  const { gameData } = useGlobal();
   const router = useRouter();
 
   const opts = {
