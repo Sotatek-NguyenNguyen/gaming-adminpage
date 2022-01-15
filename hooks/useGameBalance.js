@@ -56,12 +56,6 @@ export const useGameBalance = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (!connected || (connected && !isAuthenticated)) {
-      router.push("/");
-    }
-  }, [router, connected, isAuthenticated]);
-
   return {
     actualGameBalance,
     unallocatedInGameBalance,
