@@ -57,7 +57,7 @@ export default function SimpleAccordion(props) {
   };
 
   const validateGrantTokenAmount = (amount, _errors) => {
-    if (amount == ''){
+    if (amount === ''){
         _errors['grantAmount'] = 'This field is required';
         return false;
     } else if (amount == 0) {
@@ -72,9 +72,8 @@ export default function SimpleAccordion(props) {
     } 
   };
 
-  const validateDeductTokenAmount = (amount, address, _errors) => {
-    const playerBalance = getPlayerBalanceByAddress(address)
-    if (amount == ''){
+  const validateDeductTokenAmount = (amount, playerBalance, _errors) => {
+    if (amount === ''){
         _errors['deductAmount'] = 'This field is required';
         return false;
     } else if (amount == 0) {
@@ -91,7 +90,7 @@ export default function SimpleAccordion(props) {
 
   const grantTokenSubmitHandler = async (e) => {
     e.preventDefault();
-    const amount = +amountGrantToken.current.value;
+    const amount = amountGrantToken.current.value;
     const userAddress = grantWalletAddress.current.value;
     const note = grantNote.current.value;
 
@@ -132,9 +131,10 @@ export default function SimpleAccordion(props) {
 
   const deductTokenSubmitHandler = async (e) => {
     e.preventDefault();
-    const amount = +amountDeductToken.current.value;
+    const amount = amountDeductToken.current.value;
     const userAddress = deductWalletAddress.current.value;
     const note = deductNote.current.value;
+    const playerBalance = await getPlayerBalanceByAddress(userAddress);
     
     const _errors = {...errors};
 
@@ -160,8 +160,8 @@ export default function SimpleAccordion(props) {
       _errors['walletAddressDeduct'] = null;
     }
 
-    const checkAmount = validateDeductTokenAmount(amount, userAddress, _errors);
-
+    const checkAmount = validateDeductTokenAmount(amount, playerBalance, _errors);
+    
     if (checkAddress && checkAmount && note.trim() !== '') {
       setErrors(null);
       props.onDeductTokenSubmit(amount, userAddress, note);
