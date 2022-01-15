@@ -106,15 +106,15 @@ export const GlobalProvider = ({ children }) => {
       getPlayerList().catch((err) => alertError(err.message));
     }
 
-    let timerId;
-    if (connected && isAuthenticated) {
-      timerId = setInterval(() => {
-        refreshWalletBalance();
-      }, 10000);
-    } else {
-      clearInterval(timerId);
-    }
-    return () => clearInterval(timerId);
+    // let timerId;
+    // if (connected && isAuthenticated) {
+    //   timerId = setInterval(() => {
+    //     refreshWalletBalance();
+    //   }, 10000);
+    // } else {
+    //   clearInterval(timerId);
+    // }
+    // return () => clearInterval(timerId);
   }, [isAuthenticated, connected]);
 
   return (
