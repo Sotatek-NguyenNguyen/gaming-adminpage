@@ -201,7 +201,7 @@ export default function SimpleAccordion(props) {
                 type="number"
                 id="token-amount"
                 error={errors?.grantAmount}
-                resetValue={refresh}
+                resetvalue={refresh}
               />
             </div>
 
@@ -268,7 +268,7 @@ export default function SimpleAccordion(props) {
                 type="number"
                 id="token-amount"
                 error={errors?.deductAmount}
-                resetValue={refresh}
+                resetvalue={refresh}
               />
             </div>
 
