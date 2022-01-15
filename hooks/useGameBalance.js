@@ -49,7 +49,7 @@ export const useGameBalance = () => {
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (router.pathname !== '/') {
       getGameBalance().catch((err) => console.error(err.message));
       const interval = setInterval(() => resetGameBalance(), 7000);
       return () => clearInterval(interval);
