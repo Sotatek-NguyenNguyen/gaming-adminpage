@@ -22,9 +22,9 @@ import Inventory from "../../components/catalogTransaction/inventory";
 import TransactionsHistory from "../../components/catalogTransaction/transactionsHistory";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import { getJSON, sendJSON } from "../../common";
+import { sendJSON } from "../../common";
 import { IDL } from "../../treasury.js";
-import { useAlert, useAuth, useGlobal, useSmartContract } from "../../hooks";
+import { useAlert, useAuth, useGlobal, useSmartContract, useGameBalance } from "../../hooks";
 
 const treasuryPDASeed = Buffer.from("treasury");
 
@@ -35,9 +35,11 @@ function CatalogPage() {
   const [showDeductTokenModal, setShowDeductTokenModal] = useState(false);
   const [errors, setErrors] = useState(null);
   const [tab, setTab] = useState("inventory");
-  const [actualGameBalance, setActualGameBalance] = useState("");
-  const [allocatedInGameBalance, setAllocatedInGameBalance] = useState("");
-  const [unallocatedInGameBalance, setUnallocatedInGameBalance] = useState("");
+  const {
+    actualGameBalance,
+    unallocatedInGameBalance,
+    allocatedInGameBalance,
+  } = useGameBalance();
   const [tokenData, setTokenData] = useState({});
   const { alertError, alertSuccess, alertWarning } = useAlert();
   const { publicKey, signTransaction } = useWallet();
@@ -149,7 +151,7 @@ function CatalogPage() {
   };
 
   const handleWithDraw = async (userAddress, amount) => {
-    if(!signTransaction) return;
+    if (!signTransaction) return;
     try {
       const exactAmount = convertTokenAmountBaseOnTokenDec(amount);
 
@@ -266,15 +268,14 @@ function CatalogPage() {
     sendJSON(`/admin/users/grant-token`, exactTokenData)
       .then((res) => {
         if (res.success) {
-          const _errors = {...errors};
-          _errors['grant'] = null;
-          setErrors(_errors)
-          alertSuccess("Successfully granted token!")
-        };
+          const _errors = { ...errors };
+          _errors["grant"] = null;
+          setErrors(_errors);
+          alertSuccess("Successfully granted token!");
+        }
         if (res.statusCode === 404) alertError("User not found!");
       })
       .finally(() => {
-        getGameBalance();
         setTokenData({});
         setShowGrantTokenModal(false);
       })
@@ -296,39 +297,15 @@ function CatalogPage() {
         if (res.statusCode === 404) alertError("User not found!");
       })
       .finally(() => {
-        getGameBalance();
         setTokenData({});
         setShowDeductTokenModal(false);
       })
       .catch((err) => console.error(err.message));
   };
 
-  const getGameBalance = async () => {
-    const convertToExactFormat = (num) => {
-      return num / Math.pow(10, gameData?.tokenDecimals);
-    };
-
-    try {
-      const res = await getJSON(`/admin/game-balance`);
-      setActualGameBalance(convertToExactFormat(res?.actualGameBalance));
-      setUnallocatedInGameBalance(
-        convertToExactFormat(res?.unallocatedInGameBalance)
-      );
-      setAllocatedInGameBalance(
-        convertToExactFormat(res?.allocatedInGameBalance)
-      );
-    } catch (error) {
-      throw error;
-    }
-  };
-
   useEffect(() => {
     const loginStatus = isLoggined();
     if (!loginStatus) router.replace("/");
-  }, []);
-
-  useEffect(() => {
-    getGameBalance().catch((err) => console.error(err.message));
   }, []);
 
   return (
