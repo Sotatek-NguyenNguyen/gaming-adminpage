@@ -8,7 +8,11 @@ import {
 } from "../hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { signatureMsgAuth, loginAuth } from "../api/auth";
-import { transformLamportsToSOL, formatNumber, renderTokenBalance } from "../shared/helper";
+import {
+  transformLamportsToSOL,
+  formatNumber,
+  renderTokenBalance,
+} from "../shared/helper";
 import { envConfig } from "../configs";
 import {
   Token,
@@ -144,12 +148,16 @@ export const AuthProvider = ({ children }) => {
         return token;
       }
     } catch (error) {
-      if (error && error.message === 'User rejected the request.') {
+      if (
+        error &&
+        (error.message === "User rejected the request." ||
+          error.message === "Transaction cancelled")
+      ) {
         setIsAuthenticated(false);
         setPublicKey(null);
-        alertError('Transaction Canceled')
+        alertError("Transaction Canceled");
         throw error;
-      };
+      }
       setIsAuthenticated(false);
       setPublicKey(null);
       alertError("Can not login, please try again");

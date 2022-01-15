@@ -38,6 +38,7 @@ function HomePage() {
         if (token) router.replace('/overview');
         else router.replace('/notadmin');
       } catch (error) {
+        console.log(error, "errorrr from handle login")
         setLoading(false);
       }
     } else {
