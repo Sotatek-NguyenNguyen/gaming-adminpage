@@ -110,7 +110,7 @@ function TransactionsHistory() {
     // set endpoint
     const _endpoint = endpoint;
     let _endpointNextPage = _endpoint.split("&");
-    _endpointNextPage[0] = _endpointNextPage[0].slice(0, -1) + value;
+    _endpointNextPage[0] = _endpointNextPage[0].split('=')[0] + '=' + value;
 
     let nextPage = _endpointNextPage.join("&");
     setEndpoint(nextPage);
@@ -123,8 +123,11 @@ function TransactionsHistory() {
     const currentEndpoint = "/admin/users/transactions?page=1&pageSize=10";
 
     if (fromDate !== null) {
+      let _ToDate = new Date(toDate);
+      let nextToDate = new Date(_ToDate.setDate(_ToDate.getDate()+1));
+
       let fromDateFormat = fromDate?.toISOString().split("T")[0];
-      let toDateFormat = toDate?.toISOString().split("T")[0];
+      let toDateFormat = nextToDate?.toISOString().split("T")[0];
 
       if (checkSameDay(fromDate, toDate)) {
         fromDateFormat = new Date(fromDate.setHours(0, 0, 0, 0)).toISOString();
