@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import {
   Connection,
@@ -77,7 +77,7 @@ function CatalogPage() {
     setErrors(null);
   };
 
-  const DepositModal = () => {
+  const DepositModal = useCallback(() => {
     return (
       <Modal
         title="Confirm Deposit Token?"
@@ -92,9 +92,9 @@ function CatalogPage() {
         onClick={handleDeposit}
       />
     );
-  };
+  }, [gameData?.walletAddress], handleDeposit);
 
-  const WithDrawModal = () => {
+  const WithDrawModal = useCallback(() => {
     return (
       <Modal
         title="Confirm Withdraw Token?"
@@ -104,9 +104,9 @@ function CatalogPage() {
         onClick={handleWithDraw}
       />
     );
-  };
+  }, [handleWithDraw]);
 
-  const GrantTokenModal = () => {
+  const GrantTokenModal = useCallback(() => {
     return (
       <Modal
         title="Confirm Sending Token?"
@@ -122,9 +122,9 @@ function CatalogPage() {
         inputDisabled={true}
       />
     );
-  };
+  }, [sendingToken, tokenData.amount, tokenData?.userAddress]);
 
-  const DeductTokenModal = () => {
+  const DeductTokenModal = useCallback(() => {
     return (
       <Modal
         title="Confirm Deduct Token?"
@@ -140,7 +140,7 @@ function CatalogPage() {
         inputDisabled={true}
       />
     );
-  };
+  }, [deductToken, tokenData.amount, tokenData?.userAddress]);
 
   const handleWithDraw = async (userAddress, amount) => {
     if (!signTransaction) return;
