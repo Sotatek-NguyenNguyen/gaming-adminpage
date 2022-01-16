@@ -95,3 +95,7 @@
 .tox-tinymce{
   border-radius: 16px !important;
 }
+
+.info__description.tiny-custom-err > .tox-tinymce{
+  border-color: red !important;
+}
