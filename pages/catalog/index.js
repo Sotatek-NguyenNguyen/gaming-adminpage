@@ -23,7 +23,7 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { sendJSON } from "../../common";
 import { IDL } from "../../treasury.js";
 import { useAlert, useAuth, useGlobal, useSmartContract, useGameBalance } from "../../hooks";
-import InGameBalance from "../../components/Layouts/IngameBalance";
+import InGameBalance from "../../components/Layouts/InGameBalance";
 
 const treasuryPDASeed = Buffer.from("treasury");
 
