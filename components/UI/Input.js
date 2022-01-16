@@ -13,7 +13,7 @@ const Input = React.forwardRef((props, ref) => {
     if(props.refresh !== 0){
       setVal('');
     }
-  }, [props.resetValue])
+  }, [props.resetvalue])
 
   const onChange = (e) => {
     props.onChange();
