@@ -92,7 +92,7 @@ function CatalogPage() {
         onClick={handleDeposit}
       />
     );
-  }, [gameData?.walletAddress, handleDeposit]);
+  }, [gameData?.walletAddress, handleDeposit, signTransaction]);
 
   const WithDrawModal = useCallback(() => {
     return (
