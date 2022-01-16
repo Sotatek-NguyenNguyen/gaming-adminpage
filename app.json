@@ -1,0 +1,9 @@
+{
+    "apps": [
+        {
+            "name": "gamify-gc-gamming-admin-staging-4012",
+            "script": "npm",
+            "args": "run start-4012"
+        }
+    ]
+}
