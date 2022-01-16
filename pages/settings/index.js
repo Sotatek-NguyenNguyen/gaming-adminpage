@@ -86,6 +86,9 @@ function SettingsPage() {
     let gameName = checkFieldIsEmpty(updatedGameInfoData.name, 'GameName', _errors);
     if(gameName) removeErrors('GameName', _errors);
 
+    let description = checkFieldIsEmpty(updatedGameInfoData.description, 'description', _errors);
+    if(description) removeErrors('description', _errors);
+
     let logoURL = validateURL(updatedGameInfoData.logoURL, true, (link) => {
       if(!checkFieldIsEmpty(link, 'logoURL', _errors)) return;
       _errors['logoURL'] = `This field must be a valid image URL`;
@@ -124,6 +127,7 @@ function SettingsPage() {
 
     if(
       !gameName ||
+      !description ||
       !logoURL ||
       !backgroundURL ||
       !videoIntroURL ||
@@ -145,12 +149,15 @@ function SettingsPage() {
   const styleTextEditorDisable = !disabledEditGameInfo ? "#9F99B3" : "black";
 
   const changeColorEditor = () => {
-    editorRef.current.iframeElement.contentDocument.getElementsByTagName('style')[0].innerHTML = `
+    let styleEditor = `
       body { 
         font-size: 14pt; 
         font-family: Arial; 
-        color: ${styleTextEditorDisable} !important
-      }`;
+        color: ${styleTextEditorDisable} !important;
+        border-color: red;
+      }
+    `;
+    editorRef.current.iframeElement.contentDocument.getElementsByTagName('style')[0].innerHTML = styleEditor;
   }
 
   const updateGameInfo = async () => {
@@ -262,7 +269,7 @@ function SettingsPage() {
               </div>
             </section>
 
-            <section className="info__description">
+            <section className={`info__description ${(errors?.description) ? 'tiny-custom-err' : ''}`}>
               <label htmlFor="gameDescription">
                 Description: <span className="label-required">*</span>
               </label>
@@ -284,6 +291,7 @@ function SettingsPage() {
                   content_style: `body { font-size: 14pt; font-family: Arial; color: #9F99B3 !important}`,
                 }}
               />
+              {errors?.description && <span className="text-error">This field is required</span>}
             </section>
           </div>
         </div>

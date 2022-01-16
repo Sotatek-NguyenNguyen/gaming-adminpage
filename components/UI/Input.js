@@ -6,9 +6,7 @@ const Input = React.forwardRef((props, ref) => {
   const [value, handleChange, setVal] = useInputNumber("");
 
   useEffect(() => {
-    if (props.value) {
-      setVal(props.value);
-    }
+    setVal(props.value);
   }, [setVal, props.value]);
 
   useEffect(() => {
