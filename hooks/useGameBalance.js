@@ -5,14 +5,12 @@ import { useAuth, useGlobal } from ".";
 import { getJSON } from "../common";
 
 export const useGameBalance = () => {
-  const { connected } = useWallet();
-  const { isAuthenticated } = useAuth();
   const router = useRouter();
   const { gameData } = useGlobal();
 
-  const [actualGameBalance, setActualGameBalance] = useState("");
-  const [allocatedInGameBalance, setAllocatedInGameBalance] = useState("");
-  const [unallocatedInGameBalance, setUnallocatedInGameBalance] = useState("");
+  const [actualGameBalance, setActualGameBalance] = useState(0);
+  const [allocatedInGameBalance, setAllocatedInGameBalance] = useState(0);
+  const [unallocatedInGameBalance, setUnallocatedInGameBalance] = useState(0);
 
   const convertToExactFormat = useCallback((num) => {
     return num / Math.pow(10, gameData?.tokenDecimals);
