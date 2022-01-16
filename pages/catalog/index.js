@@ -92,7 +92,7 @@ function CatalogPage() {
         onClick={handleDeposit}
       />
     );
-  }, [gameData?.walletAddress], handleDeposit);
+  }, [gameData?.walletAddress, handleDeposit]);
 
   const WithDrawModal = useCallback(() => {
     return (
@@ -104,7 +104,7 @@ function CatalogPage() {
         onClick={handleWithDraw}
       />
     );
-  }, [handleWithDraw]);
+  }, [handleWithDraw, signTransaction]);
 
   const GrantTokenModal = useCallback(() => {
     return (
