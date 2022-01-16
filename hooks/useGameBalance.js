@@ -13,13 +13,14 @@ export const useGameBalance = () => {
   const [unallocatedInGameBalance, setUnallocatedInGameBalance] = useState(0);
 
   const convertToExactFormat = useCallback((num) => {
+    if (num === 0) return num;
     return num / Math.pow(10, gameData?.tokenDecimals);
   }, [gameData]);
 
   const getGameBalance = async () => {
     try {
       const res = await getJSON(`/admin/game-balance`);
-      setActualGameBalance(convertToExactFormat(res?.actualGameBalance));
+      setActualGameBalance(convertToExactFormat(+res?.actualGameBalance));
       setUnallocatedInGameBalance(
         convertToExactFormat(res?.unallocatedInGameBalance)
       );
@@ -34,7 +35,7 @@ export const useGameBalance = () => {
   const resetGameBalance = async () => {
     try {
       const res = await getJSON(`/admin/game-balance`);
-      setActualGameBalance(convertToExactFormat(res?.actualGameBalance));
+      setActualGameBalance(convertToExactFormat(+res?.actualGameBalance));
       setUnallocatedInGameBalance(
         convertToExactFormat(res?.unallocatedInGameBalance)
       );
