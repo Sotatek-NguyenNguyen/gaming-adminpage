@@ -12,8 +12,6 @@ import { Program, Provider, BN, web3 } from "@project-serum/anchor";
 import * as spl from "@solana/spl-token";
 import { useRouter } from "next/router";
 import Layout from "../../components/Layouts/Layout";
-import Input from "../../components/UI/Input.js";
-import Tooltip from "../../components/UI/Tooltip";
 import Button from "../../components/UI/Button.js";
 import SimpleAccordion from "../../components/UI/Accordion";
 import Modal from "../../components/UI/Modal.js";
@@ -25,6 +23,7 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { sendJSON } from "../../common";
 import { IDL } from "../../treasury.js";
 import { useAlert, useAuth, useGlobal, useSmartContract, useGameBalance } from "../../hooks";
+import InGameBalance from "../../components/Layouts/IngameBalance";
 
 const treasuryPDASeed = Buffer.from("treasury");
 
@@ -35,11 +34,6 @@ function CatalogPage() {
   const [showDeductTokenModal, setShowDeductTokenModal] = useState(false);
   const [errors, setErrors] = useState(null);
   const [tab, setTab] = useState("inventory");
-  const {
-    actualGameBalance,
-    unallocatedInGameBalance,
-    allocatedInGameBalance,
-  } = useGameBalance();
   const [tokenData, setTokenData] = useState({});
   const { alertError, alertSuccess, alertWarning } = useAlert();
   const { publicKey, signTransaction } = useWallet();
@@ -318,47 +312,7 @@ function CatalogPage() {
 
         <div className="card__body">
           <form className="form-content" onSubmit={(e) => e.preventDefault()}>
-            <div>
-              <label htmlFor="actual-game" className="game-label">
-                <h5>Actual game balance</h5>
-                <Tooltip info="Actual amount of Token in Smart Contract" />
-              </label>
-              <Input
-                disabled
-                type="number"
-                id="actual-game"
-                className="input-main large disable"
-                value={actualGameBalance}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="unallocated" className="game-label">
-                <h5>Unallocated in-game balance</h5>
-                <Tooltip info="Balance deposited by Admin and has not been granted to any players" />
-              </label>
-              <Input
-                disabled
-                type="number"
-                id="unallocated"
-                className="input-main large disable"
-                value={unallocatedInGameBalance}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="allocated" className="game-label">
-                <h5>Allocated in-game balance</h5>
-                <Tooltip info="Balance owned by All Players" />
-              </label>
-              <Input
-                disabled
-                type="number"
-                id="allocated"
-                className="input-main large disable"
-                value={allocatedInGameBalance}
-              />
-            </div>
+            <InGameBalance />
 
             <div className="form-actions">
               <Button
