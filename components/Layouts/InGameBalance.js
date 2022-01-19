@@ -1,10 +1,9 @@
-import React from 'react';
+import React from "react";
 import Input from "../../components/UI/Input.js";
 import Tooltip from "../../components/UI/Tooltip";
 import { useGameBalance } from "../../hooks";
 
 function InGameBalance() {
-
   const {
     actualGameBalance,
     unallocatedInGameBalance,
