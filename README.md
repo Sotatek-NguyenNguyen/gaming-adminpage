@@ -9,6 +9,7 @@ First, clone file _.env.example_ to _.env.local_ and change values, example:
   NEXT_PUBLIC_API_URL_BACKEND=https://api-gaming.dev.gamifyclub.com
   NEXT_PUBLIC_API_URL_SMART_CONTRACT=https://api.devnet.solana.com
   NEXT_PUBLIC_SOLLET_ENV=devnet
+  NEXT_PUBLIC_ISOLA_TOKEN_ADDRESS=2nm8A6y3bqz9m2KMfDJWPsLviE3A9iLZHKb8dgEw77JY
 ```
 
 Second, run the development server:
@@ -33,6 +34,7 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
   NEXT_PUBLIC_API_URL_BACKEND=https://api-gaming.dev.gamifyclub.com
   NEXT_PUBLIC_API_URL_SMART_CONTRACT=https://api.devnet.solana.com
   NEXT_PUBLIC_SOLLET_ENV=devnet
+  NEXT_PUBLIC_ISOLA_TOKEN_ADDRESS=2nm8A6y3bqz9m2KMfDJWPsLviE3A9iLZHKb8dgEw77JY
   ```
 
 ### Deploy with pm2
