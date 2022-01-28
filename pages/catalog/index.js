@@ -44,7 +44,6 @@ function CatalogPage() {
   const { publicKey, signTransaction } = useWallet();
   const wallet = useWallet();
   const { isLoggined, cluster } = useAuth();
-  const { refreshWalletBalance } = useSmartContract();
   const { gameData } = useGlobal();
   const router = useRouter();
 
@@ -163,7 +162,6 @@ function CatalogPage() {
       const signed = await signTransaction(userTx);
       const signature = await connection.sendRawTransaction(signed.serialize());
       await connection.confirmTransaction(signature);
-      await refreshWalletBalance();
       alertSuccess("Withdrawn successfully");
       setErrors(null);
       setShowWithdrawModal(false);
@@ -202,7 +200,7 @@ function CatalogPage() {
         );
 
         // const fromTokenAccount = await token.getOrCreateAssociatedAccountInfo(
-        //   wallet.publicKey
+        //   wallet.publicKey,
         // );
 
         const tokenAccountAddress = await spl.Token.getAssociatedTokenAddress(
@@ -237,12 +235,18 @@ function CatalogPage() {
             },
           }
         );
-        await refreshWalletBalance();
         alertSuccess("Deposited successfully");
       } catch (error) {
         console.error(error);
         setShowDepositModal(false);
-        alertError("Transaction Canceled");
+
+        if (error.message === 'Failed to find account') {
+          alertError('Token balance is not enough to deposit');
+        } else if (error.message === 'failed to send transaction: Transaction simulation failed: Attempt to debit an account but found no record of a prior credit.') {
+          alertError('Insufficient balance');
+        } else {
+          alertError("Transaction Canceled");
+        }
       }
       setShowDepositModal(false);
     }
