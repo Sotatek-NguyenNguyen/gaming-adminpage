@@ -201,16 +201,16 @@ function CatalogPage() {
           window.solana.payer
         );
 
-        // const fromTokenAccount = await token.getOrCreateAssociatedAccountInfo(
+        const fromTokenAccount = await token.getOrCreateAssociatedAccountInfo(
+          wallet.publicKey,
+        );
+
+        // const tokenAccountAddress = await spl.Token.getAssociatedTokenAddress(
+        //   spl.ASSOCIATED_TOKEN_PROGRAM_ID,
+        //   spl.TOKEN_PROGRAM_ID,
+        //   new PublicKey(gameData.tokenAddress),
         //   wallet.publicKey
         // );
-
-        const tokenAccountAddress = await spl.Token.getAssociatedTokenAddress(
-          spl.ASSOCIATED_TOKEN_PROGRAM_ID,
-          spl.TOKEN_PROGRAM_ID,
-          new PublicKey(gameData.tokenAddress),
-          wallet.publicKey
-        );
 
         const [treasuryAccount] = await PublicKey.findProgramAddress(
           [treasuryPDASeed, gameId.toBuffer()],
@@ -229,7 +229,7 @@ function CatalogPage() {
             accounts: {
               sender: program.provider.wallet.publicKey,
               depositUser: program.provider.wallet.publicKey,
-              senderTokenAccount: tokenAccountAddress,
+              senderTokenAccount: fromTokenAccount.address,
               treasuryAccount,
               treasuryTokenAccount,
               tokenProgram: spl.TOKEN_PROGRAM_ID,
