@@ -36,7 +36,7 @@ function CatalogPage() {
   const [tab, setTab] = useState("inventory");
   const [tokenData, setTokenData] = useState({});
   const { alertError, alertSuccess, alertWarning } = useAlert();
-  const { publicKey, signTransaction } = useWallet();
+  const { publicKey, signTransaction, wallet } = useWallet();
   const { isLoggined, cluster } = useAuth();
   const { refreshWalletBalance } = useSmartContract();
   const { gameData } = useGlobal();
@@ -48,7 +48,7 @@ function CatalogPage() {
   };
 
   const { SystemProgram } = web3;
-  const wallet = window.solana;
+  // const wallet = window.solana;
 
   const network = clusterApiUrl(cluster);
   const connection = new Connection(network, opts.preflightCommitment);
@@ -169,10 +169,11 @@ function CatalogPage() {
   };
 
   const handleDeposit = async (depositValue) => {
-    const wallet = window.solana;
+    // const wallet = window.solana;
 
     if (
       publicKey &&
+      wallet?.publicKey &&
       gameData.gameId &&
       gameData.programId &&
       gameData.tokenAddress
@@ -191,12 +192,12 @@ function CatalogPage() {
           provider.connection,
           new PublicKey(gameData.tokenAddress),
           spl.TOKEN_PROGRAM_ID,
-          wallet.payer
+          window.solana.payer,
         );
 
-        /* const fromTokenAccount = await token.getOrCreateAssociatedAccountInfo(
-          wallet.publicKey
-        ); */
+        // const fromTokenAccount = await token.getOrCreateAssociatedAccountInfo(
+        //   wallet.publicKey
+        // );
 
         const tokenAccountAddress = await spl.Token.getAssociatedTokenAddress(
           spl.ASSOCIATED_TOKEN_PROGRAM_ID,
