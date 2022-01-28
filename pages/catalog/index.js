@@ -22,7 +22,12 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { sendJSON } from "../../common";
 import { IDL } from "../../treasury.js";
-import { useAlert, useAuth, useGlobal, useSmartContract, useGameBalance } from "../../hooks";
+import {
+  useAlert,
+  useAuth,
+  useGlobal,
+  useSmartContract,
+} from "../../hooks";
 import InGameBalance from "../../components/Layouts/InGameBalance";
 
 const treasuryPDASeed = Buffer.from("treasury");
@@ -36,7 +41,8 @@ function CatalogPage() {
   const [tab, setTab] = useState("inventory");
   const [tokenData, setTokenData] = useState({});
   const { alertError, alertSuccess, alertWarning } = useAlert();
-  const { publicKey, signTransaction, wallet } = useWallet();
+  const { publicKey, signTransaction } = useWallet();
+  const wallet = useWallet();
   const { isLoggined, cluster } = useAuth();
   const { refreshWalletBalance } = useSmartContract();
   const { gameData } = useGlobal();
@@ -192,7 +198,7 @@ function CatalogPage() {
           provider.connection,
           new PublicKey(gameData.tokenAddress),
           spl.TOKEN_PROGRAM_ID,
-          window.solana.payer,
+          window.solana.payer
         );
 
         // const fromTokenAccount = await token.getOrCreateAssociatedAccountInfo(
