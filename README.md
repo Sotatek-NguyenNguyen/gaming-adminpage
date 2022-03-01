@@ -12,6 +12,11 @@ First, clone file _.env.example_ to _.env.local_ and change values, example:
   NEXT_PUBLIC_ISOLA_TOKEN_ADDRESS=2nm8A6y3bqz9m2KMfDJWPsLviE3A9iLZHKb8dgEw77JY
 ```
 
++ *NEXT_PUBLIC_BASE_URL* : The domain URL
++ *NEXT_PUBLIC_API_URL_BACKEND* : The backend API URL
++ *NEXT_PUBLIC_API_URL_SMART_CONTRACT* : The smart contract API URL
++ *NEXT_PUBLIC_SOLLET_ENV* : The cluster network (Available values are: *devnet*, *testnet*, *mainnet-beta*)
+
 Second, run the development server:
 
 ```bash
@@ -36,6 +41,8 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
   NEXT_PUBLIC_SOLLET_ENV=devnet
   NEXT_PUBLIC_ISOLA_TOKEN_ADDRESS=2nm8A6y3bqz9m2KMfDJWPsLviE3A9iLZHKb8dgEw77JY
   ```
+
+**You have 2 ways in total to deploy below (we are using port **4012** for both situations):**
 
 ### Deploy with pm2
 
