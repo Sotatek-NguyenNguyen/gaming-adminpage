@@ -71,7 +71,7 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 
 ### Deploy with docker
 
-- Ensure docker has installed on your server
+- Make sure that docker has installed on your server
 - Update files **Dockerfile** and **docker-compose.yml** to use your desired port
 - Run command:
 
